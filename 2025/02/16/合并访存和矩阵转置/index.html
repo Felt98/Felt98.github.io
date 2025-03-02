@@ -5,7 +5,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <title>
       
-        合并访存 | Felt's blog
+        合并访存和矩阵转置 | Felt's blog
       
     </title>
     <meta name="description" content="" />
@@ -147,7 +147,7 @@
   <article class="post-content">
     <div class="post-inner">
       <div class="post-content__head">
-        <div class="post-title">合并访存</div>
+        <div class="post-title">合并访存和矩阵转置</div>
         <div class="post-info">
           
   
@@ -173,23 +173,23 @@
 <ul>
 <li><strong>add1</strong><br>正常的读写连续且对齐的内存，每天指令请求的4个sector中的数据都得到了利用，合并率100%</li>
 </ul>
-<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-ddac88da-c650-45c8-acce-c0b0fe975fc0.png" class="">
+<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98%E5%92%8C%E7%9F%A9%E9%98%B5%E8%BD%AC%E7%BD%AE/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-ddac88da-c650-45c8-acce-c0b0fe975fc0.png" class="">
 <ul>
 <li><strong>add2</strong><br>不对齐的读取数据（不从头开始访问），会造成多发送了一个sector，合并率 &#x3D; 128&#x2F; （32 * 5）&#x3D; 80%</li>
 </ul>
-<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-a069dde9-4db2-405e-a9c5-38375f0aebef.png" class="">
+<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98%E5%92%8C%E7%9F%A9%E9%98%B5%E8%BD%AC%E7%BD%AE/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-a069dde9-4db2-405e-a9c5-38375f0aebef.png" class="">
 <ul>
 <li><strong>add3</strong><br>线程乱序访问，当warp整体访问的内存还是连续且对齐的，性能与add1一样</li>
 </ul>
-<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-fa49fec4-b295-4153-88b9-6fcfa7e68d16.png" class="">
+<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98%E5%92%8C%E7%9F%A9%E9%98%B5%E8%BD%AC%E7%BD%AE/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-fa49fec4-b295-4153-88b9-6fcfa7e68d16.png" class="">
 <ul>
 <li><strong>add4</strong><br>warp中每个线程都读写同一个数据，虽然只要一个float，但读取内存至少要1个sector，造成了浪费</li>
 </ul>
-<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-71e359d4-611f-4d43-9cd4-acf89c938fd7.png" class="">
+<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98%E5%92%8C%E7%9F%A9%E9%98%B5%E8%BD%AC%E7%BD%AE/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-71e359d4-611f-4d43-9cd4-acf89c938fd7.png" class="">
 <ul>
 <li><strong>add5</strong><br>每个线程读写的数据之间间隔4，导致了线程读写内存之间是不连续的，要读取16个连续的sector才能将请求的数据覆盖到，合并率 &#x3D; 4&#x2F;16 &#x3D; 25%</li>
 </ul>
-<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-1ab0f54a-eee4-4c2d-83d7-f70f2ac4c274.png" class="">
+<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98%E5%92%8C%E7%9F%A9%E9%98%B5%E8%BD%AC%E7%BD%AE/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-1ab0f54a-eee4-4c2d-83d7-f70f2ac4c274.png" class="">
 
 <h2 id="矩阵转置"><a href="#矩阵转置" class="headerlink" title="矩阵转置"></a>矩阵转置</h2><p>native实现：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* N是长，M是宽*/</span></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">transpose_naive</span><span class="params">(<span class="type">float</span>* input, <span class="type">float</span>* output,<span class="type">int</span> N, <span class="type">int</span> M)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 原矩阵上点列id和行id</span></span><br><span class="line">    <span class="comment">//注意y是行</span></span><br><span class="line">    <span class="type">int</span> col_idx = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">int</span> row_idx = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这里input和output使用的都是一级指针，因此需要算出来每个点</span></span><br><span class="line">    <span class="comment">// 在原始matrix上相对于Input的偏移</span></span><br><span class="line">    <span class="comment">// 在transpose后的matrix上相对于output的偏移</span></span><br><span class="line">    <span class="keyword">if</span> (col_idx &lt; N &amp;&amp; row_idx &lt; M) &#123;</span><br><span class="line">       <span class="comment">// M * N的矩阵</span></span><br><span class="line">       <span class="type">int</span> idx = row_idx * N + col_idx;</span><br><span class="line">       <span class="comment">// N * M的矩阵</span></span><br><span class="line">       <span class="comment">// 原matrix上的行、列变成新matrix上的列、行</span></span><br><span class="line">       <span class="type">int</span> trans_idx = col_idx * M + row_idx;</span><br><span class="line">       output[trans_idx] = input[idx];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -197,7 +197,7 @@
 <h4 id="v1"><a href="#v1" class="headerlink" title="v1"></a>v1</h4><ul>
 <li>对于输入M&#x3D;2048， N&#x3D;512的矩阵，block_size取width&#x3D;32, height&#x3D;8,结果如下:</li>
 </ul>
-<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-96c60767-dcc0-43b9-aeb0-4c5fcc553714.png" class="">
+<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98%E5%92%8C%E7%9F%A9%E9%98%B5%E8%BD%AC%E7%BD%AE/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-96c60767-dcc0-43b9-aeb0-4c5fcc553714.png" class="">
 <p>读数据是没有问题的，32个线程取32个float，一共128 byte，即4个sector<br><strong>但写数据时出现了问题</strong>： 32个float写入时的数据是完全不连续的，但每次访存至少读取1个sector，这就造成了28byte * 32 的浪费</p>
 <blockquote>
 <p>这里写数据的合并率为 4&#x2F;32&#x3D; 12.5%</p>
@@ -205,21 +205,21 @@
 <h4 id="v2"><a href="#v2" class="headerlink" title="v2"></a>v2</h4><ul>
 <li>将线程的排布变成(16,16)</li>
 </ul>
-<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-e3c06d15-bc4c-4f15-8c0a-882badb8ca94.png" class="">
+<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98%E5%92%8C%E7%9F%A9%E9%98%B5%E8%BD%AC%E7%BD%AE/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-e3c06d15-bc4c-4f15-8c0a-882badb8ca94.png" class="">
 <p>这时4个sector分布在两行，这样增加了写数据的合并率。<br>写数据的时候就减少了一个float的浪费，浪费的数据为 24 byte * 32</p>
 <ul>
 <li>将线程的排布变成(16,16)</li>
 </ul>
-<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-3159b4a1-33e5-47f9-943a-d1d7d6fc9215.png" class="">
+<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98%E5%92%8C%E7%9F%A9%E9%98%B5%E8%BD%AC%E7%BD%AE/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-3159b4a1-33e5-47f9-943a-d1d7d6fc9215.png" class="">
 <p>这时4个sector分布在4行<br>写数据的时候一个sector 里面可以写入4个float的数据，浪费的数据为 16 byte * 32</p>
 <p>为什么不能将线程行数一直缩小变成(4,64),(2,128)来提高write的合并率:<br>	这样做会使读数据的时候降低数据的合并率。因为一个float 4 byte，那么读一个sector最多被8个线程利用，如果这8个线程分布在不同行，一次访存取出的sector就会有浪费。<br>	这也启示我们，设置线程数量要尽量确保读写连续的内存，且一次读写至少是32字节，这样就能合并访存</p>
 <h3 id="使用float4"><a href="#使用float4" class="headerlink" title="使用float4"></a>使用float4</h3><p>一个线程处理多个数据，可以提高写数据的合并率</p>
 <h4 id="v1-float4"><a href="#v1-float4" class="headerlink" title="v1_float4"></a>v1_float4</h4><p>blockSize还是(32,8)的排布，但是一个线程处理一个4 * 4的矩阵（4个float4数据），先在寄存器中进行转置，然后写会<br>写数据的合并率 &#x3D; 4 * 4 &#x2F;32 &#x3D;50%</p>
-<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-be147936-6872-49f9-94c7-faec41930de4.png" class="">
+<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98%E5%92%8C%E7%9F%A9%E9%98%B5%E8%BD%AC%E7%BD%AE/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-be147936-6872-49f9-94c7-faec41930de4.png" class="">
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">__global__ <span class="type">void</span> <span class="title function_">tanspose</span><span class="params">(<span class="type">float</span> *input, <span class="type">float</span> *output, <span class="type">int</span> N, <span class="type">int</span> M)</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 先在寄存器内做好转置，再写回output</span></span><br><span class="line">    <span class="comment">// 因此先声明两个4*4的寄存器数组</span></span><br><span class="line">    <span class="comment">// 也可以使用共享内存，在block内进行转置，不过可能会出现bank conflict</span></span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> col = (blockDim.x * blockIdx.x + threadIdx.x) * <span class="number">4</span>; <span class="comment">// x是列</span></span><br><span class="line">    <span class="type">int</span> row = (blockDim.y * blockIdx.y + threadIdx.y) * <span class="number">4</span>;</span><br><span class="line">    <span class="keyword">if</span> (col &gt;= N || row &gt;= M)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">float</span> r_input[<span class="number">4</span>][<span class="number">4</span>];</span><br><span class="line">    <span class="type">float</span> r_output[<span class="number">4</span>][<span class="number">4</span>];</span><br><span class="line">	<span class="comment">//取intput[row+i][col]到r_input[i]</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        FLOAT4(r_input[i]) = FLOAT4(intput[(row + i) * N + col]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4*4矩阵内转置</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        FLOAT4(r_output[i]) = make_float4(r_input[<span class="number">0</span>][i], r_input[<span class="number">1</span>][i], r_input[<span class="number">2</span>][i],r_input[<span class="number">3</span>][i]); <span class="comment">// 把rinput的列变成float4然后写入routput的行</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">	<span class="comment">// r_output[i]写入output[col+i][row]转置矩阵</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        FLOAT4(output[(col + i) * M + row]) = FLOAT4(r_output[i]); </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h4 id="v2-float4"><a href="#v2-float4" class="headerlink" title="v2_float4"></a>v2_float4</h4><p>blockSize修改为(16,16)的排布，那么写入数据就能尽可能地合并访存了</p>
-<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-cb75a8fd-0159-48a5-b1af-eff052030fc3.png" class="">
+<img src="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98%E5%92%8C%E7%9F%A9%E9%98%B5%E8%BD%AC%E7%BD%AE/img-%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98-cb75a8fd-0159-48a5-b1af-eff052030fc3.png" class="">
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    dim3 <span class="title function_">block_size</span><span class="params">(<span class="number">16</span>, <span class="number">16</span>)</span>;</span><br><span class="line">    <span class="comment">// dim3 grid_size(N / 16, M / 16);</span></span><br><span class="line">    dim3 <span class="title function_">grid_size</span><span class="params">(CEIL(N / <span class="number">16</span>), CEIL(M / <span class="number">16</span>))</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
@@ -265,11 +265,23 @@
     
     <div class="post-nav">
   
-    <div class="post-nav-item-left"></div>
+    <a class="post-nav-item-left" href="/2025/02/17/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%A8%A1%E6%9D%BF/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>c++学习笔记——模板</div>
+    </a>
   
   <div class="vhr"></div>
   
-    <a class="post-nav-item-right" href="/2025/02/16/end/">
+    <a class="post-nav-item-right" href="/2025/02/02/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%BB%93%E6%9E%84%E4%BD%93/">
       <div class="text-align">
         <span class="text-small">下一篇</span>
         <svg t="1670570876164"
@@ -281,7 +293,7 @@
           <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
         </svg>
       </div>
-      end
+      c++学习笔记——结构体
     </a>
   
 </div>
@@ -319,60 +331,6 @@
     </div>
     <div class="foot__body">
       
-        <div class="foot-item">
-          <div class="foot-item__head">朋友</div>
-          <div class="foot-item__body">
-            
-            
-
-
-  
-  
-    <div class="foot-link-group">
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">Theme Tranquility</a>
-          </div>
-        
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://hozen.site">浩然的主页</a>
-          </div>
-        
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/icon/icon-link+.svg" />
-            <a class="foot-link" href="mailto:example@email.com?subject=申请http://example.com的友链">申请友链</a>
-          </div>
-        
-      
-        
-        
-      
-    </div>
-  
-
-
-          </div>
-        </div>
-      
       
         <div class="foot-item">
           <div class="foot-item__head">账号</div>
@@ -391,18 +349,7 @@
                  height="20px"
                  width="20px"
                  src="/images/logo-github.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/hooozen">hooozen</a>
-          </div>
-        
-      
-        
-        
-          <div class="text">
-            <img alt="link"
-                 height="20px"
-                 width="20px"
-                 src="/images/logo-wx.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzI3NzQ4NDkzNg==&mid=2247484469&idx=1&sn=8a442bb67397f52cce5c38c3f9b41e36&chksm=eb64c0d2dc1349c40d2e1bb55615ae28b3f2951be22f00717b9ade98c851082e42dc666ab45d#rd">谁在胡言乱语</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/Felt98">Felt's Github</a>
           </div>
         
       
@@ -413,8 +360,11 @@
                  height="20px"
                  width="20px"
                  src="/images/logo-zh.svg" />
-            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/hozen">Mundooo</a>
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/yi-ming-81-1">Felt</a>
           </div>
+        
+      
+        
         
       
         
@@ -444,7 +394,7 @@
                  height="20px"
                  width="20px"
                  src="/images/icon/icon-email.svg" />
-            <a class="foot-link" href="mailto:name@example.com">name@example.com</a>
+            <a class="foot-link" href="mailto:haoqingqin@gmail.com">haoqingqin@gmail.com</a>
           </div>
         
       

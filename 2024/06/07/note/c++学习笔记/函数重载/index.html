@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        c++学习笔记——函数重载 | Felt's blog
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/note">学习笔记</a>
+              
+                <a class="nav-menu-item" href="/project">项目</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">c++学习笔记——函数重载</div>
+        <div class="post-info">
+          
+  
+
+
+          <span class="post-date">2024-06-07</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>函数重载是C++<strong>静态多态特性</strong>的实现之一。<br><strong>函数重载</strong>：允许我们创建多个同名的函数，只要每个同名函数具有不同的参数类型（或者函数可以以其他方式区分），C++会使用上下文来确定要使用的重载函数版本</p>
+<table>
+<thead>
+<tr>
+<th>区分重载函数的属性</th>
+<th>能否重载</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>参数类型</td>
+<td>可以</td>
+<td></td>
+</tr>
+<tr>
+<td>参数数量</td>
+<td>可以</td>
+<td>不包括 typedef、type aliases 和 const 参数的限定符。<br>包括省略号。</td>
+</tr>
+<tr>
+<td><strong>返回类型</strong></td>
+<td><strong>不可以</strong></td>
+<td></td>
+</tr>
+<tr>
+<td>对于<strong>成员函数</strong>，还会考虑其他函数级限定符：const 、volatile、Ref 都可以重载</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>一些需要注意的点：</p>
+<ol>
+<li>函数返回类型不同不会影响重载。</li>
+<li>&amp;不会影响重载，C++类型引用&amp;和类型本身视为同一个特征标。</li>
+<li>const会影响重载，如下面的例子dribble( )函数将根据实参是否为const来决定使用哪个原型。<ul>
+<li>注意：如果没有<code>dribble(const char * a)</code>，<code>dribble(char * a)</code>也可以与const参数匹配，因为可以将非const值赋给const变量，但反之是非法的</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">dribble</span><span class="params">(<span class="type">char</span> * a)</span>;</span><br><span class="line"><span class="type">void</span> <span class="title function_">dribble</span><span class="params">(<span class="type">const</span> <span class="type">char</span> * a)</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>类型签名</strong>：函数标头中用于区分函数的部分，上面的函数名称、参数数量、参数类型和函数级限定符都是签名的一部分</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> <span class="comment">// integer version</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x + y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">add</span><span class="params">(<span class="type">double</span> x, <span class="type">double</span> y)</span> <span class="comment">// floating point version</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x + y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y, <span class="type">int</span> z)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x + y + z;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//只要每个重载函数的参数类型列表不同，也可以区分函数。</span></span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">add</span><span class="params">(<span class="type">int</span> x, <span class="type">double</span> y)</span></span>; <span class="comment">// mixed version</span></span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">add</span><span class="params">(<span class="type">double</span> x, <span class="type">int</span> y)</span></span>; <span class="comment">// mixed version</span></span><br><span class="line"><span class="function"><span class="type">double</span> <span class="title">add</span><span class="params">(<span class="type">double</span> x, ...)</span></span>; <span class="comment">// mixed version</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>对于按值传递的参数，也不考虑 const 限定符。<br>	下面不被视为重载</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">int</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">const</span> <span class="type">int</span>)</span></span>; <span class="comment">// not differentiated from print(int)</span></span><br></pre></td></tr></table></figure>
+
+<p>为什么返回类型不同不被视为重载：<br>	为了避免问题变得过于复杂。如果返回值用于区分，那么我们将没有一种简单的语法方法来判断正在调用函数的哪个重载 —— 我们还必须了解返回值是如何被使用的，这需要更多的分析。<br>重载的实现原理：<br>	<strong>名称修饰</strong>，函数的编译名称会根据各种条件（如参数的数量和类型）被更改（“损坏”），以便其在链接器中具有唯一的名称。<br>	例如，原型为 <code>int fcn（）</code> 的函数可能会编译为损坏的名称<code>__fcn_v</code>，而 <code>int fcn（int）</code> 可能会编译为损坏的名称<code>__fcn_i</code>。因此，虽然在源代码中，两个重载函数共享名称 <code>fcn（），</code>但在编译代码中，<strong>不同函数的名称是唯一</strong>的（<code>__fcn_v</code> 与 <code>__fcn_i</code>）。</p>
+<h4 id="重载函数的调用"><a href="#重载函数的调用" class="headerlink" title="重载函数的调用"></a>重载函数的调用</h4><p>重载函数进行函数调用时，编译器会逐步执行一系列规则，以确定哪些（如果有）重载函数是最匹配的<br><strong>基本优先级如下</strong>：<br>	<strong>精确匹配 → 类型提升 → 标准转换 → 用户定义转换 → 可变参数</strong></p>
+<p><strong>具体步骤</strong>：<br><strong>步骤 1）</strong> <strong>精确匹配</strong>：编译器尝试查找完全匹配项。这分两个阶段进行。首先，编译器将查看是否存在一个重载函数，其中函数调用中的参数类型与重载函数中的参数类型完全匹配。<br>编译器将对函数调用中的参数应用一些<strong>简单的转换</strong>。<strong>普通转换</strong>是一组特定的转换规则，这些规则将修改类型（不修改值）以查找匹配项<br>	包括：<br>	    - 左值到右值的转换<br>	    - 限定转换（例如，non-const 到 const）<br>	    - 非引用到引用转换<br>	例如：调用了 <code>foo（x），</code>其中 <code>x</code> 是一个 <code>int</code>。编译器会简单地将 <code>x</code> 从 <code>int</code> 转换为 <code>const int</code>，然后匹配 <code>foo（const int）。</code>我们也调用了 <code>foo（d），</code>其中 <code>d</code> 是<code>双精度</code>值。编译器会简单地将 <code>d</code> 从 <code>double</code> 转换为 <code>const double&amp;</code>，然后匹配 <code>foo（const double&amp;）。</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(<span class="type">const</span> <span class="type">int</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(<span class="type">const</span> <span class="type">double</span>&amp;)</span> <span class="comment">// double&amp; is a reference to a double</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> x &#123; <span class="number">1</span> &#125;;</span><br><span class="line">    <span class="built_in">foo</span>(x); <span class="comment">// x trivially converted from int to const int</span></span><br><span class="line"></span><br><span class="line">    <span class="type">double</span> d &#123; <span class="number">2.3</span> &#125;;</span><br><span class="line">    <span class="built_in">foo</span>(d); <span class="comment">// d trivially converted from double to const double&amp; (non-ref to ref conversion)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p> 通过普通转换进行的匹配被视为完全匹配。这意味着以下程序会导致不明确的匹配：<br> <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(<span class="type">int</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(<span class="type">const</span> <span class="type">int</span>&amp;)</span> <span class="comment">// int&amp; is a reference to a int</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> x &#123; <span class="number">1</span> &#125;;</span><br><span class="line">    <span class="built_in">foo</span>(x); <span class="comment">// ambiguous match with foo(int) and foo(const int&amp;)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>第 2 步</strong>）<strong>类型提升</strong>：如果未找到完全匹配项，编译器将尝试通过对参数应用<strong>隐式类型转换数字提升</strong>来查找匹配项。<br>	例如：对于 <code>foo（&#39;a&#39;），</code>由于在上一步中找不到 <code>foo（char）</code> 的精确匹配项，因此编译器会将 char <code>&#39;a&#39;</code> 提升为 <code>int</code>，并查找匹配项。这与 <code>foo（int）</code> 匹配，因此函数调用解析为 <code>foo（int）。</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(<span class="type">int</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(<span class="type">double</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">foo</span>(<span class="string">&#x27;a&#x27;</span>);  <span class="comment">// promoted to match foo(int)</span></span><br><span class="line">    <span class="built_in">foo</span>(<span class="literal">true</span>); <span class="comment">// promoted to match foo(int)</span></span><br><span class="line">    <span class="built_in">foo</span>(<span class="number">4.5f</span>); <span class="comment">// promoted to match foo(double)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>步骤 3</strong>）<strong>标准转换</strong>： 如果通过数字提升未找到匹配项，则编译器将尝试通过对参数应用<strong>标准转换</strong>来查找匹配项。<br>	例如：在这种情况下，由于没有 <code>foo（char）</code> （完全匹配） ，也没有 <code>foo（int）</code> （促销匹配），因此 <code>&#39;a&#39;</code> 在数值上转换为 double 并与 <code>foo（double）</code> 匹配。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(<span class="type">double</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(std::string)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">foo</span>(<span class="string">&#x27;a&#x27;</span>); <span class="comment">// &#x27;a&#x27; converted to match foo(double)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>第 4 步</strong>）<strong>用户定义转换</strong>：如果通过数字转换未找到匹配项，则编译器将尝试通过任何<strong>用户定义的转换</strong>找到匹配项。<br>值得注意到是，<strong>类的构造函数</strong>还充当从其他类型到该类类型的用户定义转换，并且可以在此步骤中用于查找匹配的函数。<br>	例如：编译器将首先检查是否存在与 <code>foo（X）</code> 完全匹配。我们还没有定义一个。接下来，编译器将检查 <code>x</code> 是否可以在数值上提升，而它不能。然后编译器将检查 <code>x</code> 是否可以进行数值转换，而它也不能。最后，编译器将查找任何用户定义的转换。由于我们定义了从 <code>X</code> 到 <code>int</code> 的用户定义转换，因此编译器会将 <code>X</code> 转换为 <code>int</code> 以匹配 <code>foo（int）。</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">X</span> <span class="comment">// this defines a new type called X</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">operator</span> <span class="title">int</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> <span class="number">0</span>; &#125; <span class="comment">// Here&#x27;s a user-defined conversion from X to int</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(<span class="type">int</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(<span class="type">double</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    X x; <span class="comment">// Here, we&#x27;re creating an object of type X (named x)</span></span><br><span class="line">    <span class="built_in">foo</span>(x); <span class="comment">// x is converted to type int using the user-defined conversion from X to int</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>第 5 步</strong>）<strong>可变参数</strong>：如果通过用户定义的转换未找到匹配项，编译器将查找使用省略号的匹配函数。<br><strong>第 6 步</strong>）如果此时未找到匹配项，编译器将放弃并发出有关找不到匹配函数的编译错误。</p>
+<p><strong>不明确匹配</strong>：例如<strong>多个最佳匹配导致歧义</strong>，将会编译错误错误<br>	例如：<code>5L</code> 的类型为 <code>long</code>，编译器将首先查看是否能找到 <code>foo（long）</code> 的精确匹配项，但找不到。接下来，编译器将尝试数字提升，但无法提升 <code>long</code> 类型的值，因此这里也没有匹配项。<br>	之后，编译器将尝试通过对 <code>long</code> 参数应用数值转换来查找匹配项。在检查所有数字转换规则的过程中，编译器将找到两个可能的匹配项。如果 <code>long</code> 参数在数值上转换为 <code>int</code>，则函数调用将匹配 <code>foo（int）。</code>如果 <code>long</code> 参数被转换为 <code>double</code>，那么它将匹配 <code>foo（double）。</code>由于已通过数字转换找到两个可能的匹配项，因此函数调用被视为不明确。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(<span class="type">int</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(<span class="type">double</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">foo</span>(<span class="number">5L</span>); <span class="comment">// 5L is type long</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>另一个产生不明确匹配项的示例：<br>	尽管您可能希望 <code>0</code> 解析为 <code>foo（unsigned int），</code>而 <code>3.14159</code> 解析为 <code>foo（float），</code>但这两种调用都会导致不明确的匹配。<code>int</code> 值 <code>0</code> 可以在数值上转换为 <code>unsigned int</code> 或 <code>float</code>，因此任一重载的匹配效果相同，结果是不明确的函数调用。<br>	这同样适用于将 <code>double</code> 转换为 <code>float</code> 或 <code>unsigned int</code>。两者都是数字转换，因此任一重载的匹配效果相同，结果同样不明确。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(<span class="type">float</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">foo</span>(<span class="number">0</span>);       <span class="comment">// int can be numerically converted to unsigned int or to float</span></span><br><span class="line">    <span class="built_in">foo</span>(<span class="number">3.14159</span>); <span class="comment">// double can be numerically converted to unsigned int or to float</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有几种方法可以解决不明确的匹配项：<br>	1. 最好的方法是简单地定义一个新的重载函数，该函数采用您尝试调用函数的类型的参数。<br>	2. 显式转换不明确的参数以匹配要调用的函数的类型。例如，要让 <code>foo（0）</code> 匹配上面的例子中的 <code>foo（unsigned int），</code>你可以这样做<br>	也可以使用 Literal 后缀来确保将 Literal 解释为正确的类型</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x&#123; <span class="number">0</span> &#125;;</span><br><span class="line"><span class="built_in">foo</span>(<span class="built_in">static_cast</span>&lt;<span class="type">unsigned</span> <span class="type">int</span>&gt;(x)); <span class="comment">// will call foo(unsigned int)</span></span><br><span class="line"><span class="built_in">foo</span>(<span class="number">0u</span>); <span class="comment">// will call foo(unsigned int) since &#x27;u&#x27; suffix is unsigned int, so this is now an exact match</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>删除函数</strong>：如果我们有一个明确不希望可调用的函数，我们可以使用 <strong>&#x3D; delete</strong> 说明符将该函数定义为已删除。如果编译器将函数调用与已删除的函数匹配，则编译将停止并出现编译错误。<br>	注意已删除的函数仍被视为函数重载解析的候选项。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">printInt</span><span class="params">(<span class="type">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">printInt</span><span class="params">(<span class="type">char</span>)</span> </span>= <span class="keyword">delete</span>; <span class="comment">// calls to this function will halt compilation</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">printInt</span><span class="params">(<span class="type">bool</span>)</span> </span>= <span class="keyword">delete</span>; <span class="comment">// calls to this function will halt compilation</span></span><br><span class="line">```<span class="function">cpp</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printInt</span>(<span class="number">97</span>);   <span class="comment">// okay</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printInt</span>(<span class="string">&#x27;a&#x27;</span>);  <span class="comment">// compile error: function deleted</span></span><br><span class="line">    <span class="built_in">printInt</span>(<span class="literal">true</span>); <span class="comment">// compile error: function deleted</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printInt</span>(<span class="number">5.0</span>);  <span class="comment">// compile error: ambiguous match</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>删除一堆单独的函数重载工作正常，但可能会很冗长。我们可以使用函数模板来实现此目的，<br>	如下所示：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">printInt</span><span class="params">(<span class="type">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// This function template will take precedence for arguments of other types</span></span><br><span class="line"><span class="comment">// Since this function template is deleted, calls to it will halt compilation</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">printInt</span><span class="params">(T x)</span> </span>= <span class="keyword">delete</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>非模板函数 vs 模板实例化</strong>：<br>	如果非模板函数得到精确匹配的话，<strong>优先选择非模板函数</strong>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">template &lt;typename T&gt; <span class="type">void</span> <span class="title function_">f</span><span class="params">(T)</span>; <span class="comment">// 模板</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">f</span><span class="params">(<span class="type">int</span>)</span>;                     <span class="comment">// 非模板</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">	f(<span class="number">42</span>); <span class="comment">// 优先调用 void f(int)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>.<br>	没有精确匹配的非模板函数，会将可以匹配的模板函数视为精确匹配。即<strong>模板的精确匹配，优先级低于非模板函数的精确匹配，但高于类型提升</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">template &lt;typename T&gt; <span class="type">void</span> <span class="title function_">f</span><span class="params">(T)</span>;      <span class="comment">// 模板函数</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">f</span><span class="params">(<span class="type">int</span>)</span>;    <span class="comment">// 非模板函数（需要类型提升）</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    f(<span class="string">&#x27;a&#x27;</span>);     <span class="comment">// char 类型不是int的精确匹配, 将优先匹配模板函数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="默认参数"><a href="#默认参数" class="headerlink" title="默认参数"></a>默认参数</h4><p>如果调用方未提供参数，则使用 default 参数的值。<br>必须使用等号来指定 default 参数。使用括号或大括号初始化不起作用<br>默认参数由编译器在函数调用的站点插入。当编译器看到 <code>print（3）</code> 时，它会将此函数调用重写为 <code>print（3， 4），</code>以便参数的数量与参数的数量相匹配。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y=<span class="number">4</span>)</span> <span class="comment">// 4 is the default argument</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;x: &quot;</span> &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;y: &quot;</span> &lt;&lt; y &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="number">1</span>, <span class="number">2</span>); <span class="comment">// y will use user-supplied argument 2</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="number">3</span>); <span class="comment">// y will use default argument 4, as if we had called print(3, 4)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>C++ 不支持 （从 C++23 开始） 函数调用语法，例如 <code>print（，，3）</code> （作为在使用 <code>x</code> 和 <code>y</code> 的默认参数时，为 <code>z</code> 提供显式值的一种方式。这有三个主要后果：</p>
+<ol>
+<li>在函数调用中，任何显式提供的参数都必须是最左侧的参数（不能跳过具有默认值的参数）。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(std::string_view sv=<span class="string">&quot;Hello&quot;</span>, <span class="type">double</span> d=<span class="number">10.0</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">print</span>();           <span class="comment">// okay: both arguments defaulted</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Macaroni&quot;</span>); <span class="comment">// okay: d defaults to 10.0</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="number">20.0</span>);       <span class="comment">// error: does not match above function (cannot skip argument for sv)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li></li>
+</ul>
+<ol start="2">
+<li>如果为参数指定了 default 参数，则所有后续参数（右侧）也必须为 default 参数指定。</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">int</span> x=<span class="number">10</span>, <span class="type">int</span> y)</span></span>; <span class="comment">// 错误，not allowed</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li></li>
+</ul>
+<ol start="3">
+<li>如果多个参数具有 default 参数，则最左边的参数应该是用户最有可能显式设置的参数。</li>
+</ol>
+<p>一旦声明，default 参数就不能在同一翻译单元中重新声明。这意味着对于具有 forward 声明和函数定义的函数，default 参数可以在 forward 声明或函数定义中声明，但不能同时在两者中声明。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y=<span class="number">4</span>)</span></span>; <span class="comment">// forward declaration</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y=<span class="number">4</span>)</span> <span class="comment">// compile error: redefinition of default argument</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;x: &quot;</span> &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;y: &quot;</span> &lt;&lt; y &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最佳做法是在 forward 声明中声明 default 参数，而不是在函数定义中声明 default，因为 forward 声明更有可能被其他文件看到并在使用之前包含在内（特别是如果它位于头文件中）。<br>	在 foo.h 中：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> FOO_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> FOO_H</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y=<span class="number">4</span>)</span></span>;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>  在 main.cpp：我们能够使用函数 <code>print（）</code> 的默认参数，因main.cpp包含foo.h，它具有定义 default 参数的 forward 声明</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;foo.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;x: &quot;</span> &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;y: &quot;</span> &lt;&lt; y &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>默认参数的函数重载</strong>：<br>具有 default 参数的函数可能会重载。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(std::string_view s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; s &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">char</span> c = <span class="string">&#x27; &#x27;</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; c &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Hello, world&quot;</span>); <span class="comment">// resolves to print(std::string_view)</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;a&#x27;</span>);            <span class="comment">// resolves to print(char)</span></span><br><span class="line">    <span class="built_in">print</span>();               <span class="comment">// resolves to print(char)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面的案例中，由于默认值不是函数签名的一部分，因此这些函数声明是差分重载。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">int</span> x)</span></span>;                  <span class="comment">// signature print(int)</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y = <span class="number">10</span>)</span></span>;      <span class="comment">// signature print(int, int)</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">int</span> x, <span class="type">double</span> y = <span class="number">20.5</span>)</span></span>; <span class="comment">// signature print(int, double)</span></span><br></pre></td></tr></table></figure>
+
+<p>默认参数很容易导致模棱两可的函数调用：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(<span class="type">int</span> x = <span class="number">0</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(<span class="type">double</span> d = <span class="number">0.0</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">foo</span>(); <span class="comment">// ambiguous function call</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>更复杂的案例：<br>	对于调用 <code>print（1），</code>编译器无法判断这是解析为 <code>print（int）、``print（int， int）</code> 还是 <code>print（int， double）。</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">int</span> x)</span></span>;                  <span class="comment">// signature print(int)</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y = <span class="number">10</span>)</span></span>;      <span class="comment">// signature print(int, int)</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">int</span> x, <span class="type">double</span> y = <span class="number">20.5</span>)</span></span>; <span class="comment">// signature print(int, double)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="number">1</span>, <span class="number">2</span>);   <span class="comment">// will resolve to print(int, int)</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="number">1</span>, <span class="number">2.5</span>); <span class="comment">// will resolve to print(int, double)</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="number">1</span>);      <span class="comment">// ambiguous function call</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>默认参数不适用于通过函数指针调用的函数</strong></p>
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/pay-code.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2024/09/07/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%B1%BB/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>c++学习笔记——类</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <div class="post-nav-item-right"></div>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+
+</div>
+  <div class="realated__body">
+    
+      DEBUG: 请安装插件 <a target="_blank" rel="noopener" href="https://github.com/tea3/hexo-related-popular-posts">hexo-related-popular-posts</a> 或关闭 related_post 配置!
+    
+  </div>
+</div>
+
+    
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/Felt98">Felt's Github</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-zh.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/yi-ming-81-1">Felt</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-email.svg" />
+            <a class="foot-link" href="mailto:haoqingqin@gmail.com">haoqingqin@gmail.com</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="http://example.com">Felt's blog</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  
+
+  </body>
+</html>

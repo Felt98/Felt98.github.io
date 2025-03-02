@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        c++学习笔记——结构体 | Felt's blog
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/note">学习笔记</a>
+              
+                <a class="nav-menu-item" href="/project">项目</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">c++学习笔记——结构体</div>
+        <div class="post-info">
+          
+  
+
+
+          <span class="post-date">2025-02-02</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>结构体和类都是C++的复合类型。</p>
+<h4 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h4><p>结构体的初始化可以使用<strong>聚合初始化</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Employee</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> id &#123;&#125;;</span><br><span class="line">    <span class="type">int</span> age &#123;&#125;;</span><br><span class="line">    <span class="type">double</span> wage &#123;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Employee frank = &#123; <span class="number">1</span>, <span class="number">32</span>, <span class="number">60000.0</span> &#125;; <span class="comment">// copy-list initialization using braced list</span></span><br><span class="line">    Employee joe &#123; <span class="number">2</span>, <span class="number">28</span>, <span class="number">45000.0</span> &#125;;     <span class="comment">// list initialization using braced list (preferred)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>聚合数据类型</strong>:是可以包含多个数据成员的任何类型。<br>C++ 中的聚合要么是 C 样式数组，要么是具有以下特征的类类型（结构、类或联合）：</p>
+<ol>
+<li>没有用户声明的构造函数</li>
+<li>无私有或受保护的非静态数据成员</li>
+<li>无虚函数<br>关键是，仅包含数据成员的结构是聚合的</li>
+</ol>
+</blockquote>
+<p>如果初始化了聚合，<strong>但初始化值的数量少于成员的数量</strong>，则每个没有显式初始值设定项的成员都将按如下方式初始化：<br>	1. 如果成员具有默认成员初始值设定项，则使用该初始值设定项。<br>	2. 否则，将从空初始值设定项列表复制初始化成员。在大多数情况下，这将对这些成员执行值初始化（在类类型上，即使存在列表构造函数，这也将调用默认构造函数）。</p>
+<blockquote>
+<ul>
+<li><strong>结构体也有隐式默认构造函数</strong>，但<strong>不初始化基本类型成员</strong>。</li>
+</ul>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Employee</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> id &#123;&#125;;</span><br><span class="line">    <span class="type">int</span> age &#123;&#125;;</span><br><span class="line">    <span class="type">double</span> wage &#123; <span class="number">76000.0</span> &#125;;</span><br><span class="line">    <span class="type">double</span> whatever;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Employee joe &#123; <span class="number">2</span>, <span class="number">28</span> &#125;; <span class="comment">// joe.whatever will be value-initialized to 0.0</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">joe.id 将使用值 <span class="number">2</span> 进行初始化，而 joe.age 将使用值 <span class="number">28</span> 进行初始化。由于 joe.wage 没有获得显式初始值设定项，但具有默认成员初始值设定项，因此 joe.wage 将初始化为 <span class="number">76000.0</span>。最后，由于 joe.whatever 没有被赋予显式初始化器，因此 joe.whatever 的值初始化为 <span class="number">0.0</span>。</span><br></pre></td></tr></table></figure>
+
+<p>如果使用空{}初始化，则使用默认成员初始值设定项</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Something</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> x;       <span class="comment">// no default initialization value (bad)</span></span><br><span class="line">    <span class="type">int</span> y &#123;&#125;;    <span class="comment">// value-initialized by default</span></span><br><span class="line">    <span class="type">int</span> z &#123; <span class="number">2</span> &#125;; <span class="comment">// explicit default value</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Something s1; <span class="comment">// s1.x is uninitialized, s1.y is 0, and s1.z is 2</span></span><br><span class="line">    Something s2 &#123;&#125;; <span class="comment">// value initialize s2.x, use default values for s2.y and s2.z. s2.x is 0 , s2.y is 0, and s2.z is 2</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">s1 对象没有初始化器，因此 s1 的成员被初始化为默认值。s<span class="number">1.</span>x 没有默认初始化器，因此它保持未初始化状态。s<span class="number">1.</span>y是默认初始化的值，因此它的值为 <span class="number">0</span>。s<span class="number">1.</span>z 初始化为值 <span class="number">2</span>。</span><br><span class="line">s<span class="number">2.</span>x（没有默认成员初始值设定项）的值初始化为 <span class="number">0</span>，s<span class="number">2.</span>y 的值初始化为 <span class="number">0</span>，s<span class="number">2.</span>z 的默认值为 <span class="number">2</span>。</span><br></pre></td></tr></table></figure>
+
+<p>C++20 添加了一种称为<strong>指定初始值设定项</strong>的新方法来初始化结构成员。使用指定的初始值设定项，可以显式定义哪些初始化值映射到哪些成员。<br>	必须按照它们在结构中声明的顺序进行初始化，否则将导致警告或错误。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Foo</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> a&#123; &#125;;</span><br><span class="line">    <span class="type">int</span> b&#123; &#125;;</span><br><span class="line">    <span class="type">int</span> c&#123; &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Foo f1&#123; .a&#123; <span class="number">1</span> &#125;, .c&#123; <span class="number">3</span> &#125; &#125;; <span class="comment">// ok: f1.a = 1, f1.b = 0 (value initialized), f1.c = 3</span></span><br><span class="line">    Foo f2&#123; .a = <span class="number">1</span>, .c = <span class="number">3</span> &#125;;   <span class="comment">// ok: f2.a = 1, f2.b = 0 (value initialized), f2.c = 3</span></span><br><span class="line">    Foo f3&#123; .b&#123; <span class="number">2</span> &#125;, .a&#123; <span class="number">1</span> &#125; &#125;; <span class="comment">// error: initialization order does not match order of declaration in struct</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一个结构也可以使用另一个相同类型的结构进行初始化：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Foo foo &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span> &#125;;</span><br><span class="line"></span><br><span class="line">Foo x = foo; <span class="comment">// copy-initialization</span></span><br><span class="line"><span class="function">Foo <span class="title">y</span><span class="params">(foo)</span></span>;  <span class="comment">// direct-initialization</span></span><br><span class="line">Foo z &#123;foo&#125;; <span class="comment">// direct-list-initialization</span></span><br></pre></td></tr></table></figure>
+
+
+<p>重载 <code>operator&lt;&lt;</code> 来打印结构体成员</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">std::ostream&amp; <span class="keyword">operator</span>&lt;&lt;(std::ostream&amp; out, <span class="type">const</span> Employee&amp; e)</span><br><span class="line">&#123;</span><br><span class="line">    out &lt;&lt; e.id &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; e.age &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; e.wage;</span><br><span class="line">    <span class="keyword">return</span> out;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Employee joe &#123; <span class="number">2</span>, <span class="number">28</span> &#125;; <span class="comment">// joe.wage will be value-initialized to 0.0</span></span><br><span class="line">    std::cout &lt;&lt; joe &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="传入和返回结构体"><a href="#传入和返回结构体" class="headerlink" title="传入和返回结构体"></a>传入和返回结构体</h4><p>通常使用引用传入结构体，避免复制临时对象。<br>也可以传入临时的结构体对象</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Employee</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> id &#123;&#125;;</span><br><span class="line">    <span class="type">int</span> age &#123;&#125;;</span><br><span class="line">    <span class="type">double</span> wage &#123;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">printEmployee</span><span class="params">(<span class="type">const</span> Employee&amp; employee)</span> <span class="comment">// note pass by reference here</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;ID:   &quot;</span> &lt;&lt; employee.id &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Age:  &quot;</span> &lt;&lt; employee.age &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Wage: &quot;</span> &lt;&lt; employee.wage &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Employee joe &#123; <span class="number">14</span>, <span class="number">32</span>, <span class="number">24.15</span> &#125;;</span><br><span class="line">    Employee frank &#123; <span class="number">15</span>, <span class="number">28</span>, <span class="number">18.27</span> &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Print Joe&#x27;s information</span></span><br><span class="line">    <span class="built_in">printEmployee</span>(joe);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Print Joe&#x27;s information</span></span><br><span class="line">    <span class="built_in">printEmployee</span>(Employee &#123; <span class="number">14</span>, <span class="number">32</span>, <span class="number">24.15</span> &#125;); <span class="comment">// construct a temporary Employee to pass to function (type explicitly specified) (preferred)</span></span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Print Frank&#x27;s information</span></span><br><span class="line">    <span class="built_in">printEmployee</span>(&#123; <span class="number">15</span>, <span class="number">28</span>, <span class="number">18.27</span> &#125;); <span class="comment">// construct a temporary Employee to pass to function (type deduced from parameter)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结构体返回通常使用按值返回，避免悬空引用的问题。<br>	例如，返回坐标点结构</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Point3d</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">double</span> x &#123; <span class="number">0.0</span> &#125;;</span><br><span class="line">    <span class="type">double</span> y &#123; <span class="number">0.0</span> &#125;;</span><br><span class="line">    <span class="type">double</span> z &#123; <span class="number">0.0</span> &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">Point3d <span class="title">getZeroPoint</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// We can create a variable and return the variable (we&#x27;ll improve this below)</span></span><br><span class="line">    Point3d temp &#123; <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span> &#125;;</span><br><span class="line">    <span class="keyword">return</span> temp;        <span class="comment">//temp在表达式结束时销毁</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">/*等价写法</span></span><br><span class="line"><span class="comment">    return Point3d &#123; 0.0, 0.0, 0.0 &#125;; // return an unnamed Point3d </span></span><br><span class="line"><span class="comment">	return &#123; 0.0, 0.0, 0.0 &#125;; // return an unnamed Point3d </span></span><br><span class="line"><span class="comment">    return &#123;&#125;; </span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Point3d zero&#123; <span class="built_in">getZeroPoint</span>() &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="结构体嵌套"><a href="#结构体嵌套" class="headerlink" title="结构体嵌套"></a>结构体嵌套</h4><p>Employee作为Company结构对一部分</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Company</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">Employee</span> <span class="comment">// accessed via Company::Employee</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> id&#123;&#125;;</span><br><span class="line">        <span class="type">int</span> age&#123;&#125;;</span><br><span class="line">        <span class="type">double</span> wage&#123;&#125;;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> numberOfEmployees&#123;&#125;;</span><br><span class="line">    Employee CEO&#123;&#125;; <span class="comment">// Employee is a struct within the Company struct</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Company myCompany&#123; <span class="number">7</span>, &#123; <span class="number">1</span>, <span class="number">32</span>, <span class="number">55000.0</span> &#125; &#125;; <span class="comment">// Nested initialization list to initialize Employee</span></span><br><span class="line">    std::cout &lt;&lt; myCompany.CEO.wage &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// print the CEO&#x27;s wage</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="结构体大小"><a href="#结构体大小" class="headerlink" title="结构体大小"></a>结构体大小</h4><p>结构体会对成员数据进行数据对齐<br>对齐规则：<br>	1、第一个成员在与结构体偏移量为0的地址处。<br>	2、其他成员变量要对齐到某个数字（对齐数）的整数倍的地址处<br>		<strong>对齐数 &#x3D; 编译器默认的对齐数与该成员大小的较小值。</strong><br>		<strong>数组的对齐数</strong> &#x3D; <strong>数组类型的对齐数</strong><br>		在前一个成员结束的偏移量之后，编译器会寻找满足其对齐数的整数倍下一个地址偏移。如果当前偏移量不能满足该成员的对齐数的整数倍，则在成员前插入若干个字节的“对齐填充（Padding）”，以让该成员对齐到正确的地址。<br>	3、结构体总大小为最大对齐数的整数倍。</p>
+<blockquote>
+<p><strong>自然对齐</strong>：数据的内存地址是数据大小的倍数，这样 CPU能最有效地执行对内存的读写，因为cpu取数据是按n位数据取，例如32位系统每次取数据按32位也就是4字节整数倍取。例如，在 32 位体系结构中，如果数据存储在 4 个连续字节中，并且第一个字节位于 4 字节边界上，则数据可能会对齐。<br><strong>数据对齐</strong>是元素根据其自然对齐方式进行对齐。为了确保自然对齐，可能需要在结构元素之间或结构的最后一个元素之后插入一些填充。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Foo</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">short</span> a &#123;&#125;;</span><br><span class="line">    <span class="type">int</span> b &#123;&#125;;</span><br><span class="line">    <span class="type">double</span> c &#123;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;The size of short is &quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(<span class="type">short</span>) &lt;&lt; <span class="string">&quot; bytes\n&quot;</span>;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;The size of int is &quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(<span class="type">int</span>) &lt;&lt; <span class="string">&quot; bytes\n&quot;</span>;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;The size of double is &quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(<span class="type">double</span>) &lt;&lt; <span class="string">&quot; bytes\n&quot;</span>;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;The size of Foo is &quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(Foo) &lt;&lt; <span class="string">&quot; bytes\n&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">short</span> + <span class="type">int</span> + <span class="type">double</span> 的大小是 <span class="number">14</span> 字节，但 Foo 的大小是 <span class="number">16</span> 字节！</span><br></pre></td></tr></table></figure>
+
+<p>不同的声明顺序会导致不同的结构体大小。<br>	可以通过按照类型大小降序声明来实现最小化填充</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Foo1</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">short</span> a&#123;&#125;; <span class="comment">// will have 2 bytes of padding after a</span></span><br><span class="line">    <span class="type">int</span> b&#123;&#125;;</span><br><span class="line">    <span class="type">short</span> c&#123;&#125;; <span class="comment">// will have 2 bytes of padding after c</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Foo2</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> b&#123;&#125;;</span><br><span class="line">    <span class="type">short</span> a&#123;&#125;;</span><br><span class="line">    <span class="type">short</span> c&#123;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="built_in">sizeof</span>(Foo1) &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// prints 12</span></span><br><span class="line">    std::cout &lt;&lt; <span class="built_in">sizeof</span>(Foo2) &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// prints 8</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>再举个例子</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">MixedData</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="type">char</span>  Data1;  <span class="comment">// 1字节</span></span><br><span class="line">    <span class="type">short</span> Data2;  <span class="comment">// 2字节</span></span><br><span class="line">    <span class="type">int</span>   Data3;  <span class="comment">// 4字节</span></span><br><span class="line">    <span class="type">char</span>  Data4;  <span class="comment">// 1字节</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><strong>最大对齐单位</strong><br>结构体内部成员的最大类型为 int，其对齐要求是 4 字节，因此整个结构体的对齐单位也将是 4 字节。换言之，结构体的总大小需要是 4 的整数倍。</li>
+<li><strong>成员排布和填充</strong><br>• Data1（1 字节）位于偏移量 0 处。写入后指针移动到偏移量 1。<br>• <strong>为了保证 Data2（2 字节）按照 2 字节对齐</strong>，编译器会在 Data1 后面插入 1 字节的 <strong>对齐填充（padding）</strong>，使得 Data2 的起始地址是 2 的倍数。此时偏移量变为 2。<br>• Data2 写入后占用 2 字节（偏移量 [2, 3]），接着偏移量变为 4。<br>• Data3（4 字节）要求 4 字节对齐，当前偏移量正好是 4，满足要求，因此直接写入占用偏移量 [4, 7]，随后偏移量变为 8。<br>• Data4（1 字节）写入后占用偏移量 8（仅 1 字节），结束后偏移量变为 9。</li>
+<li><strong>结构体结尾对齐</strong><br>由于结构体整体要对齐到 4 的倍数，所以在末尾需要补足 3 个字节的填充，使得结构体总大小变为 12。</li>
+</ol>
+<p>下面重新排布顺序后，结构体大小将是8字节</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">MixedData</span>  /* <span class="title">after</span> <span class="title">reordering</span> */</span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="type">char</span> Data1;</span><br><span class="line">    <span class="type">char</span> Data4;   <span class="comment">/* reordered */</span></span><br><span class="line">    <span class="type">short</span> Data2;</span><br><span class="line">    <span class="type">int</span> Data3;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/pay-code.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98%E5%92%8C%E7%9F%A9%E9%98%B5%E8%BD%AC%E7%BD%AE/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>合并访存和矩阵转置</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2025/01/26/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%BC%95%E7%94%A8%E5%92%8C%E6%8C%87%E9%92%88/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      c++学习笔记——引用和指针
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+
+</div>
+  <div class="realated__body">
+    
+      DEBUG: 请安装插件 <a target="_blank" rel="noopener" href="https://github.com/tea3/hexo-related-popular-posts">hexo-related-popular-posts</a> 或关闭 related_post 配置!
+    
+  </div>
+</div>
+
+    
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/Felt98">Felt's Github</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-zh.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/yi-ming-81-1">Felt</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-email.svg" />
+            <a class="foot-link" href="mailto:haoqingqin@gmail.com">haoqingqin@gmail.com</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="http://example.com">Felt's blog</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  
+
+  </body>
+</html>

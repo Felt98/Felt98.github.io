@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        c++学习笔记——变量与常用类型 | Felt's blog
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/note">学习笔记</a>
+              
+                <a class="nav-menu-item" href="/project">项目</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">c++学习笔记——变量与常用类型</div>
+        <div class="post-info">
+          
+  
+
+
+          <span class="post-date">2025-01-22</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <h4 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h4><p>变量：是可用于存储信息的内存段的名称<br>	变量定义在操作系统中的细节：<br>	- 定义变量时，系统将为该变量留出一段内存。内存被组织成称为<strong>内存地址</strong>的顺序单元。与使用街道地址在街道上查找给定房屋的方式类似，唯一的内存地址允许我们在特定位置查找和访问内存内容。<br>	- 当您为变量对象指定值时，编译器和 CPU 会负责将值编码为该数据类型的适当位序列，然后将其存储在内存中（请记住：<strong>内存只能存储位</strong>）。例如，如果为整数对象分配值 <code>65</code>，则该值将转换为位序列 <code>0100 0001</code> 并存储在分配给该对象的内存中。相反，当对对象进行计算以生成值时，该位序列将重构回原始值。这意味着 <code>0100 0001</code> 将转换回值 <code>65</code>。<br>	- 只要对象存在就会一直占有内存</p>
+<blockquote>
+<p>因为内存地址的数量有限，在现代计算机体系结构中，每个位都没有自己唯一的内存地址。而是选择将<strong>每个内存地址保存 1 字节的数据</strong>（<strong>内存是字节可寻址的</strong>），也就是说，<strong>一个数据变量的大小至少是1字节</strong><br>- <strong>字节Byte</strong>是作为内存单元进行操作的一组位。现代标准是<strong>字节由 8 个顺序位bit</strong>组成。</p>
+</blockquote>
+<p>下图显示了一些顺序内存地址，以及相应的数据字节：</p>
+<img src="/2025/01/22/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%8F%98%E9%87%8F%E4%B8%8E%E5%B8%B8%E7%94%A8%E7%B1%BB%E5%9E%8B/img-%E5%8F%98%E9%87%8F%E4%B8%8E%E5%B8%B8%E7%94%A8%E7%B1%BB%E5%9E%8B-4.png" class="" title="|300">
+
+
+<h4 id="常用数据类型"><a href="#常用数据类型" class="headerlink" title="常用数据类型"></a>常用数据类型</h4><p>C++的<strong>基本数据类型</strong>如下表，务必将下面的表背熟并会推范围：</p>
+<table>
+<thead>
+<tr>
+<th>整数类型</th>
+<th>大小&#x2F;字节</th>
+<th>范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>bool</td>
+<td>1</td>
+<td>0或1</td>
+</tr>
+<tr>
+<td>char</td>
+<td>1</td>
+<td>$-2^{7}～2^{7}-1$      (-128~127)</td>
+</tr>
+<tr>
+<td>short</td>
+<td>2</td>
+<td>$-2^{15}～2^{15}-1$ （-32768~32767)</td>
+</tr>
+<tr>
+<td>int</td>
+<td>4</td>
+<td>$-2^{31}～2^{31}-1$ （-2,147,483,648 ~ 2,147,483,647)</td>
+</tr>
+<tr>
+<td>unsigned int</td>
+<td>4</td>
+<td>$0～2^{32}-1$        (0 ~ 4,294,967,295)</td>
+</tr>
+<tr>
+<td>long</td>
+<td>4或8</td>
+<td></td>
+</tr>
+<tr>
+<td>long long</td>
+<td>8</td>
+<td>$-2^{63}～2^{63}-1$  （大概±922亿亿）</td>
+</tr>
+<tr>
+<td>指针</td>
+<td>4或8</td>
+<td></td>
+</tr>
+</tbody></table>
+<pre><code>*指针和long的范围取决于平台，32位是4字节，64位是8字节*
+		对于指针，在32位系统时因为地址空间为 2 ^ 32，需要4字节存储地址。 同理，64位就需要地址空间为 2 ^ 64，需要8字节
+*有一些组合的类型，比如short int 、long int、long long int，用的少就不细说了*
+</code></pre>
+<blockquote>
+<p><strong>整数类型的范围计算公式</strong>：<br>如果该类型占n位 （字节数✖️8）<br>	- 无符号范围：$0～2^{n}-1$<br>	- 有符号范围：$2^{n-1}～2^{n-1}-1$</p>
+<p>例如char占1字节，即有8位，那么：</p>
+<ul>
+<li>无符号char的二进制范围是：0000 0000 ～ 1111 1111 换算成十进制是$0～2^{8}-1$ </li>
+<li>有符号char的二进制范围是：1000 0000 ～ 0111 1111 换算成十进制是$-2^{7}-1～2^{7}-1$</li>
+</ul>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>浮点数类型</th>
+<th>大小&#x2F;字节</th>
+<th>范围</th>
+<th>精度（有效数字位）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>float</td>
+<td>4</td>
+<td>1.2 E-38 到 3.4 E+38</td>
+<td>6-7位，通常为 7 位</td>
+</tr>
+<tr>
+<td>double</td>
+<td>8</td>
+<td>2.3 E-308 到 1.7 E+308</td>
+<td>15-18位，通常为 16 位</td>
+</tr>
+<tr>
+<td>long double</td>
+<td>8、12或16</td>
+<td>取决于平台，不建议使用</td>
+<td>18-21位</td>
+</tr>
+</tbody></table>
+<p>sizeof：C++ 提供了一个名为 <code>sizeof</code> 的运算符来返回该类型对象的<strong>字节大小</strong><br>	注意<code>sizeof</code> 不能对动态分配的内存的对象使用</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">std::cout &lt;&lt; <span class="string">&quot;bool:&quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(<span class="type">bool</span>) &lt;&lt; <span class="string">&quot; bytes\n&quot;</span>;</span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;char:&quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(<span class="type">char</span>) &lt;&lt; <span class="string">&quot; bytes\n&quot;</span>;</span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;short:&quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(<span class="type">short</span>) &lt;&lt; <span class="string">&quot; bytes\n&quot;</span>;</span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;int:&quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(<span class="type">int</span>) &lt;&lt; <span class="string">&quot; bytes\n&quot;</span>;</span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;long:&quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(<span class="type">long</span>) &lt;&lt; <span class="string">&quot; bytes\n&quot;</span>;</span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;long long:&quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(<span class="type">long</span> <span class="type">long</span>) &lt;&lt; <span class="string">&quot; bytes\n&quot;</span>;</span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;float:&quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(<span class="type">float</span>) &lt;&lt; <span class="string">&quot; bytes\n&quot;</span>;</span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;double:&quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(<span class="type">double</span>) &lt;&lt; <span class="string">&quot; bytes\n&quot;</span>;</span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;long double:&quot;</span> &lt;&lt; <span class="built_in">sizeof</span>(<span class="type">long</span> <span class="type">double</span>) &lt;&lt; <span class="string">&quot; bytes\n&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>size_t</strong>:<br><strong>std：：size_t</strong> 是实现定义的 unsigned int 类型的别名,在标准库中用于表示对象的字节大小或长度。<br>内存对象的大小(sizeof的返回类型） 、容器大小和索引都是size_t类型<br>换句话说，编译器决定 <code>size_t</code> 是 unsigned int、unsigned long、unsigned long long 等。<br>因此size_t 和 unsigned int 区别在于<strong>size_t的大小由平台地址空间决定</strong></p>
+<p><code>size_t</code> 在许多不同的标头中定义。如果需要使用 <code>std：：size_t</code>， &lt;cstddef&gt;是最好的标头，因为它包含的其他已定义标识符的数量最少。</p>
+</blockquote>
+<blockquote>
+<p><strong>整数除法</strong>:<br> 当一个整数不能整除另一个整数时，将会<strong>舍弃掉小数部分</strong>，这称为向下取整<br> 例如：8 &#x2F; 5 产生值 1.6。小数部分 （0.6） 被删除，1 的结果保持不变。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">    std::cout &lt;&lt; <span class="number">8</span> / <span class="number">5</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">输出：<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<h4 id="溢出"><a href="#溢出" class="headerlink" title="溢出"></a>溢出</h4><p>假如我们将超出范围的数分配给了一个基本类型对象，就会发生<strong>溢出</strong>。溢出会导致信息丢失<br>	例如下面的程序，x将会溢出</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">    <span class="type">int</span> x &#123; <span class="number">2&#x27;147&#x27;483&#x27;647</span> &#125;; <span class="comment">// the maximum value of a 4-byte signed integer</span></span><br><span class="line">    std::cout &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    x = x + <span class="number">1</span>; <span class="comment">// integer overflow, undefined behavior</span></span><br><span class="line">    std::cout &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">	<span class="number">2147483647</span></span><br><span class="line">	<span class="number">-2147483648</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>冷知识：在c++标准中，有符号整数溢出是未定义的行为，而无符号整数溢出是明确定义的行为（也就是说C++ 标准明确表示无符号整数溢出不是溢出）</p>
+</blockquote>
+<p>-<strong>有符号整数的溢出</strong> ：<br>	- 从最大值开始的溢出会将这个整数对象从其最小值开始增加<br>	- 相反，如果从最小值向下溢出就从最大值开始减少<br>	- <strong>wraps around</strong>：可以理解为最大值和最小值围成一个圈，超过了这个值就是回到了圈的起点重新开始</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">    <span class="type">int</span> x = <span class="number">2&#x27;147&#x27;483&#x27;647</span> ; <span class="comment">//最大值</span></span><br><span class="line">    x = x + <span class="number">1</span>; <span class="comment">// integer overflow, undefined behavior ，溢出成最小值</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">	x = <span class="number">-2&#x27;147&#x27;483&#x27;648</span> ;    <span class="comment">//最小值</span></span><br><span class="line">    x = x - <span class="number">1</span>; <span class="comment">// integer overflow, undefined behavior，溢出成最大值</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">	<span class="number">-2147483648</span></span><br><span class="line">	<span class="number">2147483647</span></span><br></pre></td></tr></table></figure>
+
+<p>-<strong>无符号整数溢出</strong><br>	- 如果无符号值超出范围，则将其除以类型所能表示的最大数字+1，然后仅保留余数。<br>		- 例如将数字 <code>280</code>（需要 9 位表示）存储在 1 字节 （ 0 到 255范围） 无符号整数变量中。则将 280 除以 256，得到余数 24，然后存在这个变量中<br>		- 同样可以理解为一个圈，<code>256</code> 超出范围，因此它会回绕到值 <code>0</code>。<code>257</code> 回绕到值 <code>1</code>。<code>280</code> 回绕为值 <code>24</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> x&#123; <span class="number">65535</span> &#125;; <span class="comment">// largest 16-bit unsigned value possible</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;x was: &quot;</span> &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    x = <span class="number">65536</span>; <span class="comment">// 65536 is out of our range, so we get modulo wrap-around</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;x is now: &quot;</span> &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    x = <span class="number">65537</span>; <span class="comment">// 65537 is out of our range, so we get modulo wrap-around</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;x is now: &quot;</span> &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">	x was: <span class="number">65535</span></span><br><span class="line">	x is now: <span class="number">0</span></span><br><span class="line">	x is now: <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>如果无符号整数表示负数，会回绕到范围的顶部，开始减少</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">    <span class="type">unsigned</span> <span class="type">short</span> x&#123; <span class="number">0</span> &#125;; <span class="comment">// smallest 2-byte unsigned value possible</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;x was: &quot;</span> &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    x = <span class="number">-1</span>; <span class="comment">// -1 is out of our range, so we get modulo wrap-around</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;x is now: &quot;</span> &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    x = <span class="number">-2</span>; <span class="comment">// -2 is out of our range, so we get modulo wrap-around</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;x is now: &quot;</span> &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">输出：</span><br><span class="line">	x was: <span class="number">0</span></span><br><span class="line">	x is now: <span class="number">65535</span></span><br><span class="line">	x is now: <span class="number">65534</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>无符号数的争议</strong>：<br>许多开发人员（以及一些大型开发公司，如 Google）认为开发人员通常应该避免使用无符号整数。<br>无符号数字的范围底部是0，接近我们大多数值所在的位置，因此可以说无符号数更容易溢出。<br>特别是当您<strong>混合使用有符号和无符号整数时</strong>，可能会导致意外行为。<br>在 C++ 中，如果数学运算（例如算术或比较）有一个有符号整数和一个无符号整数，则<strong>有符号整数通常会转换为无符号整数</strong>。因此，结果将是 unsigned。</p>
+<p>例如：在这种情况下，如果 <code>u</code> 是signed的，将产生正确的结果。但是因为 <code>u</code> 是unsigned的（很容易错过），所以 s 被转换为 unsigned，结果 （<code>-1</code>） 被视为 unsigned 值。由于 <code>-1</code> 不能存储在无符号值中，因此我们会得到 overflow 和一个意外的答案。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">unsigned</span> <span class="type">int</span> u&#123; <span class="number">2</span> &#125;;</span><br><span class="line"><span class="type">signed</span> <span class="type">int</span> s&#123; <span class="number">3</span> &#125;;</span><br><span class="line">std::cout &lt;&lt; u - s &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// 2 - 3 = 4294967295</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在 C++ 中，仍有一些情况下可以使用无符号数字。<br>例如在处理位操作时，无符号数字是首选。<br>当需要明确定义的环绕行为时，它们也很有用（在某些算法中很有用，如加密和随机数生成）。<br>在某些情况下，使用无符号数字仍然是不可避免的，例如vector等容器类的下标索引类型size_t是无符号整型</p>
+</blockquote>
+<h4 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h4><p>在现代体系结构中，浮点类型通常使用 IEEE 754 标准中定义的浮点格式之一实现。<br>浮点数可用于存储非常大或非常小的数字，包括那些带有小数分量的数字。</p>
+<blockquote>
+<p>浮点数的二进制实现参考：<a target="_blank" rel="noopener" href="https://float.exposed/0x3dcccccd">https://float.exposed/0x3dcccccd</a></p>
+</blockquote>
+<p>使用浮点数时，请始终至少包含一个小数位（即使小数为 0）。这有助于编译器了解该数字是浮点数，而不是整数。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> b &#123; <span class="number">5.0</span> &#125;; <span class="comment">// 5.0 is a floating point literal (no suffix means double type by default)</span></span><br></pre></td></tr></table></figure>
+
+<p>默认情况下，小数的类型为 <code>double</code>。要使它们成为<code>float</code>文本，应使用 <code>f</code> （或 <code>F</code>） 后缀：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">float</span> c &#123; <span class="number">5.0f</span> &#125;; <span class="comment">// 5.0 is a floating point literal, f suffix means float type</span></span><br></pre></td></tr></table></figure>
+<h6 id="精度"><a href="#精度" class="headerlink" title="精度"></a>精度</h6><p>浮点类型的<strong>精度</strong>：定义它可以表示多少个有效数字而不会丢失信息。<br>	例如，float具有 6 到 9 位精度。这意味着 float 可以精确表示最多 6 个有效数字的任何数字。具有 7 到 9 位有效数字的数字可能会也可能不会准确表示，具体取决于特定值。但精度超过 9 位的数字肯定不会被准确表示。</p>
+<h6 id="输出浮点数"><a href="#输出浮点数" class="headerlink" title="输出浮点数"></a>输出浮点数</h6><p>当输出浮点数时，<code>std：：cout</code> 的默认精度为 6 —— 也就是说，它假设所有浮点变量都只对 6 位数字有效（浮点数的最小精度），因此它将截断此之后的任何内容。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">    std::cout &lt;&lt; <span class="number">9.87654321f</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    std::cout &lt;&lt; <span class="number">987.654321f</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    std::cout &lt;&lt; <span class="number">987654.321f</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    std::cout &lt;&lt; <span class="number">9876543.21f</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    std::cout &lt;&lt; <span class="number">0.0000987654321f</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">输出：每个数字都只有 <span class="number">6</span> 个有效数字。</span><br><span class="line">	<span class="number">9.87654</span></span><br><span class="line">	<span class="number">987.654</span></span><br><span class="line">	<span class="number">987654</span></span><br><span class="line">	<span class="number">9.87654e+006</span></span><br><span class="line">	<span class="number">9.87654e-005</span></span><br></pre></td></tr></table></figure>
+<p>可以使用名为 <code>std：：setprecision（）</code> <code>的输出操纵器</code>函数来覆盖 std：：cout 显示的默认精度。<strong>输出操纵器</strong>会改变数据的输出方式，并在 <em>iomanip</em> 标头中定义。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iomanip&gt;</span> <span class="comment">// for output manipulator std::setprecision()</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; std::<span class="built_in">setprecision</span>(<span class="number">17</span>); <span class="comment">// show 17 digits of precision</span></span><br><span class="line">    std::cout &lt;&lt; <span class="number">3.33333333333333333333333333333333333333f</span> &lt;&lt;<span class="string">&#x27;\n&#x27;</span>; <span class="comment">// f suffix means float</span></span><br><span class="line">    std::cout &lt;&lt; <span class="number">3.33333333333333333333333333333333333333</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// no suffix means double</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">	<span class="number">3.3333332538604736</span></span><br><span class="line">	<span class="number">3.3333333333333335</span></span><br><span class="line">	</span><br><span class="line">使用 std：：setprecision（）将精度设置为 <span class="number">17</span> 位，所以上述每个数字都打印有 <span class="number">17</span> 位数字。但是，正如你所看到的，这些数字肯定不是精确到 <span class="number">17</span> 位数字！由于 <span class="type">float</span> 的精度低于 <span class="type">double</span>，因此 <span class="type">float</span> 的误差更大。</span><br></pre></td></tr></table></figure>
+
+<h6 id="舍入误差"><a href="#舍入误差" class="headerlink" title="舍入误差"></a>舍入误差</h6><p>当由于无法精确存储数字而丢失精度时，这称为<strong>舍入误差</strong>。舍入错误可能会使数字略小或略大，具体取决于截断发生的位置。<br>舍入错误可能会产生意想不到的后果：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">    std::cout &lt;&lt; std::<span class="built_in">setprecision</span>(<span class="number">17</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">double</span> d1&#123; <span class="number">1.0</span> &#125;;</span><br><span class="line">    std::cout &lt;&lt; d1 &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">double</span> d2&#123; <span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span> + <span class="number">0.1</span> &#125;; <span class="comment">// should equal 1.0</span></span><br><span class="line">    std::cout &lt;&lt; d2 &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">	<span class="number">1</span></span><br><span class="line">	<span class="number">0.99999999999999989</span></span><br><span class="line"></span><br><span class="line">尽管我们可能期望 d1 和 d2 应该相等，但我们看到它们并不相等。即使 <span class="number">0.1</span> 在第 <span class="number">17</span> 位有效数字中有舍入误差，但当我们将 <span class="number">0.1</span> 相加 <span class="number">10</span> 次时，舍入误差已经悄悄进入第 <span class="number">16</span> 位有效数字。继续操作将导致此错误变得越来越严重。</span><br><span class="line">如果我们在程序中比较 d1 和 d2，程序可能无法按预期执行。因为浮点数往往不精确，所以比较浮点数通常是有问题的</span><br></pre></td></tr></table></figure>
+<p>关于舍入误差的最后一点说明：数学运算（例如加法和乘法）往往会使舍入误差增加。</p>
+<p>因此，在使用需要比变量可以容纳的精度更高的浮点数时必须小心。<strong>永远不要假设你的浮点数是准确的</strong>。<br>除非空间非常宝贵，否则首选 double 而不是 float，因为 float 中缺乏精度通常会导致不准确。</p>
+<blockquote>
+<p><strong>C++中表示科学计数法</strong></p>
+<ul>
+<li>在科学记数法 <code>1.2 x 10⁴</code> 中，<code>1.2</code> 是有效数字，<code>4</code> 是指数。由于 10⁴ 的计算结果10,000， 因此 1.2 x 10⁴ 的计算结果为 12,000。</li>
+<li>由于在 C++ 中很难键入或显示指数，因此我们使用字母“e”（有时使用“E”）来表示方程的“10 次方”部分。例如，<code>1.2 x 10⁴</code> 将写入 <code>1.2e4</code>，<code>而 5.9722 x 10²⁴</code> 将写入 <code>5.9722e24</code>。 </li>
+<li>对于小于 1 的数字，指数可以为负数。数字 <code>5e-2</code> 相当于 <code>5 * 10⁻²</code>，即 <code>5 / 10²</code>，即 <code>0.05</code>。</li>
+</ul>
+</blockquote>
+<h4 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h4><p>在大多数情况下，C++ 将允许我们将一种基本类型的值转换为另一种基本类型的值。将值从一种类型转换为另一种类型的过程称为<strong>类型转换</strong><br><strong>隐式类型转换</strong>：编译器不经过询问进行的类型转换<br>	例如，下面print（y) 中 int 变量 <code>y</code> 持有的值5将隐式转换为 double 值 <code>5.0</code>，然后复制到参数 <code>x</code> 中</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">double</span> x)</span> <span class="comment">// print takes a double parameter</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	std::cout &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> y &#123; <span class="number">5</span> &#125;;</span><br><span class="line">	<span class="built_in">print</span>(y); <span class="comment">// y is of type int</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将浮点值转换为整数值会导致删除任何小数分量。<br>某些类型转换始终可以安全进行（例如 <code>int</code> 到 <code>double</code>），而其他类型可能会导致在转换过程中更改值（例如 <code>double</code> 到 <code>int</code>）。不安全的隐式转换通常会生成编译器警告，或者（在大括号初始化的情况下）生成错误。</p>
+<h6 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast"></a>static_cast</h6><p><strong>显式类型转换</strong>允许我们（程序员）显式地告诉编译器将值从一种类型转换为另一种类型<br>要执行显式类型转换，在大多数情况下，我们将使用 <code>static_cast</code> 运算符</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">static_cast&lt;new_type&gt;(expression)</span><br></pre></td></tr></table></figure>
+
+<p>现在明确请求将 double 值 <code>5.5</code> 转换为 <code>int</code> 值，因此编译器不会在编译时生成有关可能丢失数据的警告</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">int</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	std::cout &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">print</span>( <span class="built_in">static_cast</span>&lt;<span class="type">int</span>&gt;(<span class="number">5.5</span>) ); <span class="comment">// explicitly convert double value 5.5 to an int</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>强制转换有符号和无符号类型<br>	如果转换的值不在目标类型的范围内，将会产生如下的结果</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">    <span class="type">int</span> s &#123; <span class="number">-1</span> &#125;;</span><br><span class="line">    std::cout &lt;&lt; <span class="built_in">static_cast</span>&lt;<span class="type">unsigned</span> <span class="type">int</span>&gt;(s) &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// prints 4294967295</span></span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> u &#123; <span class="number">4294967295</span> &#125;; <span class="comment">// largest 32-bit unsigned int</span></span><br><span class="line">    std::cout &lt;&lt; <span class="built_in">static_cast</span>&lt;<span class="type">int</span>&gt;(u) &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// implementation-defined prior to C++20, -1 as of C++20</span></span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">	<span class="number">4294967295</span></span><br><span class="line">	<span class="number">-1</span></span><br><span class="line"></span><br><span class="line">Signed <span class="type">int</span> 值 <span class="number">-1</span> 不能表示为 <span class="type">unsigned</span> <span class="type">int</span>。结果取模为 <span class="type">unsigned</span> <span class="type">int</span> 值 <span class="number">4294967295</span>。</span><br><span class="line"><span class="type">unsigned</span> <span class="type">int</span> 值 <span class="number">4294967295</span> 不能表示为 <span class="type">signed</span> <span class="type">int</span>。在 C+<span class="number">+20</span> 之前，结果是 implementation defined （但可能是 <span class="number">-1</span>）。从 C+<span class="number">+20</span> 开始，结果将模 wrap 为 <span class="number">-1</span>。</span><br></pre></td></tr></table></figure>
+
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/pay-code.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2025/01/24/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B8%B8%E7%94%A8%E5%85%B3%E9%94%AE%E5%AD%97static%E4%B8%8Econst/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>c++学习笔记——常用关键字static与const</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2025/01/19/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      c++学习笔记——智能指针
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+
+</div>
+  <div class="realated__body">
+    
+      DEBUG: 请安装插件 <a target="_blank" rel="noopener" href="https://github.com/tea3/hexo-related-popular-posts">hexo-related-popular-posts</a> 或关闭 related_post 配置!
+    
+  </div>
+</div>
+
+    
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/Felt98">Felt's Github</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-zh.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/yi-ming-81-1">Felt</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-email.svg" />
+            <a class="foot-link" href="mailto:haoqingqin@gmail.com">haoqingqin@gmail.com</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="http://example.com">Felt's blog</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  
+
+  </body>
+</html>

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        c++学习笔记——常用关键字static与const | Felt's blog
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/note">学习笔记</a>
+              
+                <a class="nav-menu-item" href="/project">项目</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">c++学习笔记——常用关键字static与const</div>
+        <div class="post-info">
+          
+  
+
+
+          <span class="post-date">2025-01-24</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <h2 id="static"><a href="#static" class="headerlink" title="static"></a>static</h2><p>static主要作用是限制变量或函数的作用范围<br>	- static 全局变量和static函数，为全局变量和函数提供内部链接，将其作用域限制在定义它的文件中<br>	- static局部变量，相当于将一个全局变量的范围限制在函数体内<br>	- static类成员变量和函数，可以不经过实例化对象就调用</p>
+<h4 id="static全局变量"><a href="#static全局变量" class="headerlink" title="static全局变量"></a>static全局变量</h4><p><strong>内部变量</strong>：具有<strong>内部链接</strong>的全局变量。<br>	使用 <code>static</code>可以使non-constant的全局变量内部化<br>	默认情况下，<code>const</code> 和 <code>constexpr</code> 全局变量具有内部链接（因此不需要 <code>static</code> 关键字）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> g_x&#123;&#125;; <span class="comment">// non-constant globals have external linkage by default, but can be given internal linkage via the static keyword</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> g_y&#123; <span class="number">1</span> &#125;; <span class="comment">// const globals have internal linkage by default</span></span><br><span class="line"><span class="keyword">constexpr</span> <span class="type">int</span> g_z&#123; <span class="number">2</span> &#125;; <span class="comment">// constexpr globals have internal linkage by default</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; g_x &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; g_y &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; g_z &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>内部变量仅限于本文件内访问，其他文件不能直接使用，即<strong>内部变量的作用域限制在定义它的翻译单元（即源文件）中</strong></p>
+<ul>
+<li>例如，在a.cpp内声明了内部变量 <code>g_x</code></li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[[maybe_unused]] <span class="keyword">constexpr</span> <span class="type">int</span> g_x &#123; <span class="number">2</span> &#125;; <span class="comment">// this internal g_x is only accessible within a.cpp</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>main.cpp内也有一个static声明的内部变量 <code>g_x</code>。但因为 <code>g_x</code> 是每个文件的内部变量，所以main.cpp不知道 <code>a.cpp</code> 还有一个名为 <code>g_x</code> 的变量（反之亦然）</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> g_x &#123; <span class="number">3</span> &#125;; <span class="comment">// this separate internal g_x is only accessible within main.cpp</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; g_x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// uses main.cpp&#x27;s g_x, prints 3</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>C++11 标准（附录 C）提供了 const 变量默认具有内部链接的基本原理：<br>“由于 const 对象可以用作 C++ 中的编译时值，因此此功能敦促程序员为每个 const 提供显式初始值设定项值。此功能允许用户将 const 对象放在包含在许多编译单元中的头文件中。”<br>将 const 变量设为内部链接意味着每个翻译单元都获得自己的变量副本，在内部中被视为独立实体，，因此不会违反 ODR。（<strong>ODR规则（one-definition rule）</strong>：全局变量、函数、类等实体具有唯一定义）</p>
+</blockquote>
+<h4 id="static函数"><a href="#static函数" class="headerlink" title="static函数"></a>static函数</h4><p>函数默认为<strong>外部链接</strong>的。通过 <code>static</code> 关键字将函数设置为内部链接，仅限于本文件中使用</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x + y;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>static</code> vs <code>unnamed namespaces</code><br>在现代 C++ 中，使用 <code>static</code> 关键字为标识符提供内部链接已不再受欢迎。未命名的命名空间<code>unnamed namespaces</code>可以为更广泛的标识符（例如类型标识符）提供内部链接，并且它们更适合为许多标识符提供内部链接。</p>
+</blockquote>
+<h4 id="static局部变量"><a href="#static局部变量" class="headerlink" title="static局部变量"></a>static局部变量</h4><p>static局部变量类似于<strong>作用域为函数体内的全局变量</strong><br>	没有初始值设定项或非 constexpr 初始值设定项的静态局部变量在程序启动时进行零初始化。</p>
+<p><strong>static局部变量与普通局部变量的区别</strong><br>	其实就是全局变量和局部变量的区别<br>	1. static局部变量只初始化一次，声明周期是整个程序，在程序开始时创建，并在程序结束时销毁（就像全局变量一样），值不会在函数调用间丢失。<br>	   普通局部变量声明周期是在函数体内，在调用函数时创建，超出函数范围将被销毁<br>	2. static局部变量存储在<strong>数据段</strong>，普通局部变量存储在栈上</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">incrementAndPrint</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">static</span> <span class="type">int</span> s_value&#123; <span class="number">1</span> &#125;; <span class="comment">// static duration via static keyword.  This initializer is only executed once.</span></span><br><span class="line">    ++s_value;</span><br><span class="line">    std::cout &lt;&lt; s_value &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125; <span class="comment">// s_value is not destroyed here, but becomes inaccessible because it goes out of scope</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">incrementAndPrint</span>();</span><br><span class="line">    <span class="built_in">incrementAndPrint</span>();</span><br><span class="line">    <span class="built_in">incrementAndPrint</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">	<span class="number">2</span></span><br><span class="line">	<span class="number">3</span></span><br><span class="line">	<span class="number">4</span></span><br><span class="line">由于 s_value 已声明为 <span class="type">static</span>，因此它是在程序启动时创建的。在后续调用中跳过该定义，因此不会发生进一步的重新初始化。</span><br><span class="line">当 s_value在函数结束时超出范围时，它不会被销毁。每次调用函数 incrementAndPrint（） 时，s_value 的值都保持为我们之前保留的值。</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>应用场景</strong>：当您需要局部变量在函数调用中记住其值时，或者避免每次调用函数时进行昂贵的本地对象初始化，可以使用静态局部变量。</p>
+<ul>
+<li>例如，唯一 ID 生成器。<br>  -想象一个程序，其中有许多相似的对象（例如，您被许多僵尸攻击的游戏，或者您显示许多三角形的模拟）。您注意到缺陷，几乎不可能区分哪个对象有问题。但是，如果在创建时为每个对象提供唯一标识符，则可以更轻松地区分对象以进行进一步调试。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">generateID</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">static</span> <span class="type">int</span> s_itemID&#123; <span class="number">0</span> &#125;;</span><br><span class="line">    <span class="keyword">return</span> s_itemID++; <span class="comment">// makes copy of s_itemID, increments the real s_itemID, then returns the value in the copy</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>静态局部变量可以设为 const （或 constexpr）。const 静态局部变量的一个很好的用途是，当你有一个函数需要使用 const 值，但创建或初始化对象很昂贵时（例如，你需要从数据库中读取值）。使用 const&#x2F;constexpr 静态局部变量，您可以创建并初始化一次昂贵的对象，然后在调用函数时重用它。</li>
+</ul>
+<h4 id="static类成员变量"><a href="#static类成员变量" class="headerlink" title="static类成员变量"></a>static类成员变量</h4><p><strong>静态成员变量</strong>：不与某个类对象关联，而是由类的<strong>所有对象</strong>共享，可以当成专属于这个类的全局变量。<br>	- 和static局部变量一样，在程序开始时创建的，在程序结束时销毁，生命周期不像普通成员变量那样绑定到类对象。<br>	-因为在在程序开始就创建了， <strong>即使没有实例化该类的对象，静态成员变量也存在</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Something</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">static</span> <span class="type">int</span> s_value; <span class="comment">// declare s_value as static (initializer moved below)</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> Something::s_value&#123; <span class="number">1</span> &#125;; <span class="comment">// define and initialize s_value to 1 (we&#x27;ll discuss this section below)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Something first&#123;&#125;;</span><br><span class="line">    Something second&#123;&#125;;</span><br><span class="line"></span><br><span class="line">    first.s_value = <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; first.s_value &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    std::cout &lt;&lt; second.s_value &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出</span><br><span class="line">	<span class="number">2</span></span><br><span class="line">	<span class="number">2</span></span><br><span class="line">	</span><br><span class="line">由于 s_value 是静态成员变量，因此 s_value 在类的所有对象之间共享</span><br><span class="line">所以first.s_value 与 second.s_value 是相同的变量，输出的值自然是一样的</span><br></pre></td></tr></table></figure>
+
+<p>如果静态成员变量是 public的，即使没有实例化该类的对象，也<strong>可以使用类名和范围解析运算符 :: 直接初始化或访问静态成员</strong><br>	- 注意，静态成员的定义和初始化不受访问控制的约束，因为定义不被视为一种访问形式</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// note: we&#x27;re not instantiating any objects of type Something</span></span><br><span class="line"></span><br><span class="line">    Something::s_value = <span class="number">2</span>;</span><br><span class="line">    std::cout &lt;&lt; Something::s_value &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">即使没有实例化 Something 类型的对象，也可以使用范围解析运算符::初始化静态成员变量s_value</span><br></pre></td></tr></table></figure>
+<p>如果静态成员变量设置是私有private，则不能直接访问，需要使用静态成员函数访问</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Something</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>: <span class="comment">// now private</span></span><br><span class="line">    <span class="type">static</span> <span class="keyword">inline</span> <span class="type">int</span> s_value &#123; <span class="number">1</span> &#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; Something::s_value; <span class="comment">// 不能直接访问，error: s_value is private and can&#x27;t be accessed directly outside the class</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>应用场景</strong>： 类似于静态局部变量，静态成员变量可以为类的每个实例分配一个唯一的 ID</p>
+<ul>
+<li>在调试时，为每个对象提供唯一的 ID 会有所帮助，因为它可用于区分原本具有相同数据的对象。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Something</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">static</span> <span class="keyword">inline</span> <span class="type">int</span> s_idGenerator &#123; <span class="number">1</span> &#125;;</span><br><span class="line">    <span class="type">int</span> m_id &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// grab the next value from the id generator</span></span><br><span class="line">    <span class="built_in">Something</span>() : m_id &#123; s_idGenerator++ &#125;</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">getID</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_id; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Something first&#123;&#125;;</span><br><span class="line">    Something second&#123;&#125;;</span><br><span class="line">    Something third&#123;&#125;;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; first.<span class="built_in">getID</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    std::cout &lt;&lt; second.<span class="built_in">getID</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    std::cout &lt;&lt; third.<span class="built_in">getID</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>当类需要<strong>使用查找表</strong>（例如，用于存储一组预先计算值的数组）时，静态成员变量也很有用。通过使查找表成为静态的，所有对象只存在一个副本，而不是为每个实例化的对象创建一个副本。</li>
+</ul>
+<p><strong>NOTE</strong>：</p>
+<ul>
+<li>静态成员变量定义通常放在该类的关联代码文件中（例如 <code>Something.cpp</code>）。</li>
+<li><strong>不要将静态成员变量定义放在头文件中</strong>（与全局变量非常相似，如果该头文件被多次包含，则最终会得到多个定义，这将导致链接器错误）。</li>
+<li>对于模板类，（模板化的）静态成员定义通常直接放置在头文件中模板类定义的下方</li>
+<li>可以将静态成员设<code>为 inline</code> 或 <code>constexpr</code>，以便可以在类定义中初始化它们。</li>
+</ul>
+<h4 id="static类成员函数"><a href="#static类成员函数" class="headerlink" title="static类成员函数"></a>static类成员函数</h4><p>和static成员对象类似，静态成员函数不与特定对象关联。<br>	- 因此也可以使用类名和范围解析运算符::（例如 <code>Something：：getValue（）</code>）直接调用它们。<br>	- 也可以通过对象调用，但不建议这样做。</p>
+<p><strong>静态成员函数可以直接访问类的静态成员（变量或函数），但不能访问非静态成员</strong>。这是因为非静态成员必须属于类对象，而静态成员函数没有要使用的类对象。<br>	因此可以设置一个public静态成员函数访问私有private静态成员</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Something</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">static</span> <span class="keyword">inline</span> <span class="type">int</span> s_value &#123; <span class="number">1</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">getValue</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> s_value; &#125; <span class="comment">// static member function</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; Something::<span class="built_in">getValue</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>静态成员函数也可以在类声明之外定义。其工作方式与普通成员函数相同。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">IDGenerator</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">static</span> <span class="keyword">inline</span> <span class="type">int</span> s_nextID &#123; <span class="number">1</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">     <span class="function"><span class="type">static</span> <span class="type">int</span> <span class="title">getNextID</span><span class="params">()</span></span>; <span class="comment">// Here&#x27;s the declaration for a static function</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Here&#x27;s the definition of the static function outside of the class.  Note we don&#x27;t use the static keyword here.</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">IDGenerator::getNextID</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> s_nextID++; &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> count&#123; <span class="number">0</span> &#125;; count &lt; <span class="number">5</span>; ++count)</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;The next ID is: &quot;</span> &lt;&lt; IDGenerator::<span class="built_in">getNextID</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>NOTE</strong>:</p>
+<ul>
+<li>静态成员函数没有附加到对象，<strong>所以它们没有</strong> <code>this</code> <strong>指针</strong></li>
+<li>在类定义之外定义的成员函数不是隐式内联的，但可以使用 <code>inline</code> 关键字进行内联。因此，在头文件中定义的静态成员函数<code>应内联，</code>以便在该头随后包含在多个翻译单元中时不会违反单定义规则</li>
+<li>C++ 不支持静态构造函数  </li>
+<li>静态函数不能定义为虚函数<ul>
+<li>原因：静态函数是属于类的，不与任何类对象关联，所以它们不具备<code>this</code>指针和虚函数表指针。这意味着它们无法实现动态多态，也就不能实现虚函数的多态特性。<br>应用实例：单例模式</li>
+</ul>
+</li>
+</ul>
+<h2 id="const"><a href="#const" class="headerlink" title="const"></a>const</h2><p><strong>常量</strong>是在程序执行期间不能更改的值。<br>	const变量是最常见的命名常量类型<br>	<br>const 变量必须在定义它们时初始化，然后不能通过赋值来更改该值。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">double</span> gravity &#123; <span class="number">9.8</span> &#125;;  <span class="comment">// preferred use of const before type</span></span><br></pre></td></tr></table></figure>
+
+<p>可以使用非const 的变量来初始化const变量</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> constAge &#123; age &#125;; <span class="comment">// initialize const variable using non-const value</span></span><br></pre></td></tr></table></figure>
+
+<p>函数参数可以通过 <code>const</code> 关键字成为常量：<br>	在<strong>按引用传递和按地址传递</strong>时，使用const常量可以避免修改参数的值</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">printInt</span><span class="params">(<span class="type">const</span> <span class="type">int</span> &amp;x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>函数的返回值也可以设为 const：<br>	按值返回 const 对象通常没有什么意义，因为它们是临时副本，无论如何都会被销毁</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">const</span> <span class="type">int</span> <span class="title">getValue</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">5</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>为什么需要常量</strong>：<br>	如果变量可以变为常量，则通常应将其变为常量。<br>	1. 它减少了出现 bug 的机会。通过使变量成为常量，可以确保该值不会被意外更改。<br>	2. 它为编译器提供了更多优化程序的机会。当编译器可以假设值没有变化时，它能够利用更多技术来优化程序</p>
+<p><strong>首选常量变量而不是预处理器宏</strong>：<br>	首选常量变量，而不是带有替换文本的类对象宏。<br>	1. 宏不遵循正常的 C++ 范围规则。#defined 宏后，当前文件中出现的所有后续出现的宏名称都将被替换。如果该名称在其他地方使用，您将在您不需要的地方获得宏替换。<br>	2. 使用宏调试代码通常更难。尽管源代码将具有宏的名称，但编译器和调试器永远不会看到宏，因为它在运行之前已被替换<br>	3. 常量变量没有这些问题：它们遵循正常的范围规则，可以被编译器和调试器看到，并且行为一致。</p>
+<blockquote>
+<p><strong>类型限定符volatile</strong><br><strong>类型限定符</strong>（有时简称为<strong>限定符</strong>）是应用于类型的关键字，用于修改该类型的行为方式。<br>截至 C++23，C++ 只有两个类型限定符：<code>const</code> 和 <code>volatile</code>。</p>
+<ul>
+<li><code>volatile</code> 限定符用于告知编译器对象的值可能随时更改。这个很少使用的限定符会<strong>禁用某些类型的优化</strong>。</li>
+</ul>
+</blockquote>
+<h4 id="const成员函数"><a href="#const成员函数" class="headerlink" title="const成员函数"></a>const成员函数</h4><p>类的成员函数后面加 const，表明这个函数不会对这个类对象的数据成员（准确地说是非静态数据成员）作任何改变。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span> &#123;</span></span><br><span class="line">public:</span><br><span class="line">    <span class="type">int</span> <span class="title function_">getData</span><span class="params">()</span> <span class="type">const</span> &#123;</span><br><span class="line">	    <span class="comment">// data = 100  错误，不能修改普通成员变量</span></span><br><span class="line">	    <span class="keyword">return</span> data;</span><br><span class="line">    &#125;; <span class="comment">// 这是一个 const 成员函数</span></span><br><span class="line"></span><br><span class="line">private:</span><br><span class="line">    <span class="type">int</span> data;    <span class="comment">// 普通成员变量</span></span><br><span class="line">    mutable <span class="type">int</span> logCount;   <span class="comment">//可修改的成员变量</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>const 成员函数特点：</p>
+<ol>
+<li>只能读取普通成员变量，<strong>不能修改</strong> 类的普通成员变量</li>
+<li>不能调用该类的<strong>非 const 成员函数</strong>，但可以调用其他 const 成员函数</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> MyClass :: modifyData(<span class="type">int</span> d) &#123; data = d; &#125;  <span class="comment">// 非 const 成员函数</span></span><br><span class="line"><span class="type">int</span> MyClass ::  getData() <span class="type">const</span> &#123;</span><br><span class="line">     <span class="comment">// modifyData(100); // ❌ 错误，不能在 const 成员函数中调用非 const 成员函数</span></span><br><span class="line">     <span class="keyword">return</span> data;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> MyClass :: printData() <span class="type">const</span> &#123;  <span class="comment">// 另一个 const 成员函数</span></span><br><span class="line">     <span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Data: &quot;</span> &lt;&lt; getData() &lt;&lt; <span class="built_in">endl</span>;  <span class="comment">// ✅ 允许调用 const 成员函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>可以修改 mutable 修饰的成员变量</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> MyClass :: logAdd() <span class="type">const</span> &#123;</span><br><span class="line">	logCount++ ;           <span class="comment">//虽然logAdd是const函数，但是可以修改mutable变量</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li><strong>const 对象</strong>只能调用 const 成员函数，以防止const对象意外修改成员变量。<ul>
+<li><strong>const成员函数的重载</strong>：const 成员函数可以被视为非const 成员函数的重载版本。<strong>普通对象</strong> 将会优先调用<strong>非 const 版本</strong>的成员函数</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">    <span class="type">const</span> MyClass <span class="title function_">obj</span><span class="params">(<span class="number">10</span>)</span>;  <span class="comment">// obj 是 const 对象</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; obj.getData() &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;  <span class="comment">// ✅ 可以调用 const 成员函数</span></span><br><span class="line">    <span class="comment">// obj.modifyData(20); // ❌ 错误，const 对象不能调用非 const 成员函数</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>底层实现</strong>：<br>在 const 成员函数中，this 指针的类型是：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> ClassName* <span class="type">const</span> this;</span><br></pre></td></tr></table></figure>
+<p>即this指针是const指针，且其指向的对象也是const的。因此this指针不能修改普通成员，也不能调用非cons成员函数</p>
+<p>值得注意的是，如果类中存在指针类型的数据成员，即便是const函数只能保证不修改该指针的值，并不能保证不修改指针指向的对象。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Name</span> &#123;</span></span><br><span class="line">public:</span><br><span class="line"><span class="type">void</span> <span class="title function_">setName</span><span class="params">(<span class="type">const</span> <span class="built_in">string</span> &amp;s)</span> <span class="type">const</span>;</span><br><span class="line">private:</span><br><span class="line">    <span class="type">char</span> *m_sName;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="type">void</span> <span class="title function_">setName</span><span class="params">(<span class="type">const</span> <span class="built_in">string</span> &amp;s)</span> <span class="type">const</span> &#123;</span><br><span class="line">    m_sName = s.c_str();      <span class="comment">// 错误！不能修改m_sName;</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; s.size(); ++i) </span><br><span class="line">    m_sName[i] = s[i];    <span class="comment">//  不是错误的 const成员函数不能保证指针指向的对象的不变性</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>最佳实践</strong>：<br>对于不改变数据成员的成员函数都要在后面加 const，而对于改变数据成员的成员函数不能加 const</p>
+</blockquote>
+<h4 id="constexpr"><a href="#constexpr" class="headerlink" title="constexpr"></a>constexpr</h4><p><strong>编译时常量</strong>：在编译阶段其值就已经确定，并且在程序运行时不会改变的值。这类常量在编译时就可以被直接使用和优化<br>C++11引入了constexpr关键字，用于<strong>明确指定变量或函数是编译时常量</strong>。<br>	- <strong>constexpr</strong> 变量始终是编译时常量。<br>	- 必须使用<strong>常量表达式</strong>初始化 constexpr 变量，否则将导致编译错误。<br>	- 函数参数不能声明为 <code>constexpr</code>，因为它们的初始化值直到运行时才确定。</p>
+<blockquote>
+<p><strong>常量表达式</strong>：在编译时期就可以求值的表达式。即其值在编译期间就可以确定</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// The return value of a non-constexpr function is not a constant expression</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">five</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">5</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">constexpr</span> <span class="type">double</span> gravity &#123; <span class="number">9.8</span> &#125;; <span class="comment">// ok: 9.8 is a constant expression</span></span><br><span class="line">    <span class="keyword">constexpr</span> <span class="type">int</span> sum &#123; <span class="number">4</span> + <span class="number">5</span> &#125;;      <span class="comment">// ok: 4 + 5 is a constant expression</span></span><br><span class="line">    <span class="keyword">constexpr</span> <span class="type">int</span> something &#123; sum &#125;;  <span class="comment">// ok: sum is a constant expression</span></span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Enter your age: &quot;</span>;</span><br><span class="line">    <span class="type">int</span> age&#123;&#125;;</span><br><span class="line">    std::cin &gt;&gt; age;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">constexpr</span> <span class="type">int</span> myAge &#123; age &#125;;      <span class="comment">// compile error: age is not a constant expression</span></span><br><span class="line">    <span class="keyword">constexpr</span> <span class="type">int</span> f &#123; <span class="built_in">five</span>() &#125;;       <span class="comment">// compile error: return value of five() is not a constant expression</span></span><br><span class="line"></span><br><span class="line">由于函数通常在运行时执行，因此函数的返回值不是常量表达式（即使 <span class="keyword">return</span> 语句返回的值是）。这就是为什么 `five（）` 不是 `<span class="keyword">constexpr</span> <span class="type">int</span> f`的合法初始化值。</span><br></pre></td></tr></table></figure>
+
+<p>const 与 constexpr 对变量的含义：<br>	1. <code>const</code> 表示初始化后无法更改对象的值。初始化器的值<strong>可能在编译时或运行时获取</strong>。可以在运行时评估 const 对象。<br>	   <code>constexpr</code> 表示对象可以在常量表达式中使用。初始化器的值<strong>必须在编译时获取</strong>。可以在运行时或编译时评估 constexpr 对象。<br>	2. constexpr 变量是隐式的 const。const 变量不是隐式的 constexpr。<br>	  <code>constexpr</code> 不是对象类型的一部分。因此，定义为 <code>constexpr int</code> 的变量实际上具有 <code>const int</code> 类型<br>	<br>应用场景：其<strong>初始值设定项为常量表达式</strong>的任何常量变量都应声明为 <code>constexpr</code>。</p>
+<p><strong>constexpr 函数</strong><br><strong>constexpr 函数</strong>是一个可以<strong>在编译时执行</strong>的函数，可以在常量表达式中调用。<br>constexpr 函数必须在编译时计算，而它所属的常量表达式必须在编译时计算</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">constexpr</span> <span class="type">int</span> <span class="title">cmax</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> <span class="comment">// this is a constexpr function</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (x &gt; y)</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> m1 &#123; <span class="built_in">max</span>(<span class="number">5</span>, <span class="number">6</span>) &#125;;            <span class="comment">// ok</span></span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> m2 &#123; <span class="built_in">max</span>(<span class="number">5</span>, <span class="number">6</span>) &#125;;      <span class="comment">// ok</span></span><br><span class="line">    <span class="keyword">constexpr</span> <span class="type">int</span> m3 &#123; <span class="built_in">max</span>(<span class="number">5</span>, <span class="number">6</span>) &#125;;  <span class="comment">// compile error: max(5, 6) not a constant expression</span></span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> m1 &#123; <span class="built_in">cmax</span>(<span class="number">5</span>, <span class="number">6</span>) &#125;;           <span class="comment">// ok: may evaluate at compile-time or runtime</span></span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> m2 &#123; <span class="built_in">cmax</span>(<span class="number">5</span>, <span class="number">6</span>) &#125;;     <span class="comment">// ok: may evaluate at compile-time or runtime</span></span><br><span class="line">    <span class="keyword">constexpr</span> <span class="type">int</span> m3 &#123; <span class="built_in">cmax</span>(<span class="number">5</span>, <span class="number">6</span>) &#125;; <span class="comment">// okay: must evaluate at compile-time</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/pay-code.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2025/01/26/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%BC%95%E7%94%A8%E5%92%8C%E6%8C%87%E9%92%88/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>c++学习笔记——引用和指针</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2025/01/22/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%8F%98%E9%87%8F%E4%B8%8E%E5%B8%B8%E7%94%A8%E7%B1%BB%E5%9E%8B/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      c++学习笔记——变量与常用类型
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+
+</div>
+  <div class="realated__body">
+    
+      DEBUG: 请安装插件 <a target="_blank" rel="noopener" href="https://github.com/tea3/hexo-related-popular-posts">hexo-related-popular-posts</a> 或关闭 related_post 配置!
+    
+  </div>
+</div>
+
+    
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/Felt98">Felt's Github</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-zh.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/yi-ming-81-1">Felt</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-email.svg" />
+            <a class="foot-link" href="mailto:haoqingqin@gmail.com">haoqingqin@gmail.com</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="http://example.com">Felt's blog</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  
+
+  </body>
+</html>

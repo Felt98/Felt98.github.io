@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        c++学习笔记——类 | Felt's blog
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/note">学习笔记</a>
+              
+                <a class="nav-menu-item" href="/project">项目</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">c++学习笔记——类</div>
+        <div class="post-info">
+          
+  
+
+
+          <span class="post-date">2024-09-07</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>面向对象程序设计（object-oriented programming）的核心思想是数据抽象、继承和多态。</p>
+<ul>
+<li>抽象： 将类与接口的实现进行分离</li>
+<li>继承： 允许从现有类派生出新类的方法，新类可以继承现有类的属性和方法，还可以添加新的属性和方法或者覆盖现有的方法。</li>
+<li>多态： 实体具体多种形态，分为<strong>编译时多态</strong>（静态多态）和<strong>运行时多态</strong>（动态多态），详情见虚函数<br>其他概念：</li>
+<li>接口：</li>
+<li>封装：将数据和操作数据的函数组合在一起，这样可以隐藏对象的内部细节。</li>
+<li>数据隐藏</li>
+<li>泛型编程：是通过模板（template）机制允许用户编写与类型无关的通用代码</li>
+<li>RAII（Resource Acquisition Is Initialization）是C++中的一种编程技巧，它的核心思想是：资源的管理（如内存、文件句柄、锁等）应该与对象的生命周期绑定，即<strong>对象在创建时获得资源，在销毁时释放资源</strong>。<br>面向对象与面向过程的区别：</li>
+</ul>
+<h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><p>物体有两个主要组成部分：1） 一些可观察的属性（例如重量、颜色、大小、固体、形状等），以及 2） 它们可以执行或已经执行的一些基于这些属性的行为（例如被打开、损坏其他东西等）。</p>
+<p>在编程中，我们用变量表示属性，用函数表示行为。对应于类中就是使用成员变量和成员函数<br>在类中可以按任何顺序定义成员变量和成员函数！<br>在成员函数情况下，我们不需要将 类作为参数传递。调用成员函数的对象将隐式传递给成员函数。因此，调用成员函数的对象通常称为<strong>隐式对象</strong>。</p>
+<p>如果类类型没有任何数据成员，考虑改用命名空间</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">namespace Foo</span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> <span class="title function_">printHi</span><span class="params">()</span> &#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Hi!\n&quot;</span>; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    Foo::printHi(); <span class="comment">// no object needed</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>权限访问表</strong>：<br>注意同一个类的对象之间可以互相访问其私有成员，因为私有成员的访问权限是基于类的<br>![[类-1.png|900]]</p>
+<ul>
+<li><p><strong>public（公有）</strong>： <code>public</code>访问修饰符允许类成员在类的外部被访问。这意味着，如果一个成员被声明为<code>public</code>，那么它可以在类的任何地方被访问，包括类的实例、派生类以及非成员函数。通常，类的公有成员用于定义类的公共接口，允许外部代码与类进行交互。</p>
+</li>
+<li><p><strong>private（私有）</strong>： <code>private</code>私有成员仅在类的内部被访问，或同友元的成员函数访问。这意味着，如果一个成员被声明为<code>private</code>，那么它不能在类的外部或派生类中被访问。通常，类的私有成员用于存储类的内部状态和实现细节。这些成员不应该被外部代码直接访问，以保持封装性和数据隐藏。</p>
+</li>
+<li><p><strong>protected（受保护）</strong>： <code>protected</code>访问修饰符介于<code>public</code>和<code>private</code>之间。如果一个成员被声明为<code>protected</code>，那么它可以在类的内部以及派生类中被访问，但不能在其他非成员函数中访问。<code>protected</code>成员通常用于存储在派生类中需要访问或修改的数据或实现细节。</p>
+</li>
+</ul>
+<p>想要访问或者修改私有成员就要设置getter和setter，例如：</p>
+<blockquote>
+<p><strong>左值</strong>：持久存在，能获取地址，如变量、数组元素、解引用指针<br><strong>右值</strong>：临时存在，不能获取地址，如字面量、运算结果、临时值</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Date</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> m_year &#123; <span class="number">2020</span> &#125;;</span><br><span class="line">    <span class="type">int</span> m_month &#123; <span class="number">10</span> &#125;;</span><br><span class="line">    <span class="type">int</span> m_day &#123; <span class="number">14</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="comment">//注意getter 应提供对数据的 “只读” 访问权限。</span></span><br><span class="line">	<span class="comment">//应按值（如果复制成员的成本较低）或 const 左值引用（如果创建成员的开销较高）返回</span></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">getYear</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_year; &#125;        <span class="comment">// getter for year</span></span><br><span class="line">	<span class="function"><span class="type">const</span> <span class="type">int</span>&amp; <span class="title">getYear</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_year; &#125; <span class="comment">//使用左值引用返回</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">setYear</span><span class="params">(<span class="type">int</span> year)</span> </span>&#123; m_year = year; &#125;     <span class="comment">// setter for year</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">getMonth</span><span class="params">()</span> <span class="type">const</span>  </span>&#123; <span class="keyword">return</span> m_month; &#125;     <span class="comment">// getter for month</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">setMonth</span><span class="params">(<span class="type">int</span> month)</span> </span>&#123; m_month = month; &#125; <span class="comment">// setter for month</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">getDay</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_day; &#125;          <span class="comment">// getter for day</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">setDay</span><span class="params">(<span class="type">int</span> day)</span> </span>&#123; m_day = day; &#125;         <span class="comment">// setter for day</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>类与结构的差异</strong>：</p>
+<ol>
+<li>类将其成员默认为 private，而结构将其成员默认为 public。</li>
+<li>类默认继承方式是private，结构默认是public<br>简单没有特别需求的数据集合建议用struct</li>
+</ol>
+<h2 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h2><p>聚合初始化（aggregate initialization）：</p>
+<ul>
+<li>如果类的类型是聚合aggregate的（<strong>成员都是公共的，非私有</strong>），可以使用{}来初始化</li>
+<li>成员将按照声明顺序初始化</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Foo</span> <span class="comment">// Foo is an aggregate</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> x &#123;&#125;;</span><br><span class="line">    <span class="type">int</span> y &#123;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Foo foo &#123; <span class="number">6</span>, <span class="number">7</span> &#125;; <span class="comment">// uses aggregate initialization</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>构造函数</strong>是在创建非聚合类类型对象后自动调用的特殊成员函数。<br>	- 编译器会查看是否有与调用方提供的初始化值（如果有）匹配的可访问构造函数。<br>	- 如果找到可访问的匹配构造函数，则<strong>先分配对象的内存</strong>，然后在未初始化的对象上调用构造函数。反之，没有对应的构造函数就会报错<br>	- 聚合不允许有构造函数 —— 因此，如果向聚合添加构造函数，它将不再是聚合。</p>
+<p>常见的几种构造函数：</p>
+<ul>
+<li><strong>默认构造函数（Default constructor）</strong>：不带任何参数（或所有参数具有默认值）的构造函数。如果程序员没有为类定义任何构造函数，编译器将自动生成一个默认构造函数。</li>
+<li><strong>带参数构造函数（Parameterized constructor）</strong>：带有一个或多个参数的构造函数。这种构造函数允许在创建对象时初始化对象的成员。</li>
+<li><strong>拷贝构造函数（Copy constructor）</strong>：接受相同类类型对象的引用作为参数的构造函数。它用于初始化一个对象为另一个对象的副本。如果程序员没有定义拷贝构造函数，编译器将自动生成一个。</li>
+<li><strong>移动构造函数（Move constructor）</strong>：接受相同类类型对象的<strong>右值引用</strong>作为参数的构造函数。它用于在不创建对象副本的情况下，将资源从一个对象移动到另一个对象。这在C++11及更高版本中引入，以优化性能。如果程序员没有定义移动构造函数，编译器可能会自动生成一个。</li>
+</ul>
+<p><strong>NOTE</strong>：</p>
+<ul>
+<li><p>构造函数的隐式转换：构造函数也不例外，<code>Foo（int， int）</code> 构造函数将匹配其参数可隐式转换为 <code>int</code> 的任何调用</p>
+<blockquote>
+<p>隐式类型转换：编译器将在函数调用中执行参数的隐式转换（如果需要），以便匹配参数为不同类型的函数定义</p>
+</blockquote>
+</li>
+<li><p>构造函数不能是 const</p>
+<ul>
+<li>通常，不能在 const 对象上调用非 const 成员函数。但是，由于构造函数是隐式调用的，因此可以在 const 对象上调用非 const 构造函数。</li>
+</ul>
+</li>
+<li><p>构造函数不能是虚函数。</p>
+<ul>
+<li>因为虚函数需要完整的对象和虚表，构造函数调用时未构造出完整的对象，也没有虚表，是不能够调用虚函数的</li>
+</ul>
+</li>
+<li><p><strong>单个列表初始化和单参数构造函数</strong>的冲突：</p>
+<ul>
+<li>C++ 初始化的缺点之一：<code>&#123; 10 &#125;</code> 将匹配<strong>列表构造函数</strong>（如果存在）或<strong>单参数构造函数</strong>（如果列表构造函数不存在）。</li>
+<li>C++的解决方案是列表不为空时，优先使用列表构造函数。如果为空则默认构造函数优先</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="type">int</span>&gt; data&#123; <span class="number">10</span> &#125;; <span class="comment">// what does this do? 会调用列表构造函数</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="type">int</span>&gt; <span class="title function_">v2</span><span class="params">(<span class="number">10</span>)</span>;     <span class="comment">//调用单参数构造函数</span></span><br></pre></td></tr></table></figure>
+<h4 id="构造函数命名规则"><a href="#构造函数命名规则" class="headerlink" title="构造函数命名规则"></a>构造函数命名规则</h4><ul>
+<li>构造函数必须与类同名（大小写相同）。对于模板类，此名称不包括模板参数。</li>
+<li>构造函数没有返回类型（甚至没有 <code>void</code>）。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Foo</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> m_x &#123;&#125;;</span><br><span class="line">    <span class="type">int</span> m_y &#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Foo</span>(<span class="type">int</span> x, <span class="type">int</span> y) <span class="comment">// here&#x27;s our constructor function that takes two initializers</span></span><br><span class="line">	    : m_x&#123; x &#125; , m_y&#123; y &#125;   <span class="comment">//使用列表初始化，可以使用括号()初始化。冒号开始，逗号分隔，没有结尾。要按照声明顺序初始化</span></span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Foo(&quot;</span> &lt;&lt; x &lt;&lt; <span class="string">&quot;, &quot;</span> &lt;&lt; y &lt;&lt; <span class="string">&quot;) constructed\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Foo(&quot;</span> &lt;&lt; m_x &lt;&lt; <span class="string">&quot;, &quot;</span> &lt;&lt; m_y &lt;&lt; <span class="string">&quot;)\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Foo foo&#123; <span class="number">6</span>, <span class="number">7</span> &#125;; <span class="comment">// calls Foo(int, int) constructor</span></span><br><span class="line">    foo.<span class="built_in">print</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="默认构造函数"><a href="#默认构造函数" class="headerlink" title="默认构造函数"></a>默认构造函数</h4><p>不含任何参数的构造函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">    Foo() <span class="comment">// default constructor</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Foo default constructed\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">Foo foo&#123;&#125;; <span class="comment">// value initialization, calls Foo() default constructor</span></span><br><span class="line">Foo foo2;  <span class="comment">// default initialization, calls Foo() default constructor</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li>一个类应该只有一个默认构造函数，不能提供多个构造函数</li>
+<li>如果没有显示定义构造函数，则编译器会提供一个无参的隐式构造函数</li>
+</ul>
+<p><strong>带默认参数的构造函数</strong>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Foo(<span class="type">int</span> x=<span class="number">0</span>, <span class="type">int</span> y=<span class="number">0</span>) <span class="comment">// has default arguments</span></span><br><span class="line">    : m_x &#123; x &#125;</span><br><span class="line">    , m_y &#123; y &#125;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Foo(&quot;</span> &lt;&lt; m_x &lt;&lt; <span class="string">&quot;, &quot;</span> &lt;&lt; m_y &lt;&lt; <span class="string">&quot;) constructed\n&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>默认值有时还可用于将多个构造函数减少为更少的构造函数。例如，下面的Emplyee类 通过在 <code>id</code> 参数上放置默认值，我们可以创建一个需要 name 参数但可以选择接受 id 参数的 &#96;</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Employee</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::string m_name&#123;&#125;;</span><br><span class="line">    <span class="type">int</span> m_id&#123; <span class="number">0</span> &#125;; <span class="comment">// default member initializer</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Employee</span>(std::string_view name, <span class="type">int</span> id = <span class="number">0</span>) <span class="comment">// default argument for id</span></span><br><span class="line">        : m_name&#123; name &#125;, m_id&#123; id &#125;</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Employee &quot;</span> &lt;&lt; m_name &lt;&lt; <span class="string">&quot; created\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Employee e1&#123; <span class="string">&quot;James&quot;</span> &#125;;</span><br><span class="line">    Employee e2&#123; <span class="string">&quot;Dave&quot;</span>, <span class="number">42</span> &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>NOTE</strong>：<br>	1. 默认值必须附加到函数调用中最右侧的参数<br>	2. 如果构造函数中的所有参数都有默认参数，则该构造函数是默认构造函数</p>
+<p><strong>显式默认的默认构造函数</strong><br>如果有一个用户声明的构造函数，那么编译器不会生成默认构造函数，我们可以告诉编译器主动生成 default 构造函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Foo() = <span class="keyword">default</span>; <span class="comment">// generates an explicitly defaulted default constructor</span></span><br></pre></td></tr></table></figure>
+<p>显式默认的默认构造函数与空的用户定义构造函数的区别：<br>	编译器提供的默认构造函数会在对象将在默认初始化之前进行零初始化，性能差一些但安全性高一些</p>
+<h4 id="拷贝构造函数"><a href="#拷贝构造函数" class="headerlink" title="拷贝构造函数"></a>拷贝构造函数</h4><ul>
+<li>如果您没有为类提供复制构造函数，C++ 将为您创建一个公共<strong>隐式拷贝构造函数</strong>。默认拷贝构造函数执行的是逐个拷贝类的成员变量（浅拷贝）</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Fraction f &#123; <span class="number">5</span>, <span class="number">3</span> &#125;;  <span class="comment">// Calls Fraction(int, int) constructor</span></span><br><span class="line">Fraction fCopy &#123; f &#125;; <span class="comment">// 默认的拷贝构造函数， fCopy 是f的副本</span></span><br><span class="line">Fraction f2 = f;      <span class="comment">// 同样调用默认的拷贝构造函数</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可以使用 <code>= default</code> 语法显式请求编译器为我们创建一个默认的复制构造函数</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Explicitly request default copy constructor</span></span><br><span class="line"><span class="built_in">Fraction</span>(<span class="type">const</span> Fraction&amp; fraction) = <span class="keyword">default</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>偶尔我们会遇到不希望某个类的对象是可复制的。我们可以通过使用 <code>= delete</code> 语法将复制构造函数标记为已删除来防止这种情况</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Delete the copy constructor so no copies can be made</span></span><br><span class="line"><span class="built_in">Fraction</span>(<span class="type">const</span> Fraction&amp; fraction) = <span class="keyword">delete</span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>自己定义拷贝构造函数：如果类包含指向动态分配内存或资源的指针时，需要自定义拷贝构造函数以实现深拷贝。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Fraction</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> m_numerator&#123; <span class="number">0</span> &#125;;</span><br><span class="line">    <span class="type">int</span> m_denominator&#123; <span class="number">1</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// Default constructor</span></span><br><span class="line">    <span class="built_in">Fraction</span>(<span class="type">int</span> numerator=<span class="number">0</span>, <span class="type">int</span> denominator=<span class="number">1</span>)</span><br><span class="line">        : m_numerator&#123;numerator&#125;, m_denominator&#123;denominator&#125;</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Copy constructor</span></span><br><span class="line">    <span class="built_in">Fraction</span>(<span class="type">const</span> Fraction&amp; fraction)</span><br><span class="line">        <span class="comment">// Initialize our members using the corresponding member of the parameter</span></span><br><span class="line">        : m_numerator&#123; fraction.m_numerator &#125;</span><br><span class="line">        , m_denominator&#123; fraction.m_denominator &#125;</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Copy constructor called\n&quot;</span>; <span class="comment">// just to prove it works</span></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>这里涉及到访问控制的问题，Fraction拷贝构造函数可以读取其他Fraction对象的private成员吗，即同一类的对象可以访问其他对象的private成员吗？<br>	答案是可以，因为访问控制是基于类的，而不是基于对象，同类对象可以访问彼此的私有成员</p>
+<ul>
+<li>隐式复制构造函数调用<br>一般需要创建<strong>临时对象副本</strong>来存储传入的参数时，都会隐式调用复制构造函数，例如下面几种情况。</li>
+</ul>
+<ol>
+<li>将一个类对象初始化新对象</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Fraction fCopy &#123; f &#125;;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>将对象作为参数传递给函数，且为按值传递时，编译器将隐式调用复制构造函数，复制一个临时副本来传递参数</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">printFraction</span><span class="params">(Fraction f)</span> <span class="comment">// f is pass by value，这里将隐式调用复制构造函数，复制一个临时的f</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    f.<span class="built_in">print</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Fraction f&#123; <span class="number">5</span>, <span class="number">3</span> &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printFraction</span>(f); <span class="comment">// f is copied into the function parameter using copy constructor</span></span><br><span class="line">    <span class="built_in">printFraction</span>(<span class="built_in">Fraction</span>(<span class="number">3</span>, <span class="number">4</span>));  <span class="comment">// 创建一个临时的 Fraction 对象，调用复制构造函数</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>函数返回对象，且为按值返回时，从一个函数返回一个临时对象，也会隐式调用复制构造函数。</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Fraction <span class="title function_">createFraction</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Fraction(<span class="number">3</span>, <span class="number">4</span>);  <span class="comment">// 临时对象会调用复制构造函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>思考🤔 从执行逻辑上，下面会调用几次复制构造函数：<br>如果运行的话可能次数会减少，因为编译器会进行copy elision优化</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Fraction f2 &#123; <span class="built_in">createFraction</span>() &#125;; <span class="comment">// Fraction is returned using copy constructor</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printFraction</span>(f2); <span class="comment">// f2 is copied into the function parameter using copy constructor</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>NOTE</strong>：<br>	- 复制构造函数除了复制之外，不应有任何其他工作<br>	- 首选隐式复制构造函数，除非你有特定原因要创建自己的构造函数。<br>	- 复制构造函数的参数应为 const 左值引用<br>		- 因为当对象参数按值传递时，会隐式调用复制构造函数复制一个临时对象，如果复制构造函数自身也按值传递，那么它将会再次调用自己，这将导致无限递归调用，程序会因栈溢出而崩溃。</p>
+<h4 id="委托构造函数"><a href="#委托构造函数" class="headerlink" title="委托构造函数"></a>委托构造函数</h4><p>这是C++11的特性</p>
+<p>在构造函数中不能直接调用同类的另一个构造函数：<br>下面会导致编译错误或者构造出一个临时对象</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Employee</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::string m_name &#123; <span class="string">&quot;???&quot;</span> &#125;;</span><br><span class="line">    <span class="type">int</span> m_id &#123; <span class="number">0</span> &#125;;</span><br><span class="line">    <span class="type">bool</span> m_isManager &#123; <span class="literal">false</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Employee</span>(std::string_view name, <span class="type">int</span> id)</span><br><span class="line">        : m_name&#123; name &#125;, m_id &#123; id &#125; <span class="comment">// this constructor initializes name and id</span></span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Employee &quot;</span> &lt;&lt; m_name &lt;&lt; <span class="string">&quot; created\n&quot;</span>; <span class="comment">// our print statement is back here</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Employee</span>(std::string_view name, <span class="type">int</span> id, <span class="type">bool</span> isManager)</span><br><span class="line">        : m_isManager &#123; isManager &#125; <span class="comment">// this constructor initializes m_isManager</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Call Employee(std::string_view, int) to initialize m_name and m_id</span></span><br><span class="line">        <span class="built_in">Employee</span>(name, id); <span class="comment">// this doesn&#x27;t work as expected!因为这里构造的是一个临时对象，最后会被删除</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">const</span> std::string&amp; <span class="title">getName</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_name; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Employee e2&#123; <span class="string">&quot;Dave&quot;</span>, <span class="number">42</span>, <span class="literal">true</span> &#125;;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;e2 has name: &quot;</span> &lt;&lt; e<span class="number">2.</span><span class="built_in">getName</span>() &lt;&lt; <span class="string">&quot;\n&quot;</span>; <span class="comment">// print e2.m_name</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">Employee Dave created</span><br><span class="line">e2 has name: ???</span><br></pre></td></tr></table></figure>
+
+<p><strong>委托构造函数</strong>：允许构造函数将初始化委托（转移责任）给同一类类型的另一个构造函数<br>	实例：在列表初始化中调用另一个构造函数，将变量name传递给另一个构造函数</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Employee</span>(std::string_view name)</span><br><span class="line">        : Employee&#123; name, <span class="number">0</span> &#125; <span class="comment">// delegate initialization to Employee(std::string_view, int) constructor</span></span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Employee</span>(std::string_view name, <span class="type">int</span> id)</span><br><span class="line">        : m_name&#123; name &#125;, m_id &#123; id &#125; <span class="comment">// actually initializes the members</span></span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Employee &quot;</span> &lt;&lt; m_name &lt;&lt; <span class="string">&quot; created\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>NOTE</strong>：</p>
+<ol>
+<li>构造函数可以委托或初始化，但不允许同时初始化和委托</li>
+<li>如果您有多个构造函数，请考虑是否可以使用委托构造函数来减少重复代码。通常将具有较少参数的构造函数委托给具有更多参数的构造函数。</li>
+</ol>
+<h2 id="const类"><a href="#const类" class="headerlink" title="const类"></a>const类</h2><p>初始化 const 类类型对象后，不允许任何修改const对象数据成员<br>Const 对象不能调用非 const 成员函数 （非 const 成员没有限制）<br>	由于 const 成员函数可以在 const 和非 const 对象上调用，因此如果成员函数不修改对象的状态，则应将其设为 const。<br>	构造函数不能设为 const，因为它们需要初始化对象的成员</p>
+<blockquote>
+<p>const 成员函数的限制：<br>• 不能修改对象的状态（除非通过 mutable 或 const_cast）。<br>• 不能调用非 const 成员函数<br>• 无法返回对数据成员的非 const 引用</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Date</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="type">int</span> year &#123;&#125;;</span><br><span class="line">    <span class="type">int</span> month &#123;&#125;;</span><br><span class="line">    <span class="type">int</span> day &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="type">void</span> <span class="title function_">print</span><span class="params">()</span> <span class="type">const</span> <span class="comment">// now a const member function,要声明为const函数</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; year &lt;&lt; <span class="string">&#x27;/&#x27;</span> &lt;&lt; month &lt;&lt; <span class="string">&#x27;/&#x27;</span> &lt;&lt; day;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">const</span> Date today &#123; <span class="number">2020</span>, <span class="number">10</span>, <span class="number">14</span> &#125;; <span class="comment">// const</span></span><br><span class="line"></span><br><span class="line">    today.print();  <span class="comment">// ok: const object can call const member function</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面的代码错误在哪？</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Date</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="type">int</span> year &#123;&#125;;</span><br><span class="line">    <span class="type">int</span> month &#123;&#125;;</span><br><span class="line">    <span class="type">int</span> day &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="type">void</span> <span class="title function_">print</span><span class="params">()</span> <span class="comment">// non-const</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; year &lt;&lt; <span class="string">&#x27;/&#x27;</span> &lt;&lt; month &lt;&lt; <span class="string">&#x27;/&#x27;</span> &lt;&lt; day;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">doSomething</span><span class="params">(<span class="type">const</span> Date&amp; date)</span></span><br><span class="line">&#123;</span><br><span class="line">    date.print();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    Date today &#123; <span class="number">2020</span>, <span class="number">10</span>, <span class="number">14</span> &#125;; <span class="comment">// non-const</span></span><br><span class="line">    today.print();</span><br><span class="line"></span><br><span class="line">    doSomething(today);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>错误：doSomething中，<code>date</code> 被视为 const 对象（因为它是通过 const 引用传递的）。然而const对象<code>date</code>调用非const函数print，导致了错误<br>解决方法：让print变成const</p>
+<h4 id="空类"><a href="#空类" class="headerlink" title="空类"></a>空类</h4>
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/pay-code.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2024/09/10/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%A4%9A%E6%80%81%E4%B8%8E%E8%99%9A%E5%87%BD%E6%95%B0/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>c++学习笔记——多态与虚函数</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/06/07/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      c++学习笔记——函数重载
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+
+</div>
+  <div class="realated__body">
+    
+      DEBUG: 请安装插件 <a target="_blank" rel="noopener" href="https://github.com/tea3/hexo-related-popular-posts">hexo-related-popular-posts</a> 或关闭 related_post 配置!
+    
+  </div>
+</div>
+
+    
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/Felt98">Felt's Github</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-zh.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/yi-ming-81-1">Felt</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-email.svg" />
+            <a class="foot-link" href="mailto:haoqingqin@gmail.com">haoqingqin@gmail.com</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="http://example.com">Felt's blog</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  
+
+  </body>
+</html>

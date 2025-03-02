@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        c++学习笔记——模板 | Felt's blog
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/note">学习笔记</a>
+              
+                <a class="nav-menu-item" href="/project">项目</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">c++学习笔记——模板</div>
+        <div class="post-info">
+          
+  
+
+
+          <span class="post-date">2025-02-17</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p><strong>泛型编程</strong>：运行程序员在编写代码时使用一些以后才指定的类型，在<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%AE%9E%E4%BE%8B" title="实例">实例化</a>时作为参数指明这些类型。C++中称之为模板<br>	C++使用关键字<code> template &lt;typename T&gt;</code> 设置模板。模板类型参数T将作为占位符类型，被替换为参数传入的类型。</p>
+<blockquote>
+<p>&lt;&gt; 中也可以传入非类型参数，如 template &lt;typename T, int size&gt;， 其中size是非类型参数<br>非类型参数包括：整型、指针引用、浮点类型（c++20） 。 使用时，<strong>传入非类型参数的值必须是constexpr值</strong></p>
+</blockquote>
+<p>模板类实例：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="comment">// added</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Array</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> m_length&#123;&#125;;</span><br><span class="line">    T* m_data&#123;&#125;; <span class="comment">// changed type to T</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Array</span>(<span class="type">int</span> length)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">assert</span>(length &gt; <span class="number">0</span>);</span><br><span class="line">        m_data = <span class="keyword">new</span> T[length]&#123;&#125;; <span class="comment">// allocated an array of objects of type T</span></span><br><span class="line">        m_length = length;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Array</span>(<span class="type">const</span> Array&amp;) = <span class="keyword">delete</span>;</span><br><span class="line">    Array&amp; <span class="keyword">operator</span>=(<span class="type">const</span> Array&amp;) = <span class="keyword">delete</span>;</span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">Array</span>()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">delete</span>[] m_data;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">erase</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">delete</span>[] m_data;</span><br><span class="line">        <span class="comment">// We need to make sure we set m_data to 0 here, otherwise it will</span></span><br><span class="line">        <span class="comment">// be left pointing at deallocated memory!</span></span><br><span class="line">        m_data = <span class="literal">nullptr</span>;</span><br><span class="line">        m_length = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// templated operator[] function defined below</span></span><br><span class="line">    T&amp; <span class="keyword">operator</span>[](<span class="type">int</span> index); <span class="comment">// now returns a T&amp;</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">getLength</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_length; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// member functions defined outside the class need their own template declaration</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">T&amp; Array&lt;T&gt;::<span class="keyword">operator</span>[](<span class="type">int</span> index) <span class="comment">// now returns a T&amp;</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">assert</span>(index &gt;= <span class="number">0</span> &amp;&amp; index &lt; m_length);</span><br><span class="line">    <span class="keyword">return</span> m_data[index];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">const</span> <span class="type">int</span> length &#123; <span class="number">12</span> &#125;;</span><br><span class="line">	Array&lt;<span class="type">int</span>&gt; intArray &#123; length &#125;;</span><br><span class="line">	Array&lt;<span class="type">double</span>&gt; doubleArray &#123; length &#125;;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>NOTE:<br>	1. 在类声明外部定义的每个模板化成员函数都需要自己的模板声明 Array&lt;T&gt;。 类内部的Array使用可以省略&lt;T&gt;</p>
+<h3 id="模板实例化"><a href="#模板实例化" class="headerlink" title="模板实例化"></a>模板实例化</h3><p>模板的实例化方式：编译器制作一个<strong>副本</strong>，将模板参数替换为用户需要的实际数据类型，然后编译该副本。<br>	模板未被使用时，编译器不会对其代码进行完整的语法检查和编译</p>
+<p><strong>模板类的实例化</strong>：</p>
+<ul>
+<li>与普通类不同，为了执行实例化，编译器必须同时看到完整的类模板定义（而不仅仅是声明）和所需的特定模板类型。</li>
+<li>因此不能将类定义放在标头中，而将成员函数定义放在 .cpp 文件中。</li>
+</ul>
+<p>解决模板类函数未实例化的方法：<br>	1. 将所有模板类代码放在头文件.h中,而不是将模板定义放在.cpp文件中<br>	2. 也可以将模板的.cpp 的内容移动到名为 .inl 内联文件中，在.h文件中包含.inl<br>	3. 添加第三个文件管理模板，并在这个文件中包含所有要实例化的类。<br>		 例如下面实例中，“template class” 命令使编译器显式实例化 template 类。编译器将在 templates.cpp 中模版化 Array&lt;int&gt; 和 Array&lt;double&gt; 的定义。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Ensure the full Array template definition can be seen</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Array.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;Array.cpp&quot;</span> <span class="comment">// we&#x27;re breaking best practices here, but only in this one place</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// #include other .h and .cpp template definitions you need here</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> <span class="keyword">class</span> <span class="title class_">Array</span>&lt;<span class="type">int</span>&gt;; <span class="comment">// Explicitly instantiate template Array&lt;int&gt;</span></span><br><span class="line"><span class="keyword">template</span> <span class="keyword">class</span> <span class="title class_">Array</span>&lt;<span class="type">double</span>&gt;; <span class="comment">// Explicitly instantiate template Array&lt;double&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// instantiate other templates here</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="函数模版专用化"><a href="#函数模版专用化" class="headerlink" title="函数模版专用化"></a>函数模版专用化</h3><p>允许我们为特定类型或值显式定义模板的不同实现。</p>
+<ul>
+<li>当所有模板参数都是专用化时，它称为<strong>完全专用化</strong>。</li>
+<li>当只有某些模板参数是专用化的时，它称为<strong>部分专用化</strong>。<ul>
+<li>部分模板专用化只能用于类成员函数，而不能用于模板函数</li>
+<li>模板函数必须是完全专用化的</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Here&#x27;s our primary template (must come first)</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">const</span> T&amp; t)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; t &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// A full specialization of primary template print&lt;T&gt; for type double</span></span><br><span class="line"><span class="comment">// Full specializations are not implicitly inline, so make this inline if put in header file</span></span><br><span class="line"><span class="keyword">template</span>&lt;&gt;                          <span class="comment">// template parameter declaration containing no template parameters</span></span><br><span class="line"><span class="type">void</span> <span class="built_in">print</span>&lt;<span class="type">double</span>&gt;(<span class="type">const</span> <span class="type">double</span>&amp; d) <span class="comment">// specialized for type double</span></span><br><span class="line">&#123;</span><br><span class="line">    std::cout &lt;&lt; std::scientific &lt;&lt; d &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="number">5</span>);</span><br><span class="line">	<span class="built_in">print</span>(<span class="number">6.7</span>);            <span class="comment">//调用print&lt;double&gt;(const double&amp; d)</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面例子中的模板专有化<br>	1. 首先，我们需要一个模板参数声明，这样编译器就知道我们正在做一些与模板相关的事情。但是，在这种情况下，我们实际上不需要任何模板参数，因此我们使用一对空的尖括号。<br>	2. 专用化必须与主模板具有相同的签名（除了专用化在主模板使用 <code>T</code> 的任何地方都会替换 <code>double</code>）。由于主模板具有 <code>const T&amp;</code> 类型的参数，因此专用化必须具有 <code>const double&amp;</code> 类型的参数。当主模板使用 引用传参时，专用化不能使用值传参（反之亦然）。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;&gt;                          <span class="comment">// template parameter declaration containing no template parameters</span></span><br><span class="line"><span class="type">void</span> <span class="built_in">print</span>&lt;<span class="type">double</span>&gt;(<span class="type">const</span> <span class="type">double</span>&amp; d) <span class="comment">// specialized for type double</span></span><br></pre></td></tr></table></figure>
+<p>注意，匹配时永远是精确匹配的非模板函数优先于模板函数。<br>通常，应尽可能避免使用函数模板专用化，而应使用非模板函数。</p>
+<blockquote>
+<p>完全特化不是隐式内联的（部分特化是隐式内联的）。<br>如果您将完整的专用化放在头文件中，则应将其标记为<code>内联</code>，以便在包含在多个翻译单元中时不会导致 ODR 冲突。</p>
+</blockquote>
+<h3 id="类模版专用化"><a href="#类模版专用化" class="headerlink" title="类模版专用化"></a>类模版专用化</h3><p>类模板特化允许我们为特定数据类型（或数据类型，如果有多个模板参数）专门化模板类。<br><strong>类模板特化被视为完全独立的类</strong>，即使它们的实例化方式与模板化类相同。<br>	相当于允许有多个同名但不同实现的类</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstdint&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// First define our non-specialized class template</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Storage8</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    T m_array[<span class="number">8</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">set</span><span class="params">(<span class="type">int</span> index, <span class="type">const</span> T&amp; value)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        m_array[index] = value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">const</span> T&amp; <span class="title">get</span><span class="params">(<span class="type">int</span> index)</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> m_array[index];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Now define our specialized class template</span></span><br><span class="line"><span class="keyword">template</span> &lt;&gt; <span class="comment">// the following is a template class with no templated parameters</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Storage8</span>&lt;<span class="type">bool</span>&gt; <span class="comment">// we&#x27;re specializing Storage8 for bool</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">// What follows is just standard class implementation details</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::<span class="type">uint8_t</span> m_data&#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// Don&#x27;t worry about the details of the implementation of these functions</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">set</span><span class="params">(<span class="type">int</span> index, <span class="type">bool</span> value)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// Figure out which bit we&#x27;re setting/unsetting</span></span><br><span class="line">        <span class="comment">// This will put a 1 in the bit we&#x27;re interested in turning on/off</span></span><br><span class="line">        <span class="keyword">auto</span> mask&#123; <span class="number">1</span> &lt;&lt; index &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (value)  <span class="comment">// If we&#x27;re setting a bit</span></span><br><span class="line">            m_data |= mask;   <span class="comment">// use bitwise-or to turn that bit on</span></span><br><span class="line">        <span class="keyword">else</span>  <span class="comment">// if we&#x27;re turning a bit off</span></span><br><span class="line">            m_data &amp;= ~mask;  <span class="comment">// bitwise-and the inverse mask to turn that bit off</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">get</span><span class="params">(<span class="type">int</span> index)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// Figure out which bit we&#x27;re getting</span></span><br><span class="line">        <span class="keyword">auto</span> mask&#123; <span class="number">1</span> &lt;&lt; index &#125;;</span><br><span class="line">        <span class="comment">// bitwise-and to get the value of the bit we&#x27;re interested in</span></span><br><span class="line">        <span class="comment">// Then implicit cast to boolean</span></span><br><span class="line">        <span class="keyword">return</span> (m_data &amp; mask);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Same example as before</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// Define a Storage8 for integers (instantiates Storage8&lt;T&gt;, where T = int)</span></span><br><span class="line">    Storage8&lt;<span class="type">int</span>&gt; intStorage;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> count&#123; <span class="number">0</span> &#125;; count &lt; <span class="number">8</span>; ++count)</span><br><span class="line">    &#123;</span><br><span class="line">        intStorage.<span class="built_in">set</span>(count, count);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> count&#123; <span class="number">0</span> &#125;; count &lt; <span class="number">8</span>; ++count)</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; intStorage.<span class="built_in">get</span>(count) &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Define a Storage8 for bool  (instantiates Storage8&lt;bool&gt; specialization)</span></span><br><span class="line">    Storage8&lt;<span class="type">bool</span>&gt; boolStorage;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> count&#123; <span class="number">0</span> &#125;; count &lt; <span class="number">8</span>; ++count)</span><br><span class="line">    &#123;</span><br><span class="line">        boolStorage.<span class="built_in">set</span>(count, count &amp; <span class="number">3</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	std::cout &lt;&lt; std::boolalpha;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> count&#123; <span class="number">0</span> &#125;; count &lt; <span class="number">8</span>; ++count)</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; boolStorage.<span class="built_in">get</span>(count) &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面例子中，当我们实例化对象类型 <code>Storage&lt;T&gt;</code>（其中 <code>T</code> 不是bool值）时，我们将从泛型模板化 <code>Storage8&lt;T&gt;</code> 类中获得一个版本模板。当我们实例化 <code>Storage8&lt;bool&gt;</code> 类型的对象时，我们将获得专用版本。</p>
+<p><strong>NOTE</strong>：<br>	- 为了使用专用类，编译器必须能够看到非专用类和专用类的完整定义。因此专用类和函数通常在非专用类定义正下方的头文件中定义<br>	- 单独在文件中使用专用类：如果在单个翻译单元中只需要专用化，则可以在该翻译单元的源文件中定义该专业化。由于其他翻译单位将无法看到专业化的定义，因此它们将继续使用非专业化版本。</p>
+<h4 id="成员函数的专有化"><a href="#成员函数的专有化" class="headerlink" title="成员函数的专有化"></a>成员函数的专有化</h4><p>例如下面我们需要专有化<code>Storage</code>的成员函数<code>print()</code>, 使其使用科学计数法打印double类型变量。</p>
+<ul>
+<li>我们不需要我们显式地专用化 <code>Storage&lt;double&gt;</code> 来显式专用化 <code>Storage&lt;double&gt;：:p rint（）</code></li>
+<li>可以让编译器从 <code>Storage&lt;T&gt;</code> 隐式特化 <code>Storage&lt;double&gt;</code>，并仅提供 <code>Storage&lt;double&gt;：:p rint（） 的</code>显式特化！这是它的样子：</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Storage</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    T m_value &#123;&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Storage</span>(T value)</span><br><span class="line">      : m_value &#123; value &#125;</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; m_value &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// This is a specialized member function definition</span></span><br><span class="line"><span class="comment">// Explicit function specializations are not implicitly inline, so make this inline if put in header file</span></span><br><span class="line"><span class="keyword">template</span>&lt;&gt;</span><br><span class="line"><span class="type">void</span> Storage&lt;<span class="type">double</span>&gt;::<span class="built_in">print</span>()</span><br><span class="line">&#123;</span><br><span class="line">    std::cout &lt;&lt; std::scientific &lt;&lt; m_value &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// Define some storage units</span></span><br><span class="line">    Storage i &#123; <span class="number">5</span> &#125;;</span><br><span class="line">    Storage d &#123; <span class="number">6.7</span> &#125;; <span class="comment">// will cause Storage&lt;double&gt; to be implicitly instantiated</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Print out some values</span></span><br><span class="line">    i.<span class="built_in">print</span>(); <span class="comment">// calls Storage&lt;int&gt;::print (instantiated from Storage&lt;T&gt;)</span></span><br><span class="line">    d.<span class="built_in">print</span>(); <span class="comment">// calls Storage&lt;double&gt;::print (called from explicit specialization of Storage&lt;double&gt;::print())</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注意，显式函数特化不是隐式内联的，因此，如果在头文件中定义了 <code>Storage&lt;double&gt;：:p rint（）</code> 的特化，我们应该将其标记为内联。</p>
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/pay-code.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2025/02/16/%E5%90%88%E5%B9%B6%E8%AE%BF%E5%AD%98%E5%92%8C%E7%9F%A9%E9%98%B5%E8%BD%AC%E7%BD%AE/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      合并访存和矩阵转置
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+
+</div>
+  <div class="realated__body">
+    
+      DEBUG: 请安装插件 <a target="_blank" rel="noopener" href="https://github.com/tea3/hexo-related-popular-posts">hexo-related-popular-posts</a> 或关闭 related_post 配置!
+    
+  </div>
+</div>
+
+    
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/Felt98">Felt's Github</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-zh.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/yi-ming-81-1">Felt</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-email.svg" />
+            <a class="foot-link" href="mailto:haoqingqin@gmail.com">haoqingqin@gmail.com</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="http://example.com">Felt's blog</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  
+
+  </body>
+</html>

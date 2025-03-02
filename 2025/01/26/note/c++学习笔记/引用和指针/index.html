@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        c++学习笔记——引用和指针 | Felt's blog
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/note">学习笔记</a>
+              
+                <a class="nav-menu-item" href="/project">项目</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">c++学习笔记——引用和指针</div>
+        <div class="post-info">
+          
+  
+
+
+          <span class="post-date">2025-01-26</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <h2 id="左值和右值"><a href="#左值和右值" class="headerlink" title="左值和右值"></a>左值和右值</h2><p>左值表达式是计算结果为函数或可识别对象（包括变量）的表达式，这些表达式在表达式末尾之后仍然存在。<br>右值表达式是计算结果为值的表达式，包括文本和临时对象，这些表达式不会在表达式末尾之后保留。<br>	临时对象：它们是在定义时创建和初始化的，并且在创建它们的完整表达式结束时销毁。</p>
+<p>左值在等号右边的时候将隐式转换为右值，而右值不会隐式转换为左值。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x&#123; <span class="number">1</span> &#125;;</span><br><span class="line"><span class="type">int</span> y&#123; <span class="number">2</span> &#125;;</span><br><span class="line"></span><br><span class="line">x = y; <span class="comment">// y is not an rvalue, but this is legal</span></span><br></pre></td></tr></table></figure>
+
+<p>接受右值的参数：<strong>按值传递和按 const 引用传递</strong>可以接受右值，不包括按非 const 引用传递和按地址传递。</p>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><p><strong>引用</strong>是现有对象的别名。引用本质上与被引用的对象相同（<strong>指向同一内存地址</strong>），我们可以使用引用来读取或修改被引用的对象。<br>	- 与常量非常相似，所有引用都必须在开始初始化。<br>	- 当一个引用被一个对象（或函数）初始化时，我们说它被<strong>绑定到</strong>那个对象（或函数）。<br>	- 如果尝试将引用绑定到与其引用类型不匹配的对象，编译器将尝试将<strong>对象隐式转换</strong>为引用类型，然后将引用绑定到该类型。<br>	- <strong>引用的生命周期和引用对象的生命周期是独立的</strong><br>		- 临时引用被销毁不会影响被引用的对象<br>		- 当被引用的对象在引用之前被销毁时，该引用将引用不再存在的对象。此类引用称为<strong>悬空引用</strong>。访问悬空引用会导致未定义的行为。<br>	- 引用在 C++ 中不是对象。<strong>引用不需要存在或占用存储空间</strong>。<br>	- 引用绑定后，无法重新绑定新引用的对象</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">    <span class="type">int</span> x &#123; <span class="number">5</span> &#125;;</span><br><span class="line">    <span class="type">int</span> y &#123; <span class="number">6</span> &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span>&amp; ref &#123; x &#125;; <span class="comment">// ref is now an alias for x</span></span><br><span class="line"></span><br><span class="line">    ref = y; <span class="comment">// assigns 6 (the value of y) to x (the object being referenced by ref)</span></span><br><span class="line">    <span class="comment">// The above line does NOT change ref into a reference to variable y!</span></span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// user is expecting this to print 5</span></span><br><span class="line"></span><br><span class="line">输出：<span class="number">6</span></span><br><span class="line">ref并没有从x重新绑定到y，而是将x=y，让x的值变成了y</span><br></pre></td></tr></table></figure>
+
+<p>可以用引用来初始化引用，两个引用都会绑定同一对象</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> var&#123;&#125;;</span><br><span class="line"><span class="type">int</span>&amp; ref1&#123; var &#125;;  <span class="comment">// an lvalue reference bound to var</span></span><br><span class="line"><span class="type">int</span>&amp; ref2&#123; ref1 &#125;; <span class="comment">// an lvalue reference bound to var</span></span><br></pre></td></tr></table></figure>
+<h4 id="左值引用"><a href="#左值引用" class="headerlink" title="左值引用"></a>左值引用</h4><h5 id="非-const-左值引用"><a href="#非-const-左值引用" class="headerlink" title="非 const 左值引用"></a>非 const 左值引用</h5><p>只能绑定到非 const 左值的引用，<strong>不能绑定到const左值和右值</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">    <span class="type">int</span> x &#123; <span class="number">5</span> &#125;; <span class="comment">// normal integer variable</span></span><br><span class="line">    <span class="type">int</span>&amp; ref &#123; x &#125;; <span class="comment">// ref is an lvalue reference variable that can now be used as an alias for variable x</span></span><br><span class="line">    std::cout &lt;&lt; x &lt;&lt; ref &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// print 55</span></span><br><span class="line"></span><br><span class="line">    x = <span class="number">6</span>; <span class="comment">// x now has value 6</span></span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; x &lt;&lt; ref &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// prints 66</span></span><br><span class="line"></span><br><span class="line">定义引用时，通常将 &amp; 符号放在类型旁边</span><br></pre></td></tr></table></figure>
+<p>非 const 左值引用不能绑定到不同类型的对象，这是因为<strong>对象隐式转换的结果是右值</strong>，非 const 左值引用不能绑定右值</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x &#123; <span class="number">5</span> &#125;;</span><br><span class="line"><span class="type">int</span>&amp; ref &#123; x &#125;;            <span class="comment">// okay: referenced type (int) matches type of initializer</span></span><br><span class="line"></span><br><span class="line"><span class="type">double</span> d &#123; <span class="number">6.0</span> &#125;;</span><br><span class="line"><span class="type">int</span>&amp; invalidRef &#123; d &#125;;     <span class="comment">// invalid: conversion of double to int is narrowing conversion, disallowed by list initialization</span></span><br><span class="line"><span class="type">double</span>&amp; invalidRef2 &#123; x &#125;; <span class="comment">// invalid: non-const lvalue reference can&#x27;t bind to rvalue (result of converting x to double)</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="const-左值引用"><a href="#const-左值引用" class="headerlink" title="const 左值引用"></a>const 左值引用</h5><p>可以绑定到几乎所有值，包括右值和可以隐式转换为引用类型的不同类型的值</p>
+<p>为了避免出现悬空引用，C++ 有一个特殊规则：当 const 左值引用直接绑定到临时对象时，<strong>临时对象的生存期将延长以匹配引用的生存期</strong>。<br>	注意，当将不同类型的参数传递给 const 左值引用时，将会<strong>拷贝一个原类型参数的副本</strong>来进行隐式类型转换，然后再将临时副本绑定到引用</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment">// case 1</span></span><br><span class="line">    <span class="type">const</span> <span class="type">double</span>&amp; r1 &#123; <span class="number">5</span> &#125;;  <span class="comment">// temporary double initialized with value 5, r1 binds to temporary</span></span><br><span class="line">    std::cout &lt;&lt; r1 &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// prints 5</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// case 2</span></span><br><span class="line">    <span class="type">char</span> c &#123; <span class="string">&#x27;a&#x27;</span> &#125;;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span>&amp; r2 &#123; c &#125;;     <span class="comment">// temporary int initialized with value &#x27;a&#x27;, r2 binds to temporary</span></span><br><span class="line">    std::cout &lt;&lt; r2 &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// prints 97 (since r2 is a reference to int)</span></span><br><span class="line"></span><br><span class="line">在情况 <span class="number">1</span> 中，将创建一个 `<span class="type">double</span>` 类型的临时对象，并使用 <span class="type">int</span> 值 `<span class="number">5</span>` 进行初始化。然后 `<span class="type">const</span> <span class="type">double</span>&amp; r1` 被绑定到那个临时的 <span class="type">double</span> 对象。</span><br><span class="line"></span><br><span class="line">在情况 <span class="number">2</span> 中，将创建一个 `<span class="type">int</span>` 类型的临时对象，并使用 <span class="type">char</span> 值 `a` 进行初始化。然后 `<span class="type">const</span> <span class="type">int</span>&amp; r2` 绑定到那个临时的 <span class="type">int</span> 对象。</span><br></pre></td></tr></table></figure>
+
+<p>const 的左值引用绑定到可修改的左值时，就不能通过引用修改被引用的对象。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x &#123; <span class="number">5</span> &#125;;          <span class="comment">// x is a modifiable lvalue</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span>&amp; ref &#123; x &#125;; <span class="comment">// okay: we can bind a const reference to a modifiable lvalue</span></span><br><span class="line">ref = <span class="number">7</span>;                  <span class="comment">// error: we can not modify an object through a const reference</span></span><br><span class="line">x--;                   <span class="comment">//ok</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="constexpr-左值引用"><a href="#constexpr-左值引用" class="headerlink" title="constexpr 左值引用"></a>constexpr 左值引用</h5><p>因为限制较多，用的较少<br>Constexpr 引用有一个特殊的限制：它们<strong>只能绑定到具有静态持续时间的对象</strong>（全局或静态局部变量）。constexpr 引用不能绑定到 （非静态） 局部变量。<br>	这是因为编译器知道 static 对象将在内存中的哪个位置实例化，因此它可以将该地址视为编译时常量。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> g_x &#123; <span class="number">5</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    [[maybe_unused]] <span class="keyword">constexpr</span> <span class="type">int</span>&amp; ref1 &#123; g_x &#125;; <span class="comment">// ok, can bind to global</span></span><br><span class="line"></span><br><span class="line">    <span class="type">static</span> <span class="type">int</span> s_x &#123; <span class="number">6</span> &#125;;</span><br><span class="line">    [[maybe_unused]] <span class="keyword">constexpr</span> <span class="type">int</span>&amp; ref2 &#123; s_x &#125;; <span class="comment">// ok, can bind to static local</span></span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> x &#123; <span class="number">6</span> &#125;;</span><br><span class="line">    [[maybe_unused]] <span class="keyword">constexpr</span> <span class="type">int</span>&amp; ref3 &#123; x &#125;; <span class="comment">// compile error: can&#x27;t bind to non-static object</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当定义对 const 变量的 constexpr 引用时，我们需要同时应用 <code>constexpr</code>（适用于引用）和 <code>const</code>（适用于被引用的类型）。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">static</span> <span class="type">const</span> <span class="type">int</span> s_x &#123; <span class="number">6</span> &#125;; <span class="comment">// a const int</span></span><br><span class="line">[[maybe_unused]] <span class="keyword">constexpr</span> <span class="type">const</span> <span class="type">int</span>&amp; ref2 &#123; s_x &#125;; <span class="comment">// needs both constexpr and const</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="按左值引用传参"><a href="#按左值引用传参" class="headerlink" title="按左值引用传参"></a>按左值引用传参</h5><p>按值传递参数的话，会创建原参数的临时副本，然后在函数调用结束后销毁。按值传递本身性能上就比较差，而且对于某些大参数来说复制的成本很高</p>
+<p><strong>按引用传递</strong>则可以避免成本高昂的参数复制</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">printValue</span><span class="params">(string&amp; y)</span> <span class="comment">// type changed to std::string&amp;</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; y &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125; <span class="comment">// y is destroyed here</span></span><br></pre></td></tr></table></figure>
+
+<p>由于非 const 左值引用绑定的限制，非const左值引用只能传递非const左值变量</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">    <span class="type">const</span> <span class="type">int</span> z &#123; <span class="number">5</span> &#125;;</span><br><span class="line">    <span class="built_in">printValue</span>(z); <span class="comment">// error: z is a non-modifiable lvalue</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printValue</span>(<span class="number">5</span>); <span class="comment">// error: 5 is an rvalue</span></span><br><span class="line"></span><br><span class="line">传递<span class="type">const</span>左值和右值都会报错</span><br></pre></td></tr></table></figure>
+
+<p>而const左值引用，则可以传递const和非const左值、右值，同时还保证函数无法更改被引用的值。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">printRef</span><span class="params">(<span class="type">const</span> <span class="type">int</span>&amp; y)</span> <span class="comment">// y is a const reference</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; y &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> x &#123; <span class="number">5</span> &#125;;</span><br><span class="line">    <span class="built_in">printRef</span>(x);   <span class="comment">// ok: x is a modifiable lvalue, y binds to x</span></span><br><span class="line"></span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> z &#123; <span class="number">5</span> &#125;;</span><br><span class="line">    <span class="built_in">printRef</span>(z);   <span class="comment">// ok: z is a non-modifiable lvalue, y binds to z</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">printRef</span>(<span class="number">5</span>);   <span class="comment">// ok: 5 is rvalue literal, y binds to temporary int object</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意，如果将不同类型的参数传递给 const 左值引用参数，该值会转换为引用的类型。<strong>转换的过程将创建一个临时对象</strong>，然后引用参数可以绑定到该对象。<br>	因为对象副本的创建，按不同类型的参数传递给 const 左值引用参数的性能可能还不如按值传递<br>	因此使用按引用传递时，请<strong>确保参数的类型与引用的类型匹配</strong>，否则将导致意外的（并且可能代价高昂的）转换。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">printVal</span><span class="params">(<span class="type">double</span> d)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; d &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">printRef</span><span class="params">(<span class="type">const</span> <span class="type">double</span>&amp; d)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; d &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printVal</span>(<span class="number">5</span>); <span class="comment">// 5 converted to temporary double, copied to parameter d</span></span><br><span class="line">    <span class="built_in">printRef</span>(<span class="number">5</span>); <span class="comment">// 5 converted to temporary double, bound to parameter d</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>按值传递与按引用传递的成本比较</p>
+<ul>
+<li>考虑创建参数的成本：按值传递要进行对象的复制，成本与对象的大小和实例化设置有关。而引用绑定则不需要复制，但绑定也需要一定的成本</li>
+<li>考虑使用参数的成本：<ul>
+<li>编译器可以通过将按值传递参数的引用或副本（如果它很小）放入 CPU 寄存器（访问速度较快）而不是 RAM（访问速度较慢）来进行优化。值参数的每次使用都是<strong>单个 CPU 寄存器或 RAM 访问</strong></li>
+<li>但是，当使用引用参数时，通常会有一个额外的步骤。正在运行的程序必须首先直接访问分配给引用的存储位置（CPU 寄存器或 RAM），以确定正在引用的对象。只有这样，它才能访问被引用对象的存储位置（在 RAM 中）。因此引用参数的每次使用都是单个 CPU 寄存器或 RAM 访问，<strong>再加上第二个 RAM 访问</strong>。</li>
+</ul>
+</li>
+<li>编译器有时可以更有效地优化使用按值传递的代码<br>综上，按值传递的效率并不总是比按引用传递的差。<br>对于复制成本较低的对象，复制的成本与绑定的成本相似，但访问对象的速度更快，并且编译器可能能够更好地优化。<br>因此对于复制成本较低的对象，推荐使用按值传递</li>
+</ul>
+</blockquote>
+<h4 id="按引用返回"><a href="#按引用返回" class="headerlink" title="按引用返回"></a>按引用返回</h4><p>按值返回也会出现拷贝返回对象的情况</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">string <span class="title">returnByValue</span><span class="params">()</span></span>; <span class="comment">// returns a copy of a std::string (expensive)</span></span><br></pre></td></tr></table></figure>
+
+<p>使用按引用返回，返回一个绑定到所返回对象的引用，避免返回对象的拷贝</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">const</span> string&amp; <span class="title">getProgramName</span><span class="params">()</span> <span class="comment">// returns a const reference</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">static</span> <span class="type">const</span> string s_programName &#123; <span class="string">&quot;Calculator&quot;</span> &#125;; <span class="comment">// has static duration, destroyed at end of program</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> s_programName;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意：必须确保<strong>被引用的对象比返回引用的函数长寿</strong>。否则，返回的引用将悬空（引用已销毁的对象），并且使用该引用将导致未定义的行为。<br>	在上面的程序中，由于 <code>s_programName</code> 是const static，具有静态持续时间，<code>因此 s_programName</code> 将一直存在，直到程序结束，比返回的函数<code>getProgramName</code>寿命长。</p>
+<p><strong>永远不要返回 （非const static） 局部变量或临时对象的引用</strong><br>修改上面的程序：由于 <code>programName</code> 是具有自动持续时间的局部变量，<code>因此 programName</code> 在函数结束时被销毁。<strong>这意味着返回的引用现在是悬空的</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">const</span> string&amp; <span class="title">getProgramName</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">const</span> string programName &#123; <span class="string">&quot;Calculator&quot;</span> &#125;; <span class="comment">// now a non-static local variable, destroyed when function ends</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> programName;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果参数通过引用传递到函数中，<strong>则通过引用返回该参数是安全的</strong>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Takes two std::string objects, returns the one that comes first alphabetically</span></span><br><span class="line"><span class="function"><span class="type">const</span> std::string&amp; <span class="title">firstAlphabetical</span><span class="params">(<span class="type">const</span> std::string&amp; a, <span class="type">const</span> std::string&amp; b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> (a &lt; b) ? a : b; <span class="comment">// We can use operator&lt; on std::string to determine which comes first alphabetically</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当 const 引用参数的参数是右值时，通过 const 引用返回该参数仍然是可以的。<br>	这是因为在创建右值的完整表达式结束之前，右值不会被销毁。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">const</span> std::string&amp; <span class="title">foo</span><span class="params">(<span class="type">const</span> std::string&amp; s)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">std::string <span class="title">getHello</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Hello&quot;</span>; <span class="comment">// implicit conversion to std::string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">const</span> std::string s&#123; <span class="built_in">foo</span>(<span class="built_in">getHello</span>()) &#125;;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; s;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>更高级的用法，使用返回的引用改变传入的引用参数值</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// takes two integers by non-const reference, and returns the greater by reference</span></span><br><span class="line"><span class="function"><span class="type">int</span>&amp; <span class="title">max</span><span class="params">(<span class="type">int</span>&amp; x, <span class="type">int</span>&amp; y)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (x &gt; y) ? x : y;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> a&#123; <span class="number">5</span> &#125;;</span><br><span class="line">    <span class="type">int</span> b&#123; <span class="number">6</span> &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">max</span>(a, b) = <span class="number">7</span>; <span class="comment">// sets the greater of a or b to 7</span></span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; a &lt;&lt; b &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：<span class="number">5</span> <span class="number">7</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>直接返回static 局部变量的问题：</strong><br>	下面程序中，因为 <code>id1</code> 和 <code>id2</code> 引用了同一个对象（静态变量 <code>s_x</code>），所以当任何内容（例如 <code>getNextId（）</code>）修改该值时，所有引用现在都在访问修改后的值。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">const</span> <span class="type">int</span>&amp; <span class="title">getNextId</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">static</span> <span class="type">int</span> s_x&#123; <span class="number">0</span> &#125;; <span class="comment">// note: variable is non-const</span></span><br><span class="line">    ++s_x; <span class="comment">// generate the next id</span></span><br><span class="line">    <span class="keyword">return</span> s_x; <span class="comment">// and return a reference to it</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span>&amp; id1 &#123; <span class="built_in">getNextId</span>() &#125;; <span class="comment">// id1 is a reference</span></span><br><span class="line">    <span class="type">const</span> <span class="type">int</span>&amp; id2 &#123; <span class="built_in">getNextId</span>() &#125;; <span class="comment">// id2 is a reference</span></span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; id1 &lt;&lt; id2 &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：<span class="number">2</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>可以将上面的程序中， <code>id1</code> 和 <code>id2</code> 改为非引用的变量，这样即使<code>getNextId（）</code> 返回一个引用，但 <code>id1</code> 和 <code>id2</code> 是非引用变量。在这种情况下，返回引用的值就会复制给它们<br>	函数返回引用，并且该引用用于初始化或分配给非引用变量，则<strong>返回值将被复制</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">const</span> <span class="type">int</span>&amp; <span class="title">getNextId</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">static</span> <span class="type">int</span> s_x&#123; <span class="number">0</span> &#125;;</span><br><span class="line">    ++s_x;</span><br><span class="line">    <span class="keyword">return</span> s_x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> id1 &#123; <span class="built_in">getNextId</span>() &#125;; <span class="comment">// id1 is a normal variable now and receives a copy of the value returned by reference from getNextId()</span></span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> id2 &#123; <span class="built_in">getNextId</span>() &#125;; <span class="comment">// id2 is a normal variable now and receives a copy of the value returned by reference from getNextId()</span></span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; id1 &lt;&lt; id2 &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">输出：<span class="number">1</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>还要注意，如果程序返回一个悬空引用，那么在创建副本之前，该引用会保持悬空状态，这将导致未定义的行为：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">const</span> std::string&amp; <span class="title">getProgramName</span><span class="params">()</span> <span class="comment">// will return a const reference</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">const</span> std::string programName&#123; <span class="string">&quot;Calculator&quot;</span> &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> programName;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::string name &#123; <span class="built_in">getProgramName</span>() &#125;; <span class="comment">// makes a copy of a dangling reference</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;This program is named &quot;</span> &lt;&lt; name &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// undefined behavior</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="右值引用和移动语义"><a href="#右值引用和移动语义" class="headerlink" title="右值引用和移动语义"></a>右值引用和移动语义</h4><p>右值引用：使用双 &amp;&amp; 符号创建的右值的引用。R 值引用不能用 L 值初始化或绑定（不过const L值引用可以绑定到R值） 。最好不要返回右值引用<br>R 值引用的属性：<br>	1. r 值引用将初始化它们的对象的生命周期延长到 r 值引用的生命周期（对 const 对象的左值引用也可以这么延长）<br>	2. 非 const 的r 值引用允许您修改 r 值</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>&amp;&amp; rref&#123; <span class="number">5</span> &#125;; <span class="comment">// because we&#x27;re initializing an r-value reference with a literal, a temporary with value 5 is created here</span></span><br><span class="line">rref = <span class="number">10</span>;</span><br><span class="line">std::cout &lt;&lt; rref &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>.<br>	3. <strong>右值引用是一个变量</strong>（左值），其具有地址</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; rref &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; <span class="comment">// 输出 10</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; &amp;rref &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>; <span class="comment">// ✅ 输出 `rref` 的地址</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span>* p = &amp;rref         <span class="comment">//可以使用指针指向右值引用</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>R 值引用更常用作函数参数。当您希望对 l 值和 r 值参数具有不同的行为时，这对于函数重载最有用。<br>如下面的案例，r值和l值的函数表现了不同的行为</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">fun</span><span class="params">(<span class="type">const</span> <span class="type">int</span>&amp; lref)</span> <span class="comment">// l-value arguments will select this function</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;l-value reference to const: &quot;</span> &lt;&lt; lref &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">fun</span><span class="params">(<span class="type">int</span>&amp;&amp; rref)</span> <span class="comment">// r-value arguments will select this function</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;r-value reference: &quot;</span> &lt;&lt; rref &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> x&#123; <span class="number">5</span> &#125;;</span><br><span class="line">	<span class="built_in">fun</span>(x); <span class="comment">// l-value argument calls l-value version of function</span></span><br><span class="line">	<span class="built_in">fun</span>(<span class="number">5</span>); <span class="comment">// r-value argument calls r-value version of function</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="type">int</span>&amp;&amp; ref&#123; <span class="number">5</span> &#125;;</span><br><span class="line">    <span class="built_in">fun</span>(ref);        <span class="comment">//注意，这会调用左值的版本，因为ref虽然是右值引用，但其本身是左值</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>隐式移动</strong>：如果满足以下所有条件，编译器将创建隐式移动构造函数和移动赋值运算符，将复制指针，而不是移动指针。：<br>	1. - 没有用户声明的复制构造函数或复制赋值运算符。<br>	2. - 没有用户声明的移动构造函数或移动赋值运算符。<br>	3. - 没有用户声明的析构函数。</p>
+<h2 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h2><h4 id="访问变量的内存地址"><a href="#访问变量的内存地址" class="headerlink" title="访问变量的内存地址"></a>访问变量的内存地址</h4><p>使用<strong>取地址符</strong>&amp;，获取变量的地址</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x&#123; <span class="number">5</span> &#125;;</span><br><span class="line">std::cout &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;  <span class="comment">// print the value of variable x</span></span><br><span class="line">std::cout &lt;&lt; &amp;x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// print the memory address of variable x</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="解引用"><a href="#解引用" class="headerlink" title="解引用"></a>解引用</h4><p>对变量的地址，使用 * 访问存储在该地址的对象（注意，返回的是左值，即原变量）</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">std::cout &lt;&lt; *(&amp;x) &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// print the value at the memory address of variable x (parentheses not required, but make it easier to read)</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="指针-1"><a href="#指针-1" class="headerlink" title="指针"></a>指针</h4><p>指针：保存内存地址的对象<br>野指针：未初始化的指针。野指针包含垃圾地址，解引用野指针会导致未定义行为。<br>	和引用类似，应该在尽量在开始时，初始化指针</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>* ptr;        <span class="comment">// an uninitialized pointer (holds a garbage address)</span></span><br><span class="line"><span class="type">int</span>* ptr2&#123;&#125;;     <span class="comment">// a null pointer (we&#x27;ll discuss these in the next lesson)</span></span><br><span class="line"><span class="type">int</span>* ptr3&#123; &amp;x &#125;; <span class="comment">// a pointer initialized with the address of variable x</span></span><br></pre></td></tr></table></figure>
+
+<p>一旦我们有一个包含另一个对象地址的指针，我们就可以使用解引用运算符 （ * ） 来访问该地址的值。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>* ptr&#123; &amp;x &#125;; <span class="comment">// ptr holds the address of x</span></span><br><span class="line">std::cout &lt;&lt; *ptr &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// use dereference operator to print the value at the address that ptr is holding (which is x&#x27;s address)</span></span><br></pre></td></tr></table></figure>
+<p>![[引用和指针-1.png]]</p>
+<p>就像引用的类型必须与所引用的对象类型匹配一样，指针的类型也必须与所指向的对象的类型匹配</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> i&#123; <span class="number">5</span> &#125;;</span><br><span class="line"><span class="type">double</span> d&#123; <span class="number">7.0</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span>* iPtr&#123; &amp;i &#125;;     <span class="comment">// ok: a pointer to an int can point to an int object</span></span><br><span class="line"><span class="type">int</span>* iPtr2 &#123; &amp;d &#125;;   <span class="comment">// not okay: a pointer to an int can&#x27;t point to a double object</span></span><br><span class="line"><span class="type">double</span>* dPtr&#123; &amp;d &#125;;  <span class="comment">// ok: a pointer to a double can point to a double object</span></span><br><span class="line"><span class="type">double</span>* dPtr2&#123; &amp;i &#125;; <span class="comment">// not okay: a pointer to a double can&#x27;t point to an int object</span></span><br></pre></td></tr></table></figure>
+
+<p>不允许使用文本值初始化指针：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>* ptr&#123; <span class="number">5</span> &#125;; <span class="comment">// not okay</span></span><br><span class="line"><span class="type">int</span>* ptr&#123; <span class="number">0x0012FF7C</span> &#125;; <span class="comment">// not okay, 0x0012FF7C is treated as an integer literal</span></span><br></pre></td></tr></table></figure>
+
+<p>可以更改指针所指向的对象或其值</p>
+<h4 id="悬空指针"><a href="#悬空指针" class="headerlink" title="悬空指针"></a>悬空指针</h4><p><strong>悬空指针</strong>：保存已销毁对象的地址的指针。解引用悬空指针也会导致未定义行为。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x&#123; <span class="number">5</span> &#125;;</span><br><span class="line"><span class="type">int</span>* ptr&#123; &amp;x &#125;;</span><br><span class="line"></span><br><span class="line">std::cout &lt;&lt; *ptr &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// valid</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> y&#123; <span class="number">6</span> &#125;;</span><br><span class="line">    ptr = &amp;y;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; *ptr &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// valid</span></span><br><span class="line">&#125; <span class="comment">// y goes out of scope, and ptr is now dangling</span></span><br><span class="line"></span><br><span class="line">std::cout &lt;&lt; *ptr &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// undefined behavior from dereferencing a dangling pointer</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="空指针"><a href="#空指针" class="headerlink" title="空指针"></a>空指针</h4><p><strong>空指针</strong>：未指向任何内容的指针</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>* ptr &#123;&#125;; <span class="comment">// ptr is now a null pointer, and is not holding an address</span></span><br><span class="line"><span class="type">int</span>* ptr &#123; <span class="literal">nullptr</span> &#125;; <span class="comment">// can use nullptr to initialize a pointer to be a null pointer</span></span><br></pre></td></tr></table></figure>
+<p>解引用 空指针也会导致未定义的行为。不过我们可以使用if条件语句判断空指针<br>	但if语句并不能区分悬空指针。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (ptr == <span class="literal">nullptr</span>) <span class="comment">// explicit test for equivalence</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="指向const的指针和const指针"><a href="#指向const的指针和const指针" class="headerlink" title="指向const的指针和const指针"></a>指向const的指针和const指针</h4><p><strong>指向const的指针</strong><br>和非const引用类似，非指向const类型的指针不能指向const变量。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> x &#123; <span class="number">5</span> &#125;; <span class="comment">// x is now const</span></span><br><span class="line"><span class="type">int</span>* ptr &#123; &amp;x &#125;;   <span class="comment">// compile error: cannot convert from const int* to int*</span></span><br></pre></td></tr></table></figure>
+<p>只有指向const的指针才能指向const值<br>声明指向 const 值的指针，请在指针的数据类型之前使用 <code>const</code> 关键字<br>	当然<strong>指向const的指针也不能修改指向的变量内容</strong></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> x&#123; <span class="number">5</span> &#125;;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span>* ptr &#123; &amp;x &#125;; <span class="comment">// okay: ptr is pointing to a &quot;const int&quot;</span></span><br><span class="line"></span><br><span class="line">*ptr = <span class="number">6</span>; <span class="comment">// not allowed: we can&#x27;t change a const value</span></span><br></pre></td></tr></table></figure>
+
+<p>注意，由于<strong>指向 const 的指针本身不是 const</strong> （它只指向 const 值），因此我们可以通过为指针分配新地址来更改指针的指向：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> x&#123; <span class="number">5</span> &#125;;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span>* ptr &#123; &amp;x &#125;; <span class="comment">// ptr points to const int x</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> y&#123; <span class="number">6</span> &#125;;</span><br><span class="line">ptr = &amp;y; <span class="comment">// okay: ptr now points at const int y</span></span><br></pre></td></tr></table></figure>
+
+<p>类似于const引用，指向 const 的指针也可以指向非 const 变量。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x&#123; <span class="number">5</span> &#125;; <span class="comment">// non-const</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span>* ptr &#123; &amp;x &#125;; <span class="comment">// ptr points to a &quot;const int&quot;</span></span><br><span class="line"></span><br><span class="line">*ptr = <span class="number">6</span>;  <span class="comment">// not allowed: ptr points to a &quot;const int&quot; so we can&#x27;t change the value through ptr</span></span><br><span class="line">x = <span class="number">6</span>; <span class="comment">// allowed: the value is still non-const when accessed through non-const identifier x</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>const指针</strong><br>要使指针成为常量，在指针声明中星号后使用 <code>const</code> 关键字：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x&#123; <span class="number">5</span> &#125;;</span><br><span class="line"><span class="type">int</span>* <span class="type">const</span> ptr &#123; &amp;x &#125;; <span class="comment">// const after the asterisk means this is a const pointer</span></span><br></pre></td></tr></table></figure>
+
+<p>const指针因为是常量，所以不能重新修改指针的指向</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>* <span class="type">const</span> ptr &#123; &amp;x &#125;; <span class="comment">// okay: the const pointer is initialized to the address of x</span></span><br><span class="line">ptr = &amp;y; <span class="comment">// error: once initialized, a const pointer can not be changed.</span></span><br></pre></td></tr></table></figure>
+
+<p>const指针可以修改指向的非const变量</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> x&#123; <span class="number">5</span> &#125;;</span><br><span class="line"><span class="type">int</span>* <span class="type">const</span> ptr &#123; &amp;x &#125;; <span class="comment">// ptr will always point to x</span></span><br><span class="line"></span><br><span class="line">*ptr = <span class="number">6</span>; <span class="comment">// okay: the value being pointed to is non-const</span></span><br></pre></td></tr></table></figure>
+
+<p>我们也可以声明一个指向 const 值的 const 指针<br>	这个指针不能更改其地址，也不能通过指针更改它指向的值。只能解引用来获取其值</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> value &#123; <span class="number">5</span> &#125;;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span>* <span class="type">const</span> ptr &#123; &amp;value &#125;; <span class="comment">// a const pointer to a const value</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="按地址传递"><a href="#按地址传递" class="headerlink" title="按地址传递"></a>按地址传递</h4><p>传递地址也可以避免创建参数临时对象的情况，但是会复制临时指针变量。<br>	指针只有 4 或 8 个字节，因此复制指针总是很快的<br>	在对指针解引用时注意判空指针</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">changeValue</span><span class="params">(<span class="type">int</span>* ptr)</span> <span class="comment">// note: ptr is a pointer to non-const in this example</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(!ptr)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">	*ptr = <span class="number">6</span>; <span class="comment">// change the value to 6</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">int</span> x&#123; <span class="number">5</span> &#125;;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;x = &quot;</span> &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">changeValue</span>(&amp;x); <span class="comment">// we&#x27;re passing the address of x to the function</span></span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;x = &quot;</span> &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果函数不应该修改传入的对象，则可以将函数参数设置为指向 const 的指针：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">changeValue</span><span class="params">(<span class="type">const</span> <span class="type">int</span>* ptr)</span> <span class="comment">// note: ptr is now a pointer to a const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(!ptr)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	*ptr = <span class="number">6</span>; <span class="comment">// error: can not change const value</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果永远不应该将 null 指针传递给函数，则可以使用 <code>assert</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">const</span> <span class="type">int</span>* ptr)</span> <span class="comment">// now a pointer to a const int</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">assert</span>(ptr); <span class="comment">// fail the program in debug mode if a null pointer is passed (since this should never happen)</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// (optionally) handle this as an error case in production mode so we don&#x27;t crash if it does happen</span></span><br><span class="line">	<span class="keyword">if</span> (!ptr)</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">	std::cout &lt;&lt; *ptr &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>按引用传递 vs 按地址传递<br>按引用传递本质上也是按地址传递，但按引用传递有一些好处：<br>	1. const引用传递可以传递左值和右值。但按地址传递的对象必须有地址，因此按地址传递只能传递左值<br>	2. 按引用传递的语法是自然的，因为我们可以直接传入文字或对象。使用按地址传递时，我们的代码最终会散布着 &amp; 符号 （&amp;） 和星号 （ * ） </p>
+</blockquote>
+<h4 id="指针与引用的区别"><a href="#指针与引用的区别" class="headerlink" title="指针与引用的区别"></a>指针与引用的区别</h4><p>虽然引用通常由编译器使用指针实现（引用也可能会被编译器优化掉）<br>主要区别在于，对于指针，我们需要显式地获取要指向的地址，并且我们必须显式地解引用指针才能获取值。<br>而引用的获取地址和解引用都是隐式发生的<br>其他的差异：<br>	1. 引用必须在开始时初始化，指针不需要初始化（但应该初始化）<br>	2.引用不是对象，指针是。<br>	3.引用不能更改为引用其他内容，指针可以更改它们所指向的内容<br>	4.引用必须始终绑定到对象，不能是空的，指针可以指向任何内容，可以为空指针<br>	5.引用是 “安全的” （除了悬空的引用），指针本质上是危险的</p>
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/pay-code.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2025/02/02/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%BB%93%E6%9E%84%E4%BD%93/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>c++学习笔记——结构体</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2025/01/24/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B8%B8%E7%94%A8%E5%85%B3%E9%94%AE%E5%AD%97static%E4%B8%8Econst/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      c++学习笔记——常用关键字static与const
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+
+</div>
+  <div class="realated__body">
+    
+      DEBUG: 请安装插件 <a target="_blank" rel="noopener" href="https://github.com/tea3/hexo-related-popular-posts">hexo-related-popular-posts</a> 或关闭 related_post 配置!
+    
+  </div>
+</div>
+
+    
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/Felt98">Felt's Github</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-zh.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/yi-ming-81-1">Felt</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-email.svg" />
+            <a class="foot-link" href="mailto:haoqingqin@gmail.com">haoqingqin@gmail.com</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="http://example.com">Felt's blog</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  
+
+  </body>
+</html>

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        c++学习笔记——继承 | Felt's blog
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/note">学习笔记</a>
+              
+                <a class="nav-menu-item" href="/project">项目</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">c++学习笔记——继承</div>
+        <div class="post-info">
+          
+  
+
+
+          <span class="post-date">2025-01-09</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><p><strong>继承</strong>：是指一个类（子类）可以继承另一个类（父类）的属性和行为。继承表示一种 “is-a”（是一个）关系<br>	好处：继承实现了代码的重用和模块化，减少重复代码的编写。实现类之间的层次关系。如果我们更新或修改基类（例如添加新函数或修复错误），我们所有的派生类都将自动继承这些更改<br>基类：定义层次关系中所有类的共用成员<br>派生类：继承基类，定义自己的特有成员, 重写虚函数</p>
+<p>实例：BaseballPlayer继承Person类，使用冒号<code>:</code>、单词<code>public</code> 和我们希望继承的类的名称，称为<code>公共继承</code></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">// In this example, we&#x27;re making our members public for simplicity</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    std::string m_name&#123;&#125;;</span><br><span class="line">    <span class="type">int</span> m_age&#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Person</span>(std::string_view name = <span class="string">&quot;&quot;</span>, <span class="type">int</span> age = <span class="number">0</span>)</span><br><span class="line">        : m_name&#123; name &#125;, m_age&#123; age &#125;</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">const</span> std::string&amp; <span class="title">getName</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_name; &#125;</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">getAge</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_age; &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// BaseballPlayer publicly inheriting Person</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BaseballPlayer</span> : <span class="keyword">public</span> Person</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">double</span> m_battingAverage&#123;&#125;;</span><br><span class="line">    <span class="type">int</span> m_homeRuns&#123;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">BaseballPlayer</span>(<span class="type">double</span> battingAverage = <span class="number">0.0</span>, <span class="type">int</span> homeRuns = <span class="number">0</span>)</span><br><span class="line">       : m_battingAverage&#123;battingAverage&#125;, m_homeRuns&#123;homeRuns&#125;</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="派生类的实例化"><a href="#派生类的实例化" class="headerlink" title="派生类的实例化"></a>派生类的实例化</h4><p>派生类对象实际包含基类部分和派生类部分。<br>	- 首先，构造最基类（位于继承树的顶部， 会调用默认构造函数）。然后按顺序构造每个子类，直到最后构造最子类（位于继承树的底部）<br>	- 销毁派生类时，将按构造的相反顺序调用每个析构函数。<br><strong>派生类中初始化基类</strong>：如果派生类构造时要初始化基类参数，可以使用委托构造函数的方法，显示指定要调用的Base构造函数<br>	注意：派生类的构造函数只能直接调用基类的构造函数，不能调用更祖宗的构造函数。例如C继承B，B继承A，C只能调用B的构造函数，不能调用A</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Derived</span>:</span> public Base</span><br><span class="line">&#123;</span><br><span class="line">public:</span><br><span class="line">    <span class="type">double</span> m_cost &#123;&#125;;</span><br><span class="line"></span><br><span class="line">    Derived(<span class="type">double</span> cost=<span class="number">0.0</span>, <span class="type">int</span> id=<span class="number">0</span>)</span><br><span class="line">        : Base&#123; id &#125; <span class="comment">// Call Base(int) constructor with value id!</span></span><br><span class="line">        , m_cost&#123; cost &#125;</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">double</span> <span class="title function_">getCost</span><span class="params">()</span> <span class="type">const</span> &#123; <span class="keyword">return</span> m_cost; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h4 id="访问控制"><a href="#访问控制" class="headerlink" title="访问控制"></a>访问控制</h4><ul>
+<li>派生类不能直接访问修改基类的私有成员，可以使用<code>protected</code>让派生类访问基类成员，而对外界屏蔽。<br>  但最好将成员设为私有，并且仅在规划派生类并且构建和维护这些私有成员的接口的成本太高时才使用 protected</li>
+<li><strong>三种访问控制继承</strong><br>  C++ 默认为私有继承<ul>
+<li>public继承：最常用的继承，不会修改基类成员的任何属性</li>
+<li>protected继承：基类的<code>public</code>成员在派生类中变为<code>protected</code>。几乎没人使用,</li>
+<li>private继承：基类中的所有成员都作为 private 继承。也就是说无法通过派生类直接访问基类的任何成员（不过，派生类内部函数仍可以访问基类的public和protected成员）<ul>
+<li>当派生类与基类没有明显的关系，但在内部使用基类进行实现时，私有继承可能很有用。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Inherit from Base publicly</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pub</span>:</span> public Base</span><br><span class="line">&#123;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Inherit from Base protectedly</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pro</span>:</span> protected Base</span><br><span class="line">&#123;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Inherit from Base privately</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pri</span>:</span> private Base</span><br><span class="line">&#123;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Def</span>:</span> Base <span class="comment">// Defaults to private inheritance</span></span><br><span class="line">&#123;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>private继承的实例：派生类内部可以访问修改m_public和m_protected，但派生类对象不能直接访问修改任何Base中有的成员</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">public:</span><br><span class="line">    <span class="type">int</span> m_public &#123;&#125;;</span><br><span class="line">protected:</span><br><span class="line">    <span class="type">int</span> m_protected &#123;&#125;;</span><br><span class="line">private:</span><br><span class="line">    <span class="type">int</span> m_private &#123;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Pri</span>:</span> private Base <span class="comment">// note: private inheritance</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Private inheritance means:</span></span><br><span class="line">    <span class="comment">// Public inherited members become private (so m_public is treated as private)</span></span><br><span class="line">    <span class="comment">// Protected inherited members become private (so m_protected is treated as private)</span></span><br><span class="line">    <span class="comment">// Private inherited members stay inaccessible (so m_private is inaccessible)</span></span><br><span class="line">public:</span><br><span class="line">    Pri()</span><br><span class="line">    &#123;</span><br><span class="line">        m_public = <span class="number">1</span>; <span class="comment">// okay: m_public is now private in Pri</span></span><br><span class="line">        m_protected = <span class="number">2</span>; <span class="comment">// okay: m_protected is now private in Pri</span></span><br><span class="line">        m_private = <span class="number">3</span>; <span class="comment">// 不能访问，not okay: derived classes can&#x27;t access private members in the base class</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Outside access uses the access specifiers of the class being accessed.</span></span><br><span class="line">    <span class="comment">// In this case, the access specifiers of base.</span></span><br><span class="line">    Base base;</span><br><span class="line">    base.m_public = <span class="number">1</span>; <span class="comment">// okay: m_public is public in Base</span></span><br><span class="line">    base.m_protected = <span class="number">2</span>; <span class="comment">// not okay: m_protected is protected in Base</span></span><br><span class="line">    base.m_private = <span class="number">3</span>; <span class="comment">// not okay: m_private is private in Base</span></span><br><span class="line"></span><br><span class="line">    Pri pri;</span><br><span class="line">    pri.m_public = <span class="number">1</span>; <span class="comment">// 不能访问，not okay: m_public is now private in Pri</span></span><br><span class="line">    pri.m_protected = <span class="number">2</span>; <span class="comment">// 不能访问，not okay: m_protected is now private in Pri</span></span><br><span class="line">    pri.m_private = <span class="number">3</span>; <span class="comment">// 不能访问，not okay: m_private is inaccessible in Pri</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>派生类可以修改基类的可访问成员(protected，public) 的访问说明符<ul>
+<li>可以将 基类的public 成员在派生类中设为 private，隐藏基类中存在的功能，以便无法通过派生类访问它。</li>
+<li>下面的例子中，虽然 m_value 在 Derived 类中是 private，但它在 Base 类中仍然是 public。因此，Derived 中 m_value 的封装仍然可以通过强制转换为 Base&amp; 并直接访问成员来颠覆。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="type">int</span> m_value &#123;&#125;;</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">printValue</span><span class="params">()</span> <span class="type">const</span> </span>&#123; std::cout &lt;&lt; m_value; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span>: <span class="keyword">public</span> Base</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	<span class="keyword">using</span> Base::m_value;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Derived</span>(<span class="type">int</span> value)</span><br><span class="line">        : Base &#123; value &#125;</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Base::printValue was inherited as protected, so the public has no access</span></span><br><span class="line">    <span class="comment">// But we&#x27;re changing it to public via a using declaration</span></span><br><span class="line">    <span class="keyword">using</span> Base::printValue; <span class="comment">// note: no parenthesis here</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Derived derived &#123; <span class="number">7</span> &#125;;</span><br><span class="line">	std::cout &lt;&lt; derived.m_value; <span class="comment">// error: m_value is private in Derived</span></span><br><span class="line">	</span><br><span class="line">    <span class="comment">// printValue is public in Derived, so this is okay</span></span><br><span class="line">    derived.<span class="built_in">printValue</span>(); <span class="comment">// prints 7</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="派生类调用函数"><a href="#派生类调用函数" class="headerlink" title="派生类调用函数"></a>派生类调用函数</h4><p>调用成员函数步骤：编译器将从派生程度最高的类中选择最匹配的函数</p>
+<ol>
+<li>首先检查派生类自己有没有该函数</li>
+<li>如果有，则考虑具有该名称的所有重载函数，并使用函数重载解析过程来确定是否存在最佳匹配项</li>
+<li>如果没有，编译器将遍历继承链，以相同的方式依次检查每个父类</li>
+</ol>
+<p>可以在派生类重新定义基类的同名函数，但这会隐藏所有基类的同名函数。</p>
+<ul>
+<li>如果在派生类中需要调用同名的基函数，要为函数加上基类的 scope 限定符</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Base</span>() &#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">identify</span><span class="params">()</span> <span class="type">const</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;Base::identify()\n&quot;</span>; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span>: <span class="keyword">public</span> Base</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Derived</span>() &#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">identify</span><span class="params">()</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Derived::identify()\n&quot;</span>;</span><br><span class="line">        Base::<span class="built_in">identify</span>(); <span class="comment">// note call to Base::identify() here，如果没有范围解析限定符，将调用本类的identify（）</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>也可以使用 using 声明，以使所有具有特定名称的 <code>Base</code> 函数在 <code>Derived</code> 中可见，这样可以在对象中调用<code>Base</code>的同名函数<ul>
+<li>下面案例中，通过将 <code>using using :print; 的</code> using 声明放入 <code>Derived</code> 中，我们告诉编译器所有名为 <code>print</code> 的 <code>Base</code> 函数都应该在 <code>Derived</code> 中可见，这将使它们有资格进行重载解析。因此，在 <code>Derived：:p rint（double）</code> 上选择了 <code>Base：:p rint（int）。</code></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">int</span>)</span>    </span>&#123; std::cout &lt;&lt; <span class="string">&quot;Base::print(int)\n&quot;</span>; &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">double</span>)</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;Base::print(double)\n&quot;</span>; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span>: <span class="keyword">public</span> Base</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">using</span> Base::print; <span class="comment">// make all Base::print() functions eligible for overload resolution</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">double</span>)</span> </span>&#123; std::cout &lt;&lt; <span class="string">&quot;Derived::print(double)&quot;</span>; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Derived d&#123;&#125;;</span><br><span class="line"></span><br><span class="line">    d.<span class="built_in">print</span>(<span class="number">5</span>); <span class="comment">// calls Base::print(int), which is the best matching function visible in Derived</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在尝试调用基类中的友元函数（如 <code>operator&lt;&lt;）</code>时，可能会遇到一些棘手的问题。因为基类的友元函数实际上不是基类的一部分，所以使用 scope resolution 限定符将不起作用。我们需要使用 <code>static_cast</code>使我们的 <code>Derived</code> 类暂时看起来像 <code>Base</code> 类，以便可以调用函数的正确版本。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Base</span>() &#123; &#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">friend</span> std::ostream&amp; <span class="keyword">operator</span>&lt;&lt; (std::ostream&amp; out, <span class="type">const</span> Base&amp;)</span><br><span class="line">	&#123;</span><br><span class="line">		out &lt;&lt; <span class="string">&quot;In Base\n&quot;</span>;</span><br><span class="line">		<span class="keyword">return</span> out;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span>: <span class="keyword">public</span> Base</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Derived</span>() &#123; &#125;</span><br><span class="line"></span><br><span class="line"> 	<span class="keyword">friend</span> std::ostream&amp; <span class="keyword">operator</span>&lt;&lt; (std::ostream&amp; out, <span class="type">const</span> Derived&amp; d)</span><br><span class="line">	&#123;</span><br><span class="line">		out &lt;&lt; <span class="string">&quot;In Derived\n&quot;</span>;</span><br><span class="line">		<span class="comment">// static_cast Derived to a Base object, so we call the right version of operator&lt;&lt;</span></span><br><span class="line">		<span class="comment">//强制转换为 Base&amp; 而不是 Base，以避免复制派生的 Base 部分</span></span><br><span class="line">		out &lt;&lt; <span class="built_in">static_cast</span>&lt;<span class="type">const</span> Base&amp;&gt;(d);</span><br><span class="line">		<span class="keyword">return</span> out;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>在派生类中重新定义函数时，派生函数不会继承基类中具有相同名称的函数的访问说明符。因此，在基类中定义为 private 的函数可以在派生类中重新定义为 public，反之亦然！</p>
+<h4 id="多重继承"><a href="#多重继承" class="headerlink" title="多重继承"></a>多重继承</h4><p>C++ 提供了执行多重继承的能力。<strong>多重继承</strong>使派生类能够从多个父类继承成员。<br>假设我们想编写一个程序来跟踪一群教师。老师是一个人。但是，教师也是雇员（如果为自己工作，他们是自己的雇主）。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::string m_name&#123;&#125;;</span><br><span class="line">    <span class="type">int</span> m_age&#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Person</span>(std::string_view name, <span class="type">int</span> age)</span><br><span class="line">        : m_name&#123; name &#125;, m_age&#123; age &#125;</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">const</span> std::string&amp; <span class="title">getName</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_name; &#125;</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">getAge</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_age; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Employee</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::string m_employer&#123;&#125;;</span><br><span class="line">    <span class="type">double</span> m_wage&#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Employee</span>(std::string_view employer, <span class="type">double</span> wage)</span><br><span class="line">        : m_employer&#123; employer &#125;, m_wage&#123; wage &#125;</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">const</span> std::string&amp; <span class="title">getEmployer</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_employer; &#125;</span><br><span class="line">    <span class="function"><span class="type">double</span> <span class="title">getWage</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_wage; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Teacher publicly inherits Person and Employee</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Teacher</span> : <span class="keyword">public</span> Person, <span class="keyword">public</span> Employee</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> m_teachesGrade&#123;&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Teacher</span>(std::string_view name, <span class="type">int</span> age, std::string_view employer, <span class="type">double</span> wage, <span class="type">int</span> teachesGrade)</span><br><span class="line">        : Person&#123; name, age &#125;, Employee&#123; employer, wage &#125;, m_teachesGrade&#123; teachesGrade &#125;</span><br><span class="line">    &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Teacher t&#123; <span class="string">&quot;Mary&quot;</span>, <span class="number">45</span>, <span class="string">&quot;Boo&quot;</span>, <span class="number">14.3</span>, <span class="number">8</span> &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>mixin多重继承</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// h/t to reader Waldo for this example</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Point2D</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="type">int</span> x&#123;&#125;;</span><br><span class="line">	<span class="type">int</span> y&#123;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Box</span> // <span class="title">mixin</span> <span class="title">Box</span> <span class="keyword">class</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">public:</span><br><span class="line">	<span class="type">void</span> <span class="title function_">setTopLeft</span><span class="params">(Point2D point)</span> &#123; m_topLeft = point; &#125;</span><br><span class="line">	<span class="type">void</span> <span class="title function_">setBottomRight</span><span class="params">(Point2D point)</span> &#123; m_bottomRight = point; &#125;</span><br><span class="line">private:</span><br><span class="line">	Point2D m_topLeft&#123;&#125;;</span><br><span class="line">	Point2D m_bottomRight&#123;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Label</span> // <span class="title">mixin</span> <span class="title">Label</span> <span class="keyword">class</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">public:</span><br><span class="line">	<span class="type">void</span> <span class="title function_">setText</span><span class="params">(<span class="type">const</span> <span class="built_in">std</span>::string_view str)</span> &#123; m_text = str; &#125;</span><br><span class="line">	<span class="type">void</span> <span class="title function_">setFontSize</span><span class="params">(<span class="type">int</span> fontSize)</span> &#123; m_fontSize = fontSize; &#125;</span><br><span class="line">private:</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span> m_text&#123;&#125;;</span><br><span class="line">	<span class="type">int</span> m_fontSize&#123;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Tooltip</span> // <span class="title">mixin</span> <span class="title">Tooltip</span> <span class="keyword">class</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">public:</span><br><span class="line">	<span class="type">void</span> <span class="title function_">setText</span><span class="params">(<span class="type">const</span> <span class="built_in">std</span>::string_view str)</span> &#123; m_text = str; &#125;</span><br><span class="line">private:</span><br><span class="line">	<span class="built_in">std</span>::<span class="built_in">string</span> m_text&#123;&#125;;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Button</span> :</span> public Box, public Label, public Tooltip &#123;&#125;; <span class="comment">// Button using three mixins</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	Button button&#123;&#125;;</span><br><span class="line">	<span class="comment">//使用显式的 `Box：：`、`Label：：`和 `Tooltip：：` 范围解析前缀</span></span><br><span class="line">	button.Box::setTopLeft(&#123; <span class="number">1</span>, <span class="number">1</span> &#125;);</span><br><span class="line">	button.Box::setBottomRight(&#123; <span class="number">10</span>, <span class="number">10</span> &#125;);</span><br><span class="line">	button.Label::setText(<span class="string">&quot;Submit&quot;</span>);</span><br><span class="line">	button.Label::setFontSize(<span class="number">6</span>);</span><br><span class="line">	button.Tooltip::setText(<span class="string">&quot;Submit the form to the server&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于 mixin 旨在向派生类添加功能，而不是提供接口，因此 mixin 通常不使用虚函数</p>
+<p><strong>Curiously Recurring Template Pattern</strong>:CRTP,派生类可以使用派生类作为模板类型参数从 mixin 基类继承</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// The Curiously Recurring Template Pattern (CRTP)</span></span><br><span class="line"></span><br><span class="line">template &lt;<span class="class"><span class="keyword">class</span> <span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mixin</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="comment">// Mixin&lt;T&gt; can use template type parameter T to access members of Derived</span></span><br><span class="line">    <span class="comment">// via (static_cast&lt;T*&gt;(this))</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Derived</span> :</span> public Mixin&lt;Derived&gt;</span><br><span class="line">&#123;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>多重继承的问题</strong>：</p>
+<ul>
+<li>命名冲突：当多个基类包含同名的函数时，可能会导致歧义<ul>
+<li>可以显式指定要调用的父类版本</li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Diamond_problem">钻石问题</a>：<br>![[继承-1.png]]	</li>
+<li>在这种情况下会出现许多问题，包括 Copier 是否应该有一个或两个 PoweredDevice 副本，以及如何解决某些类型的歧义引用。</li>
+<li>可以使用虚基类避免重复构造PoweredDevice的问题</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PoweredDevice</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Scanner</span>:</span> public PoweredDevice</span><br><span class="line">&#123;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Printer</span>:</span> public PoweredDevice</span><br><span class="line">&#123;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Copier</span>:</span> public Scanner, public Printer</span><br><span class="line">&#123;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="避免继承"><a href="#避免继承" class="headerlink" title="避免继承"></a>避免继承</h4><p>使用关键字<code>final</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">NonInheritable</span> <span class="keyword">final</span> &#123;</span></span><br><span class="line">public:</span><br><span class="line">    <span class="comment">// 类的成员和方法定义</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="对象切片"><a href="#对象切片" class="headerlink" title="对象切片"></a>对象切片</h4><p>派生类对象复制到基类对象时，将去除掉派生类对象的部分，只保留基类对象<br>实<br>	- 将 Derived 对象分配给 Base 对象时，仅复制 Derived 对象的 Base 部分。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Derived derived&#123; <span class="number">5</span> &#125;;</span><br><span class="line">    Base base&#123; derived &#125;; <span class="comment">// what happens here?</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;base is a &quot;</span> &lt;&lt; base.<span class="built_in">getName</span>() &lt;&lt; <span class="string">&quot; and has value &quot;</span> &lt;&lt; base.<span class="built_in">getValue</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>避免对象切片的方式：</p>
+<ol>
+<li>通过将函数参数设为引用而不是按值传递</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">printName</span><span class="params">(<span class="type">const</span> Base&amp; base)</span> <span class="comment">// note: base now passed by reference</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;I am a &quot;</span> &lt;&lt; base.getName() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>尝试使用 std：：vector 实现多态性时，使用类指针</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;Base*&gt; v&#123;&#125;;</span><br><span class="line"></span><br><span class="line">Base b&#123; <span class="number">5</span> &#125;; <span class="comment">// b and d can&#x27;t be anonymous objects</span></span><br><span class="line">Derived d&#123; <span class="number">6</span> &#125;;</span><br><span class="line"></span><br><span class="line">v.push_back(&amp;b); <span class="comment">// add a Base object to our vector</span></span><br><span class="line">v.push_back(&amp;d); <span class="comment">// add a Derived object to our vector</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="向下转换"><a href="#向下转换" class="headerlink" title="向下转换"></a>向下转换</h4><p>C++会进行隐式地向上转换——将派生指针转换为基类指针。但当需要使用基类指针或引用访问特定于派生类的内容时，就需要将基类指针引用转换为派生类指针引用，即<strong>向下转换</strong>。<br>	使用<strong>dynamic_cast</strong> 的强制转换运算符将基类指针转换为派生类指针（只在有虚表的类起作用）<br>	如果dynamic_cast失败（如没有指向派生类对象），则转换结果将为 null 指针,因此要确保转换后指针不为空<br>	由于 dynamic_cast 在运行时会进行一些一致性检查（以确保可以进行转换， static_cast则不会检查），因此使用 dynamic_cast 确实会导致性能下降。<br>	例如下面代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Base* <span class="title function_">getObject</span><span class="params">(<span class="type">bool</span> returnDerived)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span> (returnDerived)</span><br><span class="line">		<span class="keyword">return</span> new Derived&#123;<span class="number">1</span>, <span class="string">&quot;Apple&quot;</span>&#125;;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="keyword">return</span> new Base&#123;<span class="number">2</span>&#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	Base* b&#123; getObject(<span class="literal">true</span>) &#125;;</span><br><span class="line"></span><br><span class="line">	Derived* d&#123; dynamic_cast&lt;Derived*&gt;(b) &#125;; <span class="comment">// use dynamic cast to convert Base pointer into Derived pointer</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (d) <span class="comment">// make sure d is non-null</span></span><br><span class="line">		<span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;The name of the Derived is: &quot;</span> &lt;&lt; d-&gt;getName() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">	delete b;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在以下几种情况下，使用 dynamic_cast 进行降级不起作用：<br>	1.使用 protected 或 private 继承。<br>	2. 对于不声明或继承任何虚函数（因此没有虚表）的类。<br>	3. 在某些情况下，涉及虚拟基类<br>	4. 编译器关闭了 RTTI</p>
+<p>兄弟类指针引用之间的转换：使用<code>reinterpret_cast</code><br>例如下面的Derived1、Derived2均继承自Base</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Derived2 red_apple&#123; <span class="number">1</span>, <span class="string">&quot;Apple&quot;</span>,<span class="string">&quot;Red&quot;</span> &#125;; <span class="comment">// create a red apple</span></span><br><span class="line">	Derived1&amp; d&#123; <span class="built_in">reinterpret_cast</span>&lt;Derived1&amp;&gt;(red_apple) &#125;; <span class="comment">// convert to Derived1 so we can call getName because Derived2 does not implement that for some important reason!</span></span><br><span class="line"></span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;The name of the Derived is: &quot;</span> &lt;&lt; d.<span class="built_in">getName</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="动态绑定"><a href="#动态绑定" class="headerlink" title="动态绑定"></a><strong>动态绑定</strong></h4><p>在虚函数<strong>运行时</strong>，通过引用（或指针）指向的对象来决定函数运行的版本。普通函数或者对象直接调用的虚函数则是在编译时进行静态绑定。<br>当我们使用基类的引用（或指针）调用一个虚函数时将发生动态绑定。<br>！注意：动态绑定只有当通过<strong>指针或引用调用虚函数时</strong>才会发生。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> <span class="title function_">print_total</span><span class="params">(ostream&amp;os,<span class="type">const</span> Quote&amp;item,<span class="type">size_t</span> n)</span>&#123;</span><br><span class="line">    <span class="type">double</span> ret = item.net_price(n);  <span class="comment">//调用基类还是派生类的虚函数？</span></span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br><span class="line">print <span class="title function_">total</span><span class="params">(<span class="built_in">cout</span>, basic, <span class="number">20</span>)</span>;  <span class="comment">// 调用Quote  的net price函数 </span></span><br><span class="line">print <span class="title function_">total</span><span class="params">(<span class="built_in">cout</span>, bulk, <span class="number">20</span>)</span>;  <span class="comment">//  调用Bulk quote的net price函数</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="组合"><a href="#组合" class="headerlink" title="组合"></a>组合</h4><p><strong>组合</strong>：表示一个类可以包含另一个类的对象作为其成员变量。表示一种“has-a”关系（拥有关系）或者“part-of”关系（部分关系）。<br>	好处：通过将不同的功能和特性分解成独立的类，可以将这些类组合成更复杂的类。在这种情况下，组合的类不需要知道其成员对象的内部实现细节，只需要知道如何与它们交互。</p>
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/pay-code.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2025/01/19/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>c++学习笔记——智能指针</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/09/10/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%A4%9A%E6%80%81%E4%B8%8E%E8%99%9A%E5%87%BD%E6%95%B0/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      c++学习笔记——多态与虚函数
+    </a>
+  
+</div>
+
+    
+      <div class="related-post">
+  <div class="related__head">
+  
+
+</div>
+  <div class="realated__body">
+    
+      DEBUG: 请安装插件 <a target="_blank" rel="noopener" href="https://github.com/tea3/hexo-related-popular-posts">hexo-related-popular-posts</a> 或关闭 related_post 配置!
+    
+  </div>
+</div>
+
+    
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/Felt98">Felt's Github</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-zh.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/yi-ming-81-1">Felt</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-email.svg" />
+            <a class="foot-link" href="mailto:haoqingqin@gmail.com">haoqingqin@gmail.com</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="http://example.com">Felt's blog</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  
+
+  </body>
+</html>
