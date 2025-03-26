@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        c++学习笔记——智能指针—auto_ptr | Felt's blog
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/note">学习笔记</a>
+              
+                <a class="nav-menu-item" href="/project">项目</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner--toc">
+      <div class="post-content__head">
+        <div class="post-title">c++学习笔记——智能指针—auto_ptr</div>
+        <div class="post-info">
+          
+  <a href="/tags/c/" class="post-tag">#c++</a>
+
+
+          <span class="post-date">2025-01-19</span>
+        </div>
+      </div>
+      
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#auto-ptr"><span class="post-toc-text">auto_ptr</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%A7%BB%E5%8A%A8%E6%9E%84%E9%80%A0%E5%92%8C%E8%B5%8B%E5%80%BC"><span class="post-toc-text">移动构造和赋值</span></a></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>智能指针是C++11的新特性<br><strong>智能指针和指针的主要区别</strong>：</p>
+<ul>
+<li>普通指针需要<strong>手动管理内存</strong>，容易出现内存泄漏（忘记释放内存）或悬空指针（释放后仍使用指针）。<ul>
+<li>其他：不提供资源所有权管理的概念，多个指针可以指向同一块内存，容易引发内存管理问题</li>
+</ul>
+</li>
+<li>智能指针能够在<strong>自动管理内存</strong>，在智能指针生命周期结束的时候释放指针内存，安全性更高<ul>
+<li>其他：<strong>提供资源所有权的管理</strong>，unique_ptr独占所有权，shared_ptr共享所有权，weak_ptr不占用所有权<br>注意事项:</li>
+</ul>
+<ol>
+<li><strong>始终在堆栈上分配智能指针，永远不应动态分配智能指针本身</strong></li>
+<li>保证智能指针在包含它的函数或对象结束时正确地超出范围，从而确保智能指针拥有的对象被正确释放。（否则，存在智能指针可能无法正确释放的风险，这意味着它拥有的对象不会被释放，从而导致内存泄漏）</li>
+</ol>
+</li>
+</ul>
+<h3 id="auto-ptr"><a href="#auto-ptr" class="headerlink" title="auto_ptr"></a>auto_ptr</h3><p>动态分配的内存经常出现忘了释放的问题，因为指针变量没有固有的机制来清理自身。<br>例如下面的，早期执行 return 或 throw 语句，导致函数终止而不删除变量 ptr。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">someFunction</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    Resource* ptr = <span class="keyword">new</span> <span class="built_in">Resource</span>();</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> x;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Enter an integer: &quot;</span>;</span><br><span class="line">    std::cin &gt;&gt; x;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (x == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span>; <span class="comment">// the function returns early, and ptr won’t be deleted!</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// do stuff with ptr here</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">delete</span> ptr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么指针能不能像类的对象一样，超出使用范围时自动调用析构函数销毁<br>答案是可以，用一个类包装的指针就能实现，下面是智能指针类的初始版本<br>	下面例子中，由于 ptr 变量是局部变量，因此当函数终止时 ptr 将被销毁（无论它如何终止）。由于 Auto_ptr1 析构函数将清理 Resource，因此我们可以确保 Resource 将得到正确清理。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line">template &lt;typename T&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Auto_ptr1</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	T* m_ptr &#123;&#125;;</span><br><span class="line">public:</span><br><span class="line">	<span class="comment">// Pass in a pointer to &quot;own&quot; via the constructor</span></span><br><span class="line">	Auto_ptr1(T* ptr=nullptr)</span><br><span class="line">		:m_ptr(ptr)</span><br><span class="line">	&#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// The destructor will make sure it gets deallocated</span></span><br><span class="line">	~Auto_ptr1()</span><br><span class="line">	&#123;</span><br><span class="line">		delete m_ptr;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 重载指针符号，Overload dereference and operator-&gt; so we can use Auto_ptr1 like m_ptr.</span></span><br><span class="line">	T&amp; operator*() <span class="type">const</span> &#123; <span class="keyword">return</span> *m_ptr; &#125;</span><br><span class="line">	T* operator-&gt;() <span class="type">const</span> &#123; <span class="keyword">return</span> m_ptr; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// A sample class to prove the above works</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Resource</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">public:</span><br><span class="line">    Resource() &#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Resource acquired\n&quot;</span>; &#125;</span><br><span class="line">    ~Resource() &#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Resource destroyed\n&quot;</span>; &#125;</span><br><span class="line">    <span class="type">void</span> <span class="title function_">sayHi</span><span class="params">()</span> &#123; <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Hi!\n&quot;</span>; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">someFunction</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    Auto_ptr1&lt;Resource&gt; <span class="title function_">ptr</span><span class="params">(new Resource())</span>; <span class="comment">// ptr now owns the Resource</span></span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> x;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Enter an integer: &quot;</span>;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cin</span> &gt;&gt; x;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (x == <span class="number">0</span>)</span><br><span class="line">        <span class="keyword">return</span>; <span class="comment">// the function returns early</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// do stuff with ptr here</span></span><br><span class="line">    ptr-&gt;sayHi();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    someFunction();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>致命缺陷</strong>： Auto_ptr1类缺乏构造函数，如果用<strong>一个指针初始化另一个指针</strong>（按值传递），编译器将使用默认的浅拷贝构造函数，使两个指针变量指向同一块内存。当指针都调用析构函数销毁时，就会有一个指针变成<strong>悬空指针</strong>，delete空指针将造成未定义的行为</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Auto_ptr1&lt;Resource&gt; <span class="title">res1</span><span class="params">(<span class="keyword">new</span> Resource())</span></span>;</span><br><span class="line"><span class="function">Auto_ptr1&lt;Resource&gt; <span class="title">res2</span><span class="params">(res1)</span></span>; <span class="comment">// Alternatively, don&#x27;t initialize res2 and then assign res2 = res1;</span></span><br></pre></td></tr></table></figure>
+<p>为了能够按值传递，就要使用<strong>移动语义</strong>，转移对象的所有权，而不是拷贝对象<br>更新Auto_ptr如下</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Auto_ptr2</span></span><br><span class="line">&#123;</span><br><span class="line">	T* m_ptr &#123;&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">Auto_ptr2</span>(T* ptr=<span class="literal">nullptr</span>)</span><br><span class="line">		:<span class="built_in">m_ptr</span>(ptr)</span><br><span class="line">	&#123;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	~<span class="built_in">Auto_ptr2</span>()</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">delete</span> m_ptr;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 使用移动语义的复制构造函数，被移动的指针a变成了空指针，析构空指针a是安全的。A copy constructor that implements move semantics</span></span><br><span class="line">	<span class="built_in">Auto_ptr2</span>(Auto_ptr2&amp; a) <span class="comment">// note: not const</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// We don&#x27;t need to delete m_ptr here.  This constructor is only called when we&#x27;re creating a new object, and m_ptr can&#x27;t be set prior to this.</span></span><br><span class="line">		m_ptr = a.m_ptr; <span class="comment">// transfer our dumb pointer from the source to our local object</span></span><br><span class="line">		a.m_ptr = <span class="literal">nullptr</span>; <span class="comment">// make sure the source no longer owns the pointer</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// An assignment operator that implements move semantics</span></span><br><span class="line">	<span class="comment">//必须先删除m_ptr再重新转移初始化</span></span><br><span class="line">	Auto_ptr2&amp; <span class="keyword">operator</span>=(Auto_ptr2&amp; a) <span class="comment">// note: not const</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (&amp;a == <span class="keyword">this</span>)</span><br><span class="line">			<span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">delete</span> m_ptr; <span class="comment">// make sure we deallocate any pointer the destination is already holding first</span></span><br><span class="line">		m_ptr = a.m_ptr; <span class="comment">// then transfer our dumb pointer from the source to the local object</span></span><br><span class="line">		a.m_ptr = <span class="literal">nullptr</span>; <span class="comment">// make sure the source no longer owns the pointer</span></span><br><span class="line">		<span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	T&amp; <span class="keyword">operator</span>*() <span class="type">const</span> &#123; <span class="keyword">return</span> *m_ptr; &#125;</span><br><span class="line">	T* <span class="keyword">operator</span>-&gt;() <span class="type">const</span> &#123; <span class="keyword">return</span> m_ptr; &#125;</span><br><span class="line">	<span class="function"><span class="type">bool</span> <span class="title">isNull</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> m_ptr == <span class="literal">nullptr</span>; &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>悬空指针和nullptr的区别：<br>悬空指针是指向已经释放或不再有效的内存地址的指针。虽然它仍然持有一个地址值，但该地址指向的内存可能已经被释放或重分配，使用这样的指针会导致未定义行为。</p>
+<figure class="highlight plaintext"><figcaption><span>p </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">	delete p;   // 释放内存</span><br><span class="line">	\*p = 20;    // 未定义行为（悬空指针）```</span><br><span class="line">nullptr 是 C++11 引入的一种特殊值，用于表示空指针。它明确地表示指针当前不指向任何有效的内存地址。因此可以delete nullptr，这什么都不会发生。但是不能解引用空指针 * nullptr</span><br><span class="line"></span><br><span class="line">这就是std::auto_ptr的大致实现。std：：auto_ptr 于 C++98 年引入，并于 C++17 年删除，是 C++ 对标准化智能指针的首次尝试。std：：auto_ptr 选择像 Auto_ptr2 类一样实现移动语义。</span><br><span class="line">**auto_ptr仍存在的问题**：</span><br><span class="line">1. 由于 auto_ptr 通过**复制语义（复制构造函数和赋值运算符）实现移动语义**，资源的所有权会从源对象转移到目标对象，源对象会失去对资源的控制。</span><br><span class="line">因此**按值将 auto_ptr 传递给函数将导致资源移动到函数参数**（并在函数参数超出范围时在函数结束时销毁）.当你从调用方访问 auto_ptr 参数时（没有意识到它已被传输和删除），你突然取消引用了一个 null 指针。崩溃。</span><br><span class="line">```c</span><br><span class="line">void process(auto_ptr&lt;int&gt; ap) &#123;  // 按值传递，所有权转移给函数参数</span><br><span class="line">   cout &lt;&lt; &quot;函数内: &quot; &lt;&lt; *ap &lt;&lt; endl;</span><br><span class="line">&#125;  // 函数结束，ap超出作用域，其指向的int对象被自动删除</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">   auto_ptr&lt;int&gt; ptr(new int(42));</span><br><span class="line">   process(ptr);  // 调用函数，ptr的所有权转移给形参ap</span><br><span class="line">   cout &lt;&lt; &quot;主函数: &quot; &lt;&lt; *ptr &lt;&lt; endl;  // 错误！ptr此时已为空指针</span><br><span class="line">   return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure><ol start="2">
+<li>auto_ptr 总是使用非数组删除来删除它的内容。这意味着 <strong>auto_ptr 无法正确处理动态分配的数组</strong>，因为它使用了错误类型的释放。</li>
+<li>不适用于stl的容器</li>
+</ol>
+</blockquote>
+<h3 id="移动构造和赋值"><a href="#移动构造和赋值" class="headerlink" title="移动构造和赋值"></a>移动构造和赋值</h3><p>移动语义详情见引用和指针一节<br>修改我们指针类，增加移动构造和赋值：<br>	移动函数使用<strong>非 const 右值引用</strong>参数（仅绑定到右值），而复制函数使用const 左值引用参数<br>	移动构造函数和移动赋值应标记为 <code>noexcept</code>。这告诉编译器这些函数不会引发异常。<br>	这样当传递临时参数时，将调用移动构造函数，避免多次构造临时对象</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 移动构造</span></span><br><span class="line"><span class="comment">// Transfer ownership of a.m_ptr to m_ptr</span></span><br><span class="line"><span class="built_in">Auto_ptr4</span>(Auto_ptr4&amp;&amp; a) <span class="keyword">noexcept</span></span><br><span class="line">	: <span class="built_in">m_ptr</span>(a.m_ptr)</span><br><span class="line">&#123;</span><br><span class="line">	a.m_ptr = <span class="literal">nullptr</span>; <span class="comment">// we&#x27;ll talk more about this line below</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 移动赋值</span></span><br><span class="line"><span class="comment">// Transfer ownership of a.m_ptr to m_ptr</span></span><br><span class="line">Auto_ptr4&amp; <span class="keyword">operator</span>=(Auto_ptr4&amp;&amp; a) <span class="keyword">noexcept</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// Self-assignment detection</span></span><br><span class="line">	<span class="keyword">if</span> (&amp;a == <span class="keyword">this</span>)</span><br><span class="line">		<span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Release any resource we&#x27;re holding</span></span><br><span class="line">	<span class="keyword">delete</span> m_ptr;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Transfer ownership of a.m_ptr to m_ptr</span></span><br><span class="line">	m_ptr = a.m_ptr;</span><br><span class="line">	a.m_ptr = <span class="literal">nullptr</span>; <span class="comment">// we&#x27;ll talk more about this line below</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//深拷贝复制</span></span><br><span class="line"><span class="comment">// Copy constructor</span></span><br><span class="line"><span class="comment">// Do deep copy of a.m_ptr to m_ptr</span></span><br><span class="line"><span class="built_in">Auto_ptr4</span>(<span class="type">const</span> Auto_ptr4&amp; a)</span><br><span class="line">&#123;</span><br><span class="line">	m_ptr = <span class="keyword">new</span> T;</span><br><span class="line">	*m_ptr = *a.m_ptr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Copy assignment</span></span><br><span class="line"><span class="comment">// Do deep copy of a.m_ptr to m_ptr</span></span><br><span class="line">Auto_ptr4&amp; <span class="keyword">operator</span>=(<span class="type">const</span> Auto_ptr4&amp; a)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// Self-assignment detection</span></span><br><span class="line">	<span class="keyword">if</span> (&amp;a == <span class="keyword">this</span>)</span><br><span class="line">		<span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Release any resource we&#x27;re holding</span></span><br><span class="line">	<span class="keyword">delete</span> m_ptr;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Copy the resource</span></span><br><span class="line">	m_ptr = <span class="keyword">new</span> T;</span><br><span class="line">	*m_ptr = *a.m_ptr;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>实际上需要删除 copy 构造函数和 copy 赋值函数，以确保不会进行复制，因为深拷贝的代价很昂贵。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Copy constructor -- no copying allowed!</span></span><br><span class="line"><span class="built_in">Auto_ptr4</span>(<span class="type">const</span> Auto_ptr5&amp; a) = <span class="keyword">delete</span>;</span><br><span class="line"><span class="comment">// Copy assignment -- no copying allowed!</span></span><br><span class="line">Auto_ptr4&amp; <span class="keyword">operator</span>=(<span class="type">const</span> Auto_ptr5&amp; a) = <span class="keyword">delete</span>;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/pay-code.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2025/01/22/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%8F%98%E9%87%8F%E4%B8%8E%E5%B8%B8%E7%94%A8%E7%B1%BB%E5%9E%8B/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>c++学习笔记——变量与常用类型</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2025/01/09/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%BB%A7%E6%89%BF/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      c++学习笔记——继承
+    </a>
+  
+</div>
+
+    
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/Felt98">Felt's Github</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-zh.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/yi-ming-81-1">Felt</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-email.svg" />
+            <a class="foot-link" href="mailto:haoqingqin@gmail.com">haoqingqin@gmail.com</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="http://example.com">Felt's blog</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  
+
+  </body>
+</html>

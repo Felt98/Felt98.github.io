@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        CUDA笔记——GPU结构 | Felt's blog
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/note">学习笔记</a>
+              
+                <a class="nav-menu-item" href="/project">项目</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner--toc">
+      <div class="post-content__head">
+        <div class="post-title">CUDA笔记——GPU结构</div>
+        <div class="post-info">
+          
+  <a href="/tags/cuda/" class="post-tag">#cuda</a>
+
+
+          <span class="post-date">2024-05-06</span>
+        </div>
+      </div>
+      
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#GPU%E7%BB%93%E6%9E%84"><span class="post-toc-text">GPU结构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#GPU%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="post-toc-text">GPU工作流</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#GPU%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84"><span class="post-toc-text">GPU组成结构</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#GPU%E5%92%8CCPU%E5%9C%A8%E7%BB%93%E6%9E%84%E4%B8%8A%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="post-toc-text">GPU和CPU在结构上的区别</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SIMD%E4%B8%8ESIMT"><span class="post-toc-text">SIMD与SIMT</span></a></li></ol></li></ol></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <h2 id="GPU结构"><a href="#GPU结构" class="headerlink" title="GPU结构"></a>GPU结构</h2><p>GPU全名为Graphics Processing Unit，又称视觉处理器、图形显示卡，是一种专门用来执行图形处理和并行计算任务的<strong>芯片</strong>。<br>GPU负责渲染出2D、3D、VR效果，主要专注于计算机图形图像领域。后来人们发现，GPU非常适合并行计算，可以加速现代科学计算，GPU也因此不再局限于游戏和视频领域。</p>
+<h4 id="GPU工作流"><a href="#GPU工作流" class="headerlink" title="GPU工作流"></a>GPU工作流</h4><p>CPU 主要负责从主存（Main Memory）中读取和写入数据，并通过总线（Bus）与 GPU 进行通信。相比之下，GPU 不仅拥有大量专门用于并行计算的核心，还配备了一块独立的存储区域，称为显存（VRAM）。</p>
+<p>在 GPU 执行计算任务时，它的计算核心无法直接访问主存中的数据，而是必须通过显存进行数据读写。因此，在编写 GPU 相关的代码时，程序员需要显式地管理数据传输，指定哪些数据需要在主存与显存之间进行拷贝，以确保计算任务能够顺利执行。<br><img src="https://www.lulaoshi.info/assets/cpu-and-gpu-392408bf.png" alt="CPU与GPU"></p>
+<h4 id="GPU组成结构"><a href="#GPU组成结构" class="headerlink" title="GPU组成结构"></a>GPU组成结构</h4><h5 id="SM"><a href="#SM" class="headerlink" title="SM"></a>SM</h5><p>在英伟达的设计里，多个核心组成一个Streaming Multiprocessor（<strong>SM</strong>）</p>
+<ul>
+<li>每一个SM有左右两个SM Processing Block（SMP），<strong>每个SM有多个SP组成</strong><ul>
+<li>每个SM可以执行多个block，block一旦分配给SM就会常驻在SM中直到执行结束</li>
+<li>每个SM都有一个local L1 cache，但共用GPU的L2 cache<br>SM结构图如下</li>
+</ul>
+</li>
+</ul>
+<img src="/2024/05/06/note/cuda/CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94GPU%E7%BB%93%E6%9E%84/img-GPU%E5%92%8CCUDA%E7%AE%80%E4%BB%8B-2.png" class="">
+<p>以NVIDIA Tesla P100为例，包含60个SM<br><img src="https://cdn.arstechnica.net/wp-content/uploads/sites/3/2016/04/gp100_block_diagram-1.png" alt="Nvidia unveils first Pascal graphics card, the monstrous Tesla P100 ..."></p>
+<h5 id="SM内部结构"><a href="#SM内部结构" class="headerlink" title="SM内部结构"></a>SM内部结构</h5><p>SM包括SP、各种内存、线程束调度器（wrap scheduler）、指令分发器（dispatch unit）等，有些架构的SM还有tensor core</p>
+<ol>
+<li>SP（Streaming Processor）<ul>
+<li><strong>GPU最基本处理单元，又称CUDA core，相当於一个简易的CPU</strong>，一个sp执行一个thread，可以类比办公桌 </li>
+<li>内部包括控制单元Dispatch Port，Operand Collector，以及浮点计算单元FP Unit、整数计算单元Int Unit，另外逼包括计算结果队列当然还有Compare.Logic Branch等</li>
+</ul>
+</li>
+<li>共享内存share memory：位于片内，靠近每个sm处理器内核的轻量级低延迟内存（类似于L1 cache），每个SM都有一个共享内存，被执行的block划分</li>
+<li>寄存器：位于片内，SM内的寄存器文件很大，大到分配到SM每个线程块内的每个线程，都拥有自己的寄存器。<ul>
+<li><strong>零开销线程束切换</strong>：线程束warp的上下文切换，实际上只需要换一下寄存器空间的指针即可，十分迅速。生命周期是kernel函数内，编译命令-maxrregcount可以控制寄存器分配数</li>
+</ul>
+</li>
+<li>线程本地内存：片外，每个线程都有自己的本地私有内存，通常用来存储寄存器溢出的数据。GPU通常会使用L1 L2来对本地内存进行优化</li>
+</ol>
+<h4 id="GPU和CPU在结构上的区别"><a href="#GPU和CPU在结构上的区别" class="headerlink" title="GPU和CPU在结构上的区别"></a>GPU和CPU在结构上的区别</h4><p>与CPU的结构对比图：<br><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/_images/gpu-devotes-more-transistors-to-data-processing.png"><img src="https://docs.nvidia.com/cuda/cuda-c-programming-guide/_images/gpu-devotes-more-transistors-to-data-processing.png" alt="The GPU Devotes More Transistors to Data Processing|600"></a></p>
+<ol>
+<li><strong>核心数量</strong>：</li>
+</ol>
+<ul>
+<li>CPU拥有少量（2-16个）高性能核心，GPU有成千上万个较小的核心；</li>
+</ul>
+<ol start="2">
+<li><strong>控制单元和指令处理</strong>：<ul>
+<li>CPU具有复杂的控制单元和高级指令集，适合执行需要多种逻辑操作和频繁数据交换的任务。</li>
+<li>GPU控制单元较简单，指令集精简，适合大规模并行的浮点运算。</li>
+</ul>
+</li>
+<li><strong>缓存和内存架构</strong>：<ul>
+<li>CPU通常拥有较大的缓存（如L1、L2和L3缓存），较少数量的寄存器，减少内存访问延迟</li>
+<li>GPU一般有较小的缓存，更依赖显存（VRAM）进行数据存储和访问。此外GPU的寄存器数量比CPU大得多</li>
+</ul>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>CPU</th>
+<th>GPU</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>核心数量</td>
+<td>少量高性能核心（通常2-16个），侧重单线程性能</td>
+<td>大量简化核心（通常数百到数千个），侧重并行计算吞吐量</td>
+</tr>
+<tr>
+<td>指令集</td>
+<td>丰富且复杂，支持多种任务、分支预测、乱序执行</td>
+<td>简化指令集，采用SIMT架构，分支预测和调度相对简单</td>
+</tr>
+<tr>
+<td>控制单元</td>
+<td>复杂的控制逻辑，适应复杂的控制流和上下文切换</td>
+<td>控制逻辑较简单，主要依靠大量核心进行并行运算</td>
+</tr>
+<tr>
+<td>内存架构</td>
+<td>多级高速缓存（L1、L2、L3）优化低延迟访问，内存带宽较低</td>
+<td>依赖显存（VRAM），但延迟相对较高</td>
+</tr>
+</tbody></table>
+<h4 id="SIMD与SIMT"><a href="#SIMD与SIMT" class="headerlink" title="SIMD与SIMT"></a>SIMD与SIMT</h4><p>SIMD（<strong>Single Instruction, Multiple Data</strong>）和 SIMT（<strong>Single Instruction, Multiple Threads</strong>）是 CPU 和 GPU 在并行计算设计上的一个重要区别。</p>
+<ul>
+<li>SIMD：单指令多数据，由一个指令并行执行多个数据。例如CPU核心中的多个处理器单元执行相同的指令，但是每个单元处理不同的数据。是数据级的并行。典型的 SIMD 指令集有 Intel SSE、AVX、AVX-512</li>
+<li>SIMT：单指令多线程，多个线程执行相同的指令，每个线程处理不同的数据。例如GPU中每个SM有多个线程来执行相同的指令，这些线程可以独立控制自己的数据流和状态，是线程级的并行</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>SIMD (单指令多数据流)</th>
+<th>SIMT (单指令多线程)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>基本概念</strong></td>
+<td>同一时刻多数据应用相同的指令</td>
+<td>同一时刻多线程执行相同的指令</td>
+</tr>
+<tr>
+<td><strong>执行单位</strong></td>
+<td>单个指令在多个数据元素上并行执行</td>
+<td>每个线程执行相同的指令</td>
+</tr>
+<tr>
+<td><strong>处理器架构</strong></td>
+<td>在一个处理器中有多个数据路径，每个路径处理不同的数据</td>
+<td>每个线程对应一个执行单元，可以并行执行多个线程</td>
+</tr>
+<tr>
+<td><strong>指令流</strong></td>
+<td>所有数据元素使用相同的指令，但数据元素的操作是独立的</td>
+<td>所有线程使用相同的指令，每个线程执行独立的操作</td>
+</tr>
+<tr>
+<td><strong>控制流</strong></td>
+<td>控制流通常较为简单，直接操作数据流</td>
+<td><strong>每个线程有自己的控制流</strong>，可能有分支和同步操作</td>
+</tr>
+<tr>
+<td><strong>并行度</strong></td>
+<td>在单指令下处理多个数据元素，但并行度受到数据分布的限制</td>
+<td>高度并行，每个线程都有自己的控制和数据，但线程数受限于硬件资源</td>
+</tr>
+</tbody></table>
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/pay-code.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2024/05/08/note/cuda/CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94CUDA%E8%AF%AD%E8%A8%80/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>CUDA笔记——CUDA语言</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <div class="post-nav-item-right"></div>
+  
+</div>
+
+    
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/Felt98">Felt's Github</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-zh.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/yi-ming-81-1">Felt</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-email.svg" />
+            <a class="foot-link" href="mailto:haoqingqin@gmail.com">haoqingqin@gmail.com</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="http://example.com">Felt's blog</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  
+
+  </body>
+</html>

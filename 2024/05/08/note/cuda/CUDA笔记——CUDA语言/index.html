@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        CUDA笔记——CUDA语言 | Felt's blog
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/note">学习笔记</a>
+              
+                <a class="nav-menu-item" href="/project">项目</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner--toc">
+      <div class="post-content__head">
+        <div class="post-title">CUDA笔记——CUDA语言</div>
+        <div class="post-info">
+          
+  <a href="/tags/cuda/" class="post-tag">#cuda</a>
+
+
+          <span class="post-date">2024-05-08</span>
+        </div>
+      </div>
+      
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CUDA-%E4%BB%A3%E7%A0%81%E6%9E%B6%E6%9E%84"><span class="post-toc-text">CUDA 代码架构</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CUDA-runtime-API"><span class="post-toc-text">CUDA runtime API</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#nvcc%E7%BC%96%E8%AF%91"><span class="post-toc-text">nvcc编译</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E9%94%99%E8%AF%AF%E7%AE%A1%E7%90%86"><span class="post-toc-text">错误管理</span></a></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <h3 id="CUDA-代码架构"><a href="#CUDA-代码架构" class="headerlink" title="CUDA 代码架构"></a>CUDA 代码架构</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda_runtime.h&gt;</span>  <span class="comment">// CUDA 运行时 API</span></span></span><br><span class="line">header inclusion</span><br><span class="line"><span class="type">const</span> <span class="keyword">or</span> macro definition</span><br><span class="line">declarations of C++ <span class="function">functions <span class="keyword">and</span> CUDA kernels</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">vectorAddKernel</span><span class="params">(<span class="type">const</span> <span class="type">float</span>* A, <span class="type">const</span> <span class="type">float</span>* B, <span class="type">float</span>* C, <span class="type">int</span> size)</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> idx = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="keyword">if</span> (idx &lt; size) &#123;</span><br><span class="line">        C[idx] = A[idx] + B[idx];</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">allocate host <span class="keyword">and</span> device memory</span></span><br><span class="line"><span class="function">    initialize data in host memory</span></span><br><span class="line"><span class="function">    transfer data from host to device</span></span><br><span class="line"><span class="function">    <span class="title">launch</span> <span class="params">(call)</span> kernel to <span class="keyword">do</span> calculations in the device</span></span><br><span class="line"><span class="function">    transfer data from device to host</span></span><br><span class="line"><span class="function">    free host <span class="keyword">and</span> device memory</span></span><br><span class="line"><span class="function">&#125;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">definitions of C++ functions <span class="keyword">and</span> CUDA kernels</span></span><br><span class="line"><span class="function">````</span></span><br><span class="line"><span class="function">- `__global__` 是 **CUDA 核函数** 的修饰符，用于 **定义在 GPU 上运行、由 CPU 端调用的函数**。</span></span><br><span class="line"><span class="function">- 其他kernel修饰符如下</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function">| kernel修饰符    | 意义                                              |</span></span><br><span class="line"><span class="function">| ------------ | ----------------------------------------------- |</span></span><br><span class="line"><span class="function">| `__global__` | 表示为kernel函数，在host中调用，device中执行                  |</span></span><br><span class="line"><span class="function">| `__device__` | 表示为device函数，在kernel中调用，device中执行                |</span></span><br><span class="line"><span class="function">| `__host__`   | 表示未host函数，在host中调用，host中执行  （可以与`__device__`合用） |</span></span><br><span class="line"><span class="function">**维度指定**：</span></span><br><span class="line"><span class="function">```c++</span></span><br><span class="line"><span class="function">dim3 <span class="title">grid_dim</span><span class="params">(gridDim.x,gridDim.y,gridDim.z)</span></span></span><br><span class="line"><span class="function">dim3 <span class="title">block_dim</span><span class="params">(blockDim.x,blockDim.y,blockDim.z)</span></span></span><br><span class="line"><span class="function">kernelFunct&lt;&lt;&lt;grid_dim,block_dim&gt;&gt;&gt;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">//通常block_dim都是指定的常数，grid_dim根据要分配的线程总数量指定</span></span></span><br><span class="line"><span class="function"><span class="comment">//例1:对某个大小为N的一维数组每个元素进行计算</span></span></span><br><span class="line"><span class="function">dim3 <span class="title">block_dim</span><span class="params">(THREADS_PER_BLOCK)</span></span>;</span><br><span class="line"><span class="function">dim3 <span class="title">grid_dim</span><span class="params">((N+THREADS_PER_BLOCK<span class="number">-1</span>)/THREADS_PER_BLOCK)</span></span>; <span class="comment">//相当于计算N个线程总共需要的blcokNum，要向上取整</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//例2:对宽width，长height的二维数组中每个元素进行计算</span></span><br><span class="line"><span class="function">dim3 <span class="title">blockDim</span><span class="params">(THREADS_PER_BLOCKX, THREADS_PER_BLOCKY)</span></span>;</span><br><span class="line"><span class="function">dim3 <span class="title">gridDim</span><span class="params">((width + blockDim.x - <span class="number">1</span>) / blockDim.x, (height + blockDim.y - <span class="number">1</span>) / blockDim.y)</span></span>;</span><br></pre></td></tr></table></figure>
+<p><strong>kernel的注意事项</strong>：</p>
+<ol>
+<li>在<code>kernelFunct&lt;&lt;&lt;grid_dim,block_dim&gt;&gt;&gt;</code>中，grid_dim,block_dim是必须要指定的<ul>
+<li>grid_dim可以理解为要分配的block数，block_dim则是每个block分配的thread数，总线程数gridDim.x * gridDim.y* gridDim.z * blockDim.x * blockDim.y* blockDim.z</li>
+<li>grid_dim指定了grid的维度，block_dim指定了block的维度</li>
+<li>一般来说grid_dim越大越好，但block_dim不能太小（因为wrap以32个thread来捆绑）</li>
+</ul>
+</li>
+<li>kernel的没有返回值</li>
+<li>传入kernel的指针必须指向device的内存，除非使用unified memory</li>
+<li>kernel不能被其他kernel调用，除非使用dynamic parallelism </li>
+<li>kernel不能为class的成员</li>
+</ol>
+<p>id的计算：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//二维块在二维数组对应id</span></span><br><span class="line">    <span class="type">int</span> i = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">int</span> j = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line"><span class="comment">//大小为 （Dx， Dy）的二维块，索引为（x， y）的线程的线程 顺序ID 为 （x + y * Dx）,类比二维数组就是x是列号j，y是行号i，Dx是行长度n</span></span><br><span class="line">	<span class="type">int</span> threadId= threadId.x + threadId.y*blockDim.x</span><br></pre></td></tr></table></figure>
+<p>线程同步：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__syncthreads();   <span class="comment">//只有同一block中的线程可以同步</span></span><br></pre></td></tr></table></figure>
+<h3 id="CUDA-runtime-API"><a href="#CUDA-runtime-API" class="headerlink" title="CUDA runtime API"></a>CUDA runtime API</h3><p>常用API由内存分配和同步API</p>
+<ul>
+<li><strong>cudaMalloc(void** devPtr, size_t size)</strong>: <ul>
+<li>分配<code>size</code>字节的device内存空间，该空间开头由<code>*devPtr</code>指向(注意<strong>devPtr是个二级指针</strong>，因为要改变指针的值（指向地址）)。 返回值是cudaError_t</li>
+<li>例：</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">double</span>* d_x</span></span><br><span class="line"><span class="function"><span class="title">cudaMalloc</span><span class="params">((<span class="type">void</span>**)&amp;d_x,<span class="keyword">sizeof</span>(<span class="type">double</span>)*n)</span></span>;     <span class="comment">//这里传入的参数是指针的地址，说明参数需要二级指针，(void**)可以省略</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><em><em>cudaMemcpy(void</em> dst,  const void</em> src,  size_t size ,  kind)** : <ul>
+<li>从由<code>src</code>指向的源地址内存空间中复制<code>size</code>字节到 由<code>dst</code>指向的地址内存空间。移动方式为<code>kind</code>，<code>kind</code>如下表</li>
+<li>例：</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cudaMemcpy</span>(d_x , h_x, <span class="built_in">sizeof</span>(<span class="type">double</span>)*n , cudaMemcpyHostToDevice);  <span class="comment">//把host中h_x指向的内容复制到device中d_x指向的内存空间</span></span><br><span class="line"><span class="built_in">cudaMemcpy</span>(h_z, d_z, <span class="built_in">sizeof</span>(<span class="type">double</span>)*n, cudaMemcpyDeviceToHost);    <span class="comment">//把device的计算结果传回host</span></span><br></pre></td></tr></table></figure>
+<img src="/2024/05/08/note/cuda/CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94CUDA%E8%AF%AD%E8%A8%80/img-CUDA%E8%AF%AD%E8%A8%80-5.png" class="">
+
+<ul>
+<li><p><em><em>cudaFree(void</em> devPtr)</em>*: 释放GPU内存空间</p>
+</li>
+<li><p><strong>cudaDeviceSynchronize</strong>():  </p>
+<ul>
+<li>同步GPU和CPU：因为kernel与CPU的执行是异步的，该API能够阻塞CPU等待device执行kernel完后再往下运行。</li>
+<li>cudaMemcpy不需要，因为其自带阻塞功能</li>
+<li>如果有多个kernel要执行的话：命令行<code>export CUDA_LAUNCH_BLOCKING=1</code>，可以直接设置每次执行kernel阻塞</li>
+</ul>
+</li>
+</ul>
+<h3 id="nvcc编译"><a href="#nvcc编译" class="headerlink" title="nvcc编译"></a>nvcc编译</h3><p>.cu文件的编译分为两个部分，一部分是编译主机代码，另一部分是编译设备代码，设备代码的编程过程中会生成.ptx文件</p>
+<ol>
+<li>首先nvcc会把<code>cu</code>文件分为host code 和 device code，其中host code由c++编译器编译</li>
+<li>device code由nvcc编译为<strong>PTX</strong>（Parallel Thread eXecution）code，<ul>
+<li>可以在命令行指定<strong>virtual architecture</strong>的计算能力： <code>-arch=compute_XY</code></li>
+</ul>
+</li>
+<li>PTX code再编译为cubin binary文件<ul>
+<li>可以在命令行指定 real architecture的计算能力：<code>-code=sm_ZW</code><ul>
+<li>例如：nvcc <strong>-arch&#x3D;compute_70</strong>  <strong>-code&#x3D;sm_70</strong> xxx.cu</li>
+</ul>
+</li>
+<li>可以使用<code>-gencode</code> 指定多个GPU的计算能力</li>
+</ul>
+</li>
+</ol>
+<img src="/2024/05/08/note/cuda/CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94CUDA%E8%AF%AD%E8%A8%80/img-CUDA%E8%AF%AD%E8%A8%80-1.png" class="">
+<h3 id="错误管理"><a href="#错误管理" class="headerlink" title="错误管理"></a>错误管理</h3><p>cuda API或kernel出现错误时，不会停止运行主机代码</p>
+<p>cuda api调用返回cudaError_t<br>	- 成功：返回cuda Success<br>	- 错误：返回错误码，需要使用cudaGetErrorString查看错误信息</p>
+<p>使用宏检查基本API的错误</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> CHECK_CUDA_ERROR(call)                                           \</span></span><br><span class="line"><span class="meta">    do &#123;                                                                 \</span></span><br><span class="line"><span class="meta">        cudaError_t err = call;                                          \</span></span><br><span class="line"><span class="meta">        <span class="keyword">if</span> (err != cudaSuccess) &#123;                                        \</span></span><br><span class="line"><span class="meta">            fprintf(stderr, <span class="string">&quot;CUDA Error at %s:%d - %s\n&quot;</span>,                \</span></span><br><span class="line"><span class="meta">                    __FILE__, __LINE__, cudaGetErrorString(err));        \</span></span><br><span class="line"><span class="meta">            exit(EXIT_FAILURE);                                          \</span></span><br><span class="line"><span class="meta">        &#125;                                                                \</span></span><br><span class="line"><span class="meta">    &#125; while (0)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//使用实例</span></span><br><span class="line">CHECK_CUDA_ERROR(cudaMalloc((<span class="type">void</span>**)&amp;d_ptr, size));</span><br><span class="line">CHECK_CUDA_ERROR(cudaMemcpy(d_ptr, h_ptr, size, cudaMemcpyHostToDevice));</span><br><span class="line">CHECK_CUDA_ERROR(cudaFree(d_ptr));</span><br></pre></td></tr></table></figure>
+
+<p>kernel函数的错误需要使用cudaGetLastErro()</p>
+<ul>
+<li>由于CUDA 内核调用是 <strong>异步</strong> 执行的，因此即使内核出错，cudaGetLastError() 也可能不会立即报告错误。</li>
+<li>在宏中需要使用 cudaDeviceSynchronize() 来强制同步并检查错误</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> CHECK_CUDA_KERNEL(call)                                          \</span></span><br><span class="line"><span class="meta">    do &#123;                                                                 \</span></span><br><span class="line"><span class="meta">        call;                                                            \</span></span><br><span class="line"><span class="meta">        cudaError_t err = cudaGetLastError();                            \</span></span><br><span class="line"><span class="meta">        <span class="keyword">if</span> (err != cudaSuccess) &#123;                                        \</span></span><br><span class="line"><span class="meta">            fprintf(stderr, <span class="string">&quot;CUDA Kernel Error at %s:%d - %s\n&quot;</span>,         \</span></span><br><span class="line"><span class="meta">                    __FILE__, __LINE__, cudaGetErrorString(err));        \</span></span><br><span class="line"><span class="meta">            exit(EXIT_FAILURE);                                          \</span></span><br><span class="line"><span class="meta">        &#125;                                                                \</span></span><br><span class="line"><span class="meta">        err = cudaDeviceSynchronize();                                   \</span></span><br><span class="line"><span class="meta">        <span class="keyword">if</span> (err != cudaSuccess) &#123;                                        \</span></span><br><span class="line"><span class="meta">            fprintf(stderr, <span class="string">&quot;CUDA Sync Error at %s:%d - %s\n&quot;</span>,           \</span></span><br><span class="line"><span class="meta">                    __FILE__, __LINE__, cudaGetErrorString(err));        \</span></span><br><span class="line"><span class="meta">            exit(EXIT_FAILURE);                                          \</span></span><br><span class="line"><span class="meta">        &#125;                                                                \</span></span><br><span class="line"><span class="meta">    &#125; while (0)</span></span><br><span class="line"></span><br><span class="line">CHECK_CUDA_KERNEL(myKernel&lt;&lt;&lt;gridSize, blockSize&gt;&gt;&gt;(d_ptr));</span><br></pre></td></tr></table></figure>
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/pay-code.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2024/06/07/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>c++学习笔记——函数重载</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2024/05/06/note/cuda/CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94GPU%E7%BB%93%E6%9E%84/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      CUDA笔记——GPU结构
+    </a>
+  
+</div>
+
+    
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/Felt98">Felt's Github</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-zh.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/yi-ming-81-1">Felt</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-email.svg" />
+            <a class="foot-link" href="mailto:haoqingqin@gmail.com">haoqingqin@gmail.com</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="http://example.com">Felt's blog</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  
+
+  </body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        CUDA笔记——LayerNorm算子 | Felt's blog
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/note">学习笔记</a>
+              
+                <a class="nav-menu-item" href="/project">项目</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner">
+      <div class="post-content__head">
+        <div class="post-title">CUDA笔记——LayerNorm算子</div>
+        <div class="post-info">
+          
+  
+
+
+          <span class="post-date">2025-03-03</span>
+        </div>
+      </div>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>Layer Normalization 目的为减少深度神经网络中层与层之间的 <a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=242568926&content_type=Article&match_order=1&q=Covariate+Shift&zhida_source=entity">Covariate Shift</a>，提高网络收敛速度。<br>具体实现见：<a target="_blank" rel="noopener" href="https://github.com/karpathy/llm.c/blob/master/dev/cuda/layernorm_forward.cu#L98C1-L111C2">layernorm_forward.cu</a></p>
+<h2 id="LayerNorm-前向过程的实现"><a href="#LayerNorm-前向过程的实现" class="headerlink" title="LayerNorm 前向过程的实现"></a><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=242568926&content_type=Article&match_order=1&q=LayerNorm&zhida_source=entity">LayerNorm</a> 前向过程的实现</h2><p>假设待归一化的 m 维向量为x，均值和标准差分别是 μ 和 σ，LayerNorm的参数是w  和 b ，那么层归一化后的输出为：<br>	<img src="/2025/03/03/note/cuda/AI%20infra/CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94LayerNorm%E7%AE%97%E5%AD%90/img-LayerNorm-4.png" class="" title="|400"><br>	这里的乘法是element_wise乘法<br>	均值：  $\mu &#x3D; \frac{1}{m} \sum_{i&#x3D;1}^{m} x_i$<br>	标准差：	  $\sigma &#x3D; \sqrt{\frac{1}{m} \sum_{i&#x3D;1}^{m} (x_i - \mu)^2}$</p>
+<p>例如对于输入 x 形状为 <code>(N, C, H, W)</code>， normalized_shape 为 (H, W) 的情况，可以理解为输入 x<br>为 <code>(N*C, H*W)</code>，在 <code>N*C</code> 个行上，每行有 <code>H*W </code>个元素，<strong>对每行的元素求这一行的均值和标准差</strong>，得到 <code>N*C</code> 个 μ 和 σ，再对输入按上面的 LayerNorm 的计算公式对<strong>每一行的每个元素</strong>进行计算得到 y</p>
+<h4 id="cpu实现"><a href="#cpu实现" class="headerlink" title="cpu实现"></a>cpu实现</h4><p>输入输出参数：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">int B, int T, int C  // 输入输出shape，默认为 8, 1024, 768</span><br><span class="line">const float* inp   // 输入x，shape为 [B, T, C]</span><br><span class="line">float* mean, float* rstd  // 输入x的均值\mu, 及标准差的倒数 1/\sigma, 该值随机初始化后传入，前向完成后得到结果并在反向过程中重复使用</span><br><span class="line">const float* weight, const float* bias  // 可学习的权重及偏置，随机初始化后传入</span><br><span class="line">float* out  // 输出，shape为 [B, T, C]</span><br></pre></td></tr></table></figure>
+
+<p>计算步骤：</p>
+<ul>
+<li>计算数组x&#x3D;[b][c] 在维度 C 上的均值及方差</li>
+<li>计算标准差的倒数 rstd</li>
+<li>对数组x上每一个点x[i]进行归一化，写回output[i]</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">layernorm_forward_cpu</span><span class="params">(<span class="type">float</span>* out, <span class="type">float</span>* mean, <span class="type">float</span>* rstd,</span></span><br><span class="line"><span class="params">                       <span class="type">const</span> <span class="type">float</span>* inp, <span class="type">const</span> <span class="type">float</span>* weight, <span class="type">const</span> <span class="type">float</span>* bias,</span></span><br><span class="line"><span class="params">                       <span class="type">int</span> B, <span class="type">int</span> T, <span class="type">int</span> C)</span> &#123;</span><br><span class="line">    <span class="type">float</span> eps = <span class="number">1e-5</span>f;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> b = <span class="number">0</span>; b &lt; B; b++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> t = <span class="number">0</span>; t &lt; T; t++) &#123;</span><br><span class="line">            <span class="comment">// seek to the input position inp[b,t,:]</span></span><br><span class="line">            <span class="comment">// 在C维度进行归一化的数组开始位置,即[b][t][0]</span></span><br><span class="line">            <span class="type">const</span> <span class="type">float</span>* x = inp + b * T * C + t * C;</span><br><span class="line">            <span class="comment">// calculate the mean</span></span><br><span class="line">            <span class="type">float</span> m = <span class="number">0.0f</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; C; i++) &#123;</span><br><span class="line">                m += x[i];</span><br><span class="line">            &#125;</span><br><span class="line">            m = m/C;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// calculate the variance (without any bias correction)</span></span><br><span class="line">            <span class="type">float</span> v = <span class="number">0.0f</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; C; i++) &#123;</span><br><span class="line">                <span class="type">float</span> xshift = x[i] - m;</span><br><span class="line">                v += xshift * xshift;</span><br><span class="line">            &#125;</span><br><span class="line">            v = v/C;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// calculate the rstd</span></span><br><span class="line">            <span class="type">float</span> s = <span class="number">1.0f</span> / sqrtf(v + eps);</span><br><span class="line">            <span class="comment">// seek to the output position in out[b,t,:]</span></span><br><span class="line">            <span class="type">float</span>* out_bt = out + b * T * C + t * C;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; C; i++) &#123;</span><br><span class="line">                <span class="type">float</span> n = (s * (x[i] - m)); <span class="comment">// normalized output</span></span><br><span class="line">                <span class="type">float</span> o = n * weight[i] + bias[i]; <span class="comment">// scale and shift it</span></span><br><span class="line">                out_bt[i] = o; <span class="comment">// write</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// cache the mean and rstd for the backward pass later</span></span><br><span class="line">            mean[b * T + t] = m;</span><br><span class="line">            rstd[b * T + t] = s;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="cuda实现-V1"><a href="#cuda实现-V1" class="headerlink" title="cuda实现 V1"></a>cuda实现 V1</h4><p>由于 LayerNorm 的计算都是在维度 C 上进行，因此将 [B, T] 维度映射到一维，然后对外循环进行并行，一个线程负责一个C维度数组x的所有元素归一化</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// naive drag and drop implementation into kernel, parallelize over B,T, loop over C</span></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">layernorm_forward_kernel1</span><span class="params">(<span class="type">float</span>* out, <span class="type">float</span>* mean, <span class="type">float</span>* rstd,</span></span><br><span class="line"><span class="params">                                 <span class="type">const</span> <span class="type">float</span>* inp, <span class="type">const</span> <span class="type">float</span>* weight, <span class="type">const</span> <span class="type">float</span>* bias,</span></span><br><span class="line"><span class="params">                                 <span class="type">int</span> N, <span class="type">int</span> C)</span> &#123;</span><br><span class="line">    <span class="type">int</span> idx = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">float</span> eps = <span class="number">1e-5</span>f;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (idx &lt; N) &#123;</span><br><span class="line">        <span class="comment">// seek to the input position inp[idx,:]</span></span><br><span class="line">        <span class="comment">//该线程负责的x数组</span></span><br><span class="line">        <span class="type">const</span> <span class="type">float</span>* x = inp + idx * C;</span><br><span class="line">        <span class="comment">// calculate the mean</span></span><br><span class="line">        <span class="type">float</span> m = <span class="number">0.0f</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; C; i++) &#123;</span><br><span class="line">            m += x[i];</span><br><span class="line">        &#125;</span><br><span class="line">        m = m / C;</span><br><span class="line">        <span class="comment">// calculate the variance (without any bias correction)</span></span><br><span class="line">        <span class="type">float</span> v = <span class="number">0.0f</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; C; i++) &#123;</span><br><span class="line">            <span class="type">float</span> xshift = x[i] - m;</span><br><span class="line">            v += xshift * xshift;</span><br><span class="line">        &#125;</span><br><span class="line">        v = v / C;</span><br><span class="line">        <span class="comment">// calculate the rstd</span></span><br><span class="line">        <span class="type">float</span> s = <span class="number">1.0f</span> / sqrtf(v + eps);</span><br><span class="line">        <span class="comment">// seek to the output position in out[idx,:]</span></span><br><span class="line">        <span class="type">float</span>* out_idx = out + idx * C;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; C; i++) &#123;</span><br><span class="line">            <span class="type">float</span> n = (s * (x[i] - m)); <span class="comment">// normalized output</span></span><br><span class="line">            <span class="type">float</span> o = n * weight[i] + bias[i]; <span class="comment">// scale and shift it</span></span><br><span class="line">            out_idx[i] = o; <span class="comment">// write</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// cache the mean and rstd for the backward pass later</span></span><br><span class="line">        mean[idx] = m;</span><br><span class="line">        rstd[idx] = s;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用kernel</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">layernorm_forward1</span><span class="params">(<span class="type">float</span>* out, <span class="type">float</span>* mean, <span class="type">float</span>* rstd,</span></span><br><span class="line"><span class="params">                           <span class="type">const</span> <span class="type">float</span>* inp, <span class="type">const</span> <span class="type">float</span>* weight, <span class="type">const</span> <span class="type">float</span>* bias,</span></span><br><span class="line"><span class="params">                           <span class="type">int</span> B, <span class="type">int</span> T, <span class="type">int</span> C,</span></span><br><span class="line"><span class="params">                           <span class="type">const</span> <span class="type">int</span> block_size)</span> &#123;</span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> N = B * T;     <span class="comment">//B、T维度合并</span></span><br><span class="line">    <span class="type">const</span> <span class="type">int</span> grid_size = ceil_div(N, block_size);</span><br><span class="line">    layernorm_forward_kernel1&lt;&lt;&lt;grid_size, block_size&gt;&gt;&gt;(out, mean, rstd, inp, weight, bias, N, C);</span><br><span class="line">    cudaCheck(cudaGetLastError());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="cuda实现-V2"><a href="#cuda实现-V2" class="headerlink" title="cuda实现 V2"></a>cuda实现 V2</h4><p>求均值和标准差可以使用规约求和实现，因此可以使用3个算子分别实现 求均值、求标准差、归一化<br>求均值算子：<br>	上一个算子中，是一个线程负责一个C维度数组x的计算<br>	这里一个block负责一个C维度数组x的均值计算</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">__global__ <span class="type">void</span> <span class="title function_">mean_kernel</span><span class="params">(<span class="type">float</span>* mean, <span class="type">const</span> <span class="type">float</span>* inp, <span class="type">int</span> N, <span class="type">int</span> C, <span class="type">int</span> block_size)</span> &#123;</span><br><span class="line">    <span class="keyword">extern</span> __shared__ <span class="type">float</span> shared[];    <span class="comment">//shared[block_size]</span></span><br><span class="line">    <span class="type">int</span> idx = blockIdx.x; <span class="comment">// range [0, B*T)</span></span><br><span class="line">    <span class="type">int</span> tid = threadIdx.x; <span class="comment">// range [0, block_size)</span></span><br><span class="line">    <span class="type">const</span> <span class="type">float</span>* x = inp + idx * C;       <span class="comment">//一个block负责一个x</span></span><br><span class="line">    <span class="comment">// thread coarsening</span></span><br><span class="line">    <span class="comment">// x折叠到block_size大小</span></span><br><span class="line">    <span class="type">float</span> sum = <span class="number">0.0f</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = tid; i &lt; C; i += block_size) &#123;</span><br><span class="line">        sum += x[i];</span><br><span class="line">    &#125;</span><br><span class="line">    shared[tid] = sum;</span><br><span class="line">    __syncthreads();</span><br><span class="line">    <span class="comment">// reductions</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> stride = block_size / <span class="number">2</span>; stride &gt;= <span class="number">1</span>; stride /= <span class="number">2</span>) &#123;</span><br><span class="line">        __syncthreads();</span><br><span class="line">        <span class="keyword">if</span> (tid &lt; stride) &#123;</span><br><span class="line">            shared[tid] += shared[tid + stride];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// write the final result (at thread 0) to global memory</span></span><br><span class="line">    <span class="keyword">if</span> (tid == <span class="number">0</span>) &#123;</span><br><span class="line">        mean[idx] = shared[<span class="number">0</span>] / C;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>归一化算子：<br>	三维映射到一维，一个线程负责一个x[i]的归一化</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">__global__ <span class="type">void</span> <span class="title function_">normalization_kernel</span><span class="params">(<span class="type">float</span>* out, <span class="type">const</span> <span class="type">float</span>* inp, <span class="type">float</span>* mean, <span class="type">float</span>* rstd,</span></span><br><span class="line"><span class="params">                                     <span class="type">const</span> <span class="type">float</span>* weight, <span class="type">const</span> <span class="type">float</span>* bias, <span class="type">int</span> B, <span class="type">int</span> T, <span class="type">int</span> C)</span> &#123;</span><br><span class="line">    <span class="type">int</span> idx = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">	<span class="comment">//[bt][c]</span></span><br><span class="line">    <span class="type">int</span> bt = idx / C;</span><br><span class="line">    <span class="type">int</span> c = idx % C;</span><br><span class="line"></span><br><span class="line">    <span class="type">float</span> m = mean[bt];</span><br><span class="line">    <span class="type">float</span> s = rstd[bt];</span><br><span class="line">    <span class="type">float</span> xi = inp[idx];</span><br><span class="line">    <span class="type">float</span> n = s * (xi - m);</span><br><span class="line">    <span class="type">float</span> o = n * weight[c] + bias[c];</span><br><span class="line"></span><br><span class="line">    out[idx] = o;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3个算子调用：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> N = B * T;</span><br><span class="line"><span class="comment">// in mean and rstd, threads cooperate within blocks via reductions</span></span><br><span class="line">mean_kernel&lt;&lt;&lt;N, block_size, block_size * <span class="title function_">sizeof</span><span class="params">(<span class="type">float</span>)</span>&gt;&gt;&gt;<span class="params">(mean, inp, N, C, block_size)</span>;</span><br><span class="line"></span><br><span class="line">rstd_kernel&lt;&lt;&lt;N, block_size, block_size * <span class="title function_">sizeof</span><span class="params">(<span class="type">float</span>)</span>&gt;&gt;&gt;<span class="params">(rstd, inp, mean, N, C, block_size)</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// in the normalization, everything just gets flattened out</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> block_size2 = <span class="number">256</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> grid_size = ceil_div(B * T * C, block_size2);</span><br><span class="line">normalization_kernel&lt;&lt;&lt;grid_size, block_size2&gt;&gt;&gt;(out, inp, mean, rstd, weight, bias, B, T, C);</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>也可以全部写在一个算子里</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br></pre></td><td class="code"><pre><span class="line">template &lt;typename T&gt;</span><br><span class="line"></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">layerNormKernel</span><span class="params">(<span class="type">const</span> T *pInput, <span class="type">const</span> T *gamma, <span class="type">const</span> T *beta, T *pOutput, <span class="type">const</span> <span class="type">int</span> block_size,</span></span><br><span class="line"><span class="params"></span></span><br><span class="line"><span class="params"><span class="type">const</span> <span class="type">int</span> nDim)</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> tx = threadIdx.x;</span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> index = blockIdx.x * nDim;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="comment">// 每个 block 处理一行nDim大小的样本的入口</span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> T *input = pInput + index;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="comment">// 动态共享内存声明（只声明一次）</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// __shared__ T temp[256] blocksize=256</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> __shared__ T temp[];</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="comment">// 计算均值：每个线程累加部分和</span></span><br><span class="line"></span><br><span class="line">T sum = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = tx; i &lt; nDim; i += block_size)</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">sum += input[i];</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">temp[tx] = sum;</span><br><span class="line"></span><br><span class="line">__syncthreads();</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> stride = block_size / <span class="number">2</span>; stride &gt;= <span class="number">1</span>; stride /= <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (tx &lt; stride)</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">temp[tx] += temp[tx + stride];</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__syncthreads();</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">T mean = temp[<span class="number">0</span>] / static_cast&lt;T&gt;(nDim); <span class="comment">// 均值</span></span><br><span class="line"></span><br><span class="line">__syncthreads();</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="comment">// 计算方差：每个线程计算自己的平方差部分和</span></span><br><span class="line"></span><br><span class="line">sum = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = tx; i &lt; nDim; i += block_size)</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">T diff = input[i] - mean;</span><br><span class="line"></span><br><span class="line">sum += diff * diff;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">temp[tx] = sum;</span><br><span class="line"></span><br><span class="line">__syncthreads();</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> stride = block_size / <span class="number">2</span>; stride &gt;= <span class="number">1</span>; stride /= <span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (tx &lt; stride)</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">temp[tx] += temp[tx + stride];</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__syncthreads();</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">T var = temp[<span class="number">0</span>] / static_cast&lt;T&gt;(nDim); <span class="comment">// 方差</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="comment">// 对每个输入做归一化并应用 gamma, beta</span></span><br><span class="line"></span><br><span class="line">T *output = pOutput + index;</span><br><span class="line"></span><br><span class="line"><span class="type">const</span> T epsilon = <span class="number">6e-6</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = tx; i &lt; nDim; i += block_size)</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">output[i] = (input[i] - mean) * static_cast&lt;T&gt;(rsqrtf(var + epsilon)) * gamma[i] + beta[i];</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/pay-code.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2025/03/12/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E2%80%94unique_ptr/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>c++学习笔记——智能指针—unique_ptr</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2025/02/18/note/cuda/CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      CUDA笔记——内存模型
+    </a>
+  
+</div>
+
+    
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/Felt98">Felt's Github</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-zh.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/yi-ming-81-1">Felt</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-email.svg" />
+            <a class="foot-link" href="mailto:haoqingqin@gmail.com">haoqingqin@gmail.com</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="http://example.com">Felt's blog</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  
+
+  </body>
+</html>

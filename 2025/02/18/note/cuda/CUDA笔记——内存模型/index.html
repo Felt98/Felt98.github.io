@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        CUDA笔记——内存模型 | Felt's blog
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/note">学习笔记</a>
+              
+                <a class="nav-menu-item" href="/project">项目</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner--toc">
+      <div class="post-content__head">
+        <div class="post-title">CUDA笔记——内存模型</div>
+        <div class="post-info">
+          
+  <a href="/tags/cuda/" class="post-tag">#cuda</a>
+
+
+          <span class="post-date">2025-02-18</span>
+        </div>
+      </div>
+      
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98"><span class="post-toc-text">全局内存</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="post-toc-text">共享内存</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8"><span class="post-toc-text">寄存器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%BC%93%E5%AD%98"><span class="post-toc-text">缓存</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%B8%B8%E9%87%8F%E5%86%85%E5%AD%98"><span class="post-toc-text">常量内存</span></a></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <p>CUDA内存模型总览：<br><img src="https://img-blog.csdnimg.cn/direct/2c04332abb6a48e7b6805c420d64a2a1.png" alt="CUDA内存模型|400"></p>
+<h4 id="全局内存"><a href="#全局内存" class="headerlink" title="全局内存"></a>全局内存</h4><p>容量大，延迟高，所有线程共享<br>分配的device端内存默认都是使用的全局内存</p>
+<ul>
+<li>静态分配：_ _device_ _声明，cudaMemcpyToSymbol分配</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">__device__ <span class="type">int</span> globalArray[<span class="number">256</span>];</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span> <span class="params">()</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将数据从主机拷贝到设备全局内存</span></span><br><span class="line">    cudaMemcpyToSymbol(globalArray, hostData, <span class="keyword">sizeof</span>(<span class="type">int</span>) * <span class="number">256</span>);</span><br><span class="line">    </span><br><span class="line">   <span class="comment">// 将数据从设备全局内存拷回主机</span></span><br><span class="line">    cudaMemcpyFromSymbol(hostData, globalArray, <span class="keyword">sizeof</span>(<span class="type">int</span>) * <span class="number">256</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>动态分配：cudaMalloc 和 cudaFree</p>
+  <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>* devArray;</span><br><span class="line">cudaMalloc((<span class="type">void</span>**)&amp;devArray, <span class="keyword">sizeof</span>(<span class="type">int</span>) * <span class="number">256</span>); <span class="comment">// 分配全局内存</span></span><br><span class="line"></span><br><span class="line">cudaMemcpy(devArray, hostData, <span class="keyword">sizeof</span>(<span class="type">int</span>) * <span class="number">256</span>, cudaMemcpyHostToDevice); <span class="comment">// 拷贝数据到设备</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 将数据从设备拷回主机</span></span><br><span class="line">    cudaMemcpy(hostData, devArray, <span class="keyword">sizeof</span>(<span class="type">int</span>) * <span class="number">256</span>, cudaMemcpyDeviceToHost);</span><br><span class="line">    <span class="comment">// 释放全局内存</span></span><br><span class="line">    cudaFree(devArray);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>全局内存最小访问单元是1个 <strong>sector</strong>(32字节)。</p>
+<ul>
+<li>也就是说warpy一次访存最少读取32字节</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>访问全局内存的次序： L1-&gt; L2-&gt; 全局内存<br><strong>L1 cache</strong>：cache miss时最小访问单元是 4 sector（原则上）。<br><strong>L2 cache</strong>：cache miss时最小访问单元是1 sector。</p>
+</blockquote>
+<h4 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h4><p>位于<strong>片内</strong>，靠近每个sm处理器内核的轻量级低延迟内存（类似于L1缓存）<br>每个SM都有一个共享内存，被执行的block划分，GPU通常会限制单个block使用的共享内存大小<br>	- 使用方法：使用__shared__声明，详情请看共享内存一章</p>
+<h4 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h4><p>位于片内。寄存器直接集成在GPU核心中，数据读写几乎没有延迟，访问速度是所有GPU内存中最快的。</p>
+<ul>
+<li>每个线程拥有自己的寄存器空间，不同线程之间的寄存器是私有的，互不共享。</li>
+<li>如果线程使用的寄存器过多，可能会导致寄存器溢出，从而导致性能下降。GPU通常会将超出寄存器的变量存储到本地内存（片外）中，但本地内存访问速度较慢。</li>
+</ul>
+<h4 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h4><p>GPU有两级<strong>L1缓存</strong>和<strong>L2缓存</strong></p>
+<p><strong>1. L1缓存</strong><br>• <strong>位置</strong>：L1缓存位于片内，每个<strong>SM</strong>的本地，接近于SP。<br>• <strong>功能</strong>：L1缓存存储的是频繁访问的局部数据、寄存器内容以及常用的全局内存数据。<br>• <strong>容量</strong>：通常每个SM的L1缓存容量较小，在16KB到64KB之间。<br>• <strong>专用性</strong>：L1缓存主要服务于本地线程和线程块，减少跨线程块或跨SM的共享负载。</p>
+<p><strong>2. L2缓存</strong></p>
+<p>• <strong>位置</strong>：L2缓存位于GPU的全局层次，跨越整个GPU的多个SM。<br>• <strong>功能</strong>：L2缓存用于存储较大范围的共享数据，帮助多个SM之间的数据交换。它通常缓存从全局内存加载的数据，以减少全局内存访问延迟。<br>• <strong>较大容量</strong>：L2缓存的容量通常比L1缓存大，可能达到数百KB到几MB。<br>• <strong>共享性</strong>：L2缓存用于多个SM之间的数据共享，帮助减少全局内存访问的瓶颈。<br>• <strong>较高的访问延迟</strong>：虽然L2缓存比全局内存快，但相对于L1缓存来说，访问延迟更高。</p>
+<p><strong>合并访存</strong>：缓存会尽可能合并warp的访存请求，减少对内存的访问次数</p>
+<h4 id="常量内存"><a href="#常量内存" class="headerlink" title="常量内存"></a>常量内存</h4><p>位于<strong>片外</strong>，设备端只读，生命周期为整个应用。<br>一般为 64KB，因此适合存储小型、频繁访问的<strong>常量数据</strong>。<br>	- 当所有线程访问同一地址时，常量内存的访问效率最高（广播机制）。<br>	- 因为是只读，不存在缓存一致性的问题<br>	- 使用方法,_ _constant_ _声明，cudaMemcpyToSymbol从主机拷贝数据，在kernel中直接使用，无需手动释放</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">__constant__ <span class="type">float</span> constData[<span class="number">256</span>];</span><br><span class="line"><span class="type">int</span> main（）&#123;</span><br><span class="line">    cudaMemcpyToSymbol(constData, hostData, <span class="keyword">sizeof</span>(<span class="type">float</span>) * <span class="number">256</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>延迟：全局内存&gt;常量内存&gt;共享内存&gt;寄存器</p>
+<table>
+<thead>
+<tr>
+<th>内存类型</th>
+<th>描述</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>全局内存</td>
+<td>存储在GPU上的主内存，所有线程都可以访问</td>
+<td>容量大，访问延迟高，适合存储大量数据</td>
+</tr>
+<tr>
+<td>共享内存</td>
+<td>每个线程块（Block）内的线程可以共享的内存区域</td>
+<td>访问速度快，容量小，仅限于同一线程块内的线程使用</td>
+</tr>
+<tr>
+<td>常量内存</td>
+<td>用于存储只读数据，所有线程都可以访问</td>
+<td>高效读取，适合存储不经常修改的数据（例如常量）</td>
+</tr>
+<tr>
+<td>纹理内存</td>
+<td>用于存储纹理数据，适用于图像处理和渲染相关操作</td>
+<td>支持缓存，适合处理空间局部性较强的数据</td>
+</tr>
+<tr>
+<td>寄存器</td>
+<td>每个线程拥有自己的私有寄存器用于存储局部变量</td>
+<td>访问速度极快，但数量有限，且线程之间不可共享</td>
+</tr>
+<tr>
+<td>设备内存</td>
+<td>GPU上的物理内存，可以分配给不同的内存类型，如全局内存和共享内存</td>
+<td>包括所有的内存层次，指的是GPU上所有类型的物理内存</td>
+</tr>
+<tr>
+<td>统一内存</td>
+<td>在CPU和GPU之间共享的内存区域，允许两者直接访问</td>
+<td>提供统一的内存空间，简化开发，但性能较低</td>
+</tr>
+<tr>
+<td>本地内存</td>
+<td>每个线程独立的内存区域，通常用于存储无法放入寄存器的变量</td>
+<td>容量较小，速度较慢，通常用于存储大于寄存器空间的数据</td>
+</tr>
+</tbody></table>
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/pay-code.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2025/03/03/note/cuda/AI%20infra/CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94LayerNorm%E7%AE%97%E5%AD%90/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>CUDA笔记——LayerNorm算子</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2025/02/17/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%A8%A1%E6%9D%BF/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      c++学习笔记——模板
+    </a>
+  
+</div>
+
+    
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/Felt98">Felt's Github</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-zh.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/yi-ming-81-1">Felt</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-email.svg" />
+            <a class="foot-link" href="mailto:haoqingqin@gmail.com">haoqingqin@gmail.com</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="http://example.com">Felt's blog</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  
+
+  </body>
+</html>

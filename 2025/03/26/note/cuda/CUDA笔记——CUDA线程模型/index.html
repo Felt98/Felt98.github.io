@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        CUDA笔记——CUDA线程模型 | Felt's blog
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/note">学习笔记</a>
+              
+                <a class="nav-menu-item" href="/project">项目</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner--toc">
+      <div class="post-content__head">
+        <div class="post-title">CUDA笔记——CUDA线程模型</div>
+        <div class="post-info">
+          
+  <a href="/tags/cuda/" class="post-tag">#cuda</a>
+
+
+          <span class="post-date">2025-03-26</span>
+        </div>
+      </div>
+      
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#CUDA"><span class="post-toc-text">CUDA</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#CUDA%E8%BD%AF%E4%BB%B6%E6%A0%88"><span class="post-toc-text">CUDA软件栈</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%BA%BF%E7%A8%8B%E7%BB%84%E7%BB%87%E7%BB%93%E6%9E%84"><span class="post-toc-text">线程组织结构</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#GPU%E7%9A%84Occupancy%E9%99%90%E5%88%B6"><span class="post-toc-text">GPU的Occupancy限制</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#block%E4%B8%AD%E7%BA%BF%E7%A8%8B%E6%95%B0%E9%87%8FBLOCKSIZE%E7%9A%84%E9%80%89%E6%8B%A9"><span class="post-toc-text">block中线程数量BLOCKSIZE的选择</span></a></li></ol></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <h3 id="CUDA"><a href="#CUDA" class="headerlink" title="CUDA"></a>CUDA</h3><p><strong>CUDA</strong>：一个NVIDIA GPU程序的编译器和工具集，使用C++编写的高抽象软件栈。<br>软件开发人员从此可以使用CUDA在英伟达的GPU上进行并行编程。</p>
+<h4 id="CUDA软件栈"><a href="#CUDA软件栈" class="headerlink" title="CUDA软件栈"></a>CUDA软件栈</h4><img src="/2025/03/26/note/cuda/CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94CUDA%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/img-CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94CUDA%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B-8.png" class="" title="|500">
+<p>CUDA <strong>Runtime</strong> 软件栈主要包括：</p>
+<ul>
+<li><strong>CUDA API 层</strong>（Runtime API vs Driver API）</li>
+<li><strong>CUDA 编译器</strong>（NVCC &amp; PTX）</li>
+<li><strong>CUDA 运行时 &amp; 驱动</strong>（CUDA Runtime &amp; Driver）</li>
+<li><strong>CUDA 内存管理</strong>（全局&#x2F;共享&#x2F;常量&#x2F;寄存器）</li>
+<li><strong>CUDA 执行模型</strong>（线程模型 &amp; 流调度）</li>
+</ul>
+<p>CUDA中的<strong>异构编程</strong> (Heterogeneous Programming)： 指的是在<strong>CPU和GPU之间以及GPU内部，任务可以不必等待前一个任务完成后再启动下一个任务</strong></p>
+<ul>
+<li>例如CPU在启动GPU内核计算后不必等待GPU内核完成便可以继续执行接下来的指令，让GPU在后台完成计算。CPU与GPU的内存空间是独立，它们之间通过PCI Bus交换数据</li>
+</ul>
+<h4 id="线程组织结构"><a href="#线程组织结构" class="headerlink" title="线程组织结构"></a>线程组织结构</h4><h5 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a>Thread</h5><p>GPU处理数据的基本单位<br>	- <strong>一个sp执行一个thread</strong><br>	- thread ID 是三维的，即通过（x,y,z)在block中定位<br>	- thread总数&#x3D;block总数×每个block的thread数<br>	- 每个线程都有自己的本地内存，有自己的数据空间(寄存器)；<br>		- 线程的本地内存通常是使用的全局内存，因此速度非常慢<br>		- 当线程发生<strong>寄存器溢出</strong>时才会使用本地内存<br>	- 同一个block中的线程都可以读写其blcok的共享内存shared memory</p>
+
+<h5 id="Block"><a href="#Block" class="headerlink" title="Block"></a><strong>Block</strong></h5><p>多个thread组成一个block，一个block最多拥有1024个线程<br>	- 同一个block中的threads可以同步，也可以共享数据<br>	- 不同block中的threads是不可以同步的，除非使用Thread Block Clusters（Hopper 架构）<br>	- <strong>同一个block中的所有线程一定在同一個SM中执行</strong>（即block不能切换到其他SM执行）<br>		- 这也是block中的线程数量受限制的原因，不能超过单个SM的负载<br>	- <strong>每个SM可以同时执行多个block</strong>，通常上限是16<br>		- 在同一个 SM 上，多个 block 的 warps 可能会交替执行。因此不同block之间是不同步的，它们之间执行也是无序的（对应到算法设计block之间也应该是无序的）<br>		- 当一个block执行完成后才会被释放<br>	- block ID和维度也是三维的<br>		- block三维的乘积&#x3D;该block的thread数<br>		- block的dim3范围：<strong>(1024,1024,64)</strong><br>	- <strong>每个block最多分配1024个thread</strong> （CUDA 2.0）<br>		- 即<strong>block的dim中x × y × z 三者的乘积不能超过1024</strong><br>		- block的线程数最好是32的倍数（不满32的也会被塞入无效线程强行凑够32个）</p>
+<h5 id="Grid"><a href="#Grid" class="headerlink" title="Grid"></a>Grid</h5><p>grid由多个block组成，可以拥有<strong>数万到百万</strong>的block数量<br>	- <strong>一个grid执行一个kernel函数</strong>（可以视作kernel&#x3D;grid）<br>		- 一个grid里面的所有thread均执行同一个kernel函数<br>		- GPU可以同时执行多个grid（即多个kernel）<br>	- grid的dim也是三维的，表示grid里面block的范围，grid三维的乘积&#x3D;block总数<br>		- grid的dim3范围：<strong>(2^31-1, 65535,65535)</strong><br>		- grid里面的所有block维度都一样，即线程数是一样的<br>	- 每个grid最多分配 65535（CUDA3前） 或 2^31-1 （CUDA3后）个block<br>		- 因此grid的dim中xyz乘积不能超过最大block数</p>
+<p>Grid、Block、Thread示意图：</p>
+<ul>
+<li>图中grid的维度为（2,2,1），block的维度为（4,2,2）</li>
+</ul>
+<img src="/2025/03/26/note/cuda/CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94CUDA%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/img-CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94CUDA%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B-6.png" class="" title="|350">
+<p><img src="https://pic1.zhimg.com/v2-39e09678a49d71094c5ac420d8ba43a4_r.jpg" alt="|500"></p>
+<h5 id="warp"><a href="#warp" class="headerlink" title="warp"></a>warp</h5><p>32个thread为一个warp，SM执行任务的调度单元<br>	- 同一时间，<strong>一个SM可以同时执行多个warp（取决于架构的warp scheduler数量）</strong><br>	- <strong>Warp内隐式同步</strong>：<br>		  - warp中的32个thread里面的代码执行在指令级别是隐式同步的<br>		  - 因此同一warp内的线程<strong>无需额外的同步指令</strong><br>	- <strong>延迟隐藏</strong>：类比于CPU中的进程、当一个warp阻塞时（比如等待资源），SM将切换执行另一个warp<br>		- GPU的warp切换是0开销的，CPU切换开销就很大<br>		- 例如当一个warp进行数据访存的时候，就让这个warp stall，而后调度器再选一个warp进行计算，通过这种方式交错开计算和访存，让访存单元一直忙碌，带宽打满<br>	- <strong>线程束分化</strong>：GPU对分支的处理，产生分支会导致warp中的线程串行执行线程<br>		- 如果warp中的所有线程都只执行一个分支，则不会有任何性能影响<br>		- 不满足分支条件的线程，处于未激活，等待其他线程执行分支<br>			- 也因此线程分化会导致硬件利用率下降，warp中的分支判断也是一个优化点</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">__global__ <span class="type">void</span> <span class="title function_">func</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">if</span>(some condition).     <span class="comment">//所有线程执行</span></span><br><span class="line">		<span class="keyword">do</span> a;               <span class="comment">//warp中部分线程执行a</span></span><br><span class="line">	<span class="keyword">else</span>                    </span><br><span class="line">		<span class="keyword">do</span> b;               <span class="comment">//warp中部分线程执行b，执行b的线程可能需要先等待a执行完</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li></li>
+</ul>
+<p>硬件与软件层的映射图：</p>
+<img src="/2025/03/26/note/cuda/CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94CUDA%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/img-CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94CUDA%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B-3.png" class="">
+
+<h5 id="自动可拓展性"><a href="#自动可拓展性" class="headerlink" title="自动可拓展性"></a><strong>自动可拓展性</strong></h5><p>block之间执行的无序性确保了自动可拓展性Automatic Scalability，如下图，同一个CUDA程序，不同的GPU执行时会根据具体的SM数分配不同的Block组数<br><img src="https://img-blog.csdnimg.cn/6ef554b3718e4a91ab8199c9aecc3486.png" alt="【笔记】CUDA （一） - 介绍、架构、编程模型基础_cuda库架构图-CSDN博客"></p>
+<h4 id="GPU的Occupancy限制"><a href="#GPU的Occupancy限制" class="headerlink" title="GPU的Occupancy限制"></a>GPU的Occupancy限制</h4><p>GPU 的 <strong>Occupancy（占用率）</strong> 指的是 <strong>一个 SM上正在执行的 warp 数量与SM可支持的最大 warp 数量的比值</strong>。它衡量的是 GPU 计算资源的利用率。<br><em>例如在Ampere架构上，支持的最大 Warp 数量为 64</em></p>
+<ul>
+<li><p><strong>Occupancy计算公式</strong>：</p>
+<pre><code>  $\large \text&#123;Occupancy&#125; = \frac&#123;\text&#123;Active Warps per SM&#125;&#125;&#123;\text&#123;Maximum Warps per SM&#125;&#125;$
+</code></pre>
+</li>
+<li><p><strong>一个 SM上活跃的 warp 数量计算公式</strong>：<br>$\text{Active Warps per SM} &#x3D; \min \left( \frac{\text{Total Threads per SM}}{32}, \frac{\text{Max Threads per SM}}{32}, \frac{\text{Register Limit per SM}}{\text{Register per Thread} \times 32}, \frac{\text{Shared Memory Limit per SM}}{\text{Shared Memory per Block}} \right)$<br>  其中：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数名称</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Total Threads per SM</td>
+<td>SM 上所有活动线程数 (SM上活跃的block数 ✖️ BLOCKSIZE)</td>
+</tr>
+<tr>
+<td>Max Threads per SM</td>
+<td>每个 SM 支持的最大线程数（如 Ampere 架构为 <strong>2048</strong>）。</td>
+</tr>
+<tr>
+<td>Register Limit per SM</td>
+<td>SM 可用的寄存器总数（如 Ampere 架构通常为 64K）。</td>
+</tr>
+<tr>
+<td>Register per Thread</td>
+<td>每个线程使用的寄存器数量。</td>
+</tr>
+<tr>
+<td>Shared Memory Limit per SM</td>
+<td>每个 SM 的共享内存上限（如 100 KB）。</td>
+</tr>
+<tr>
+<td>Shared Memory per Block</td>
+<td>单个线程块所使用的共享内存。</td>
+</tr>
+<tr>
+<td>从公式可以看出，可以<strong>影响occupancy的因素</strong>有：</td>
+<td></td>
+</tr>
+</tbody></table>
+<ol>
+<li>每个thread的SM register 数量 → 限制了可同时执行的thread数<ul>
+<li>当寄存器占用过多时，每个线程块可以容纳的线程数量减少，导致每个SM上的活跃线程数降低</li>
+</ul>
+</li>
+<li>每个block的shared memory 数量 →限制了可同时执行的block数<ul>
+<li>，较多的使用共享内存会减少GPU上可并行执行的线程块数量</li>
+</ul>
+</li>
+<li>每个block的thread数，即BLOCKSIZE<ul>
+<li>如果线程块太大，会导致SM不能启动更多线程块，减少了SM上活跃的block数，从而降低Occupancy。</li>
+<li>相反，如果线程块过小，可能无法充分利用GPU的计算能力。</li>
+<li><strong>一个 SM上活跃的 block 最大数量计算公式</strong>：<br>  $\text{Max Active Blocks per SM} &#x3D; \min \left( \frac{\text{Max Threads per SM}}{\text{Threads per Block}}, \text{Max Blocks per SM ()} \right)$</li>
+</ul>
+</li>
+</ol>
+<p><strong>误区</strong>：并不是Occupancy越高，性能越好。过高的占用率可能会导致寄存器溢出，影响性能。<br>    - 每个线程完成的工作越独立，对Occupancy的要求就越低<br>    - 如果是memory - bound 的工作（即频繁读写内存），则需要高Occupancy</p>
+<h4 id="block中线程数量BLOCKSIZE的选择"><a href="#block中线程数量BLOCKSIZE的选择" class="headerlink" title="block中线程数量BLOCKSIZE的选择"></a>block中线程数量BLOCKSIZE的选择</h4><p>单个block线程数量太少，会导致GPU资源利用率下降，<strong>那么单个block线程数量越大越好吗？</strong></p>
+<p>答案是否定的，如果线程数量过多，可能会导致下面的问题：</p>
+<ol>
+<li>片上分配的资源不足，增加对全局内存的访问，提高延迟。</li>
+<li>减少可以并行的block数量，降低Occupancy<br>因此SM和block限制了最大线程数量。</li>
+</ol>
+<p><strong>如何选择线程和块数量</strong>？</p>
+<ol>
+<li>首先保证block线程的数量是<strong>32</strong>的倍数</li>
+<li><strong>共享内存和寄存器的分配不能超过上限</strong>。如果使用的共享内存和寄存器越多，那么可以适当减少线程数，以增加block的占有率</li>
+<li>单块线程数量可以在开始选择为  $\frac{\text{Max Threads per SM}}{\text{Max Blocks per SM}} &#x3D; 128$ 的倍数， 再根据通过性能测试和调优来实现最优配置</li>
+<li>Grid包含的线程块可以尽可能多，确保GPU的SM能够同时调度尽可能多的线程块。<blockquote>
+<p>最佳实践： BLOCKSIZE的大小可以从128的倍数选择。<br>可以使用 NVIDIA 的 cudaOccupancyMaxPotentialBlockSize() 工具来计算系统推荐的 block size</p>
+</blockquote>
+</li>
+</ol>
+
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/pay-code.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2025/03/12/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E2%80%94weak_ptr/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      c++学习笔记——智能指针—weak_ptr
+    </a>
+  
+</div>
+
+    
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/Felt98">Felt's Github</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-zh.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/yi-ming-81-1">Felt</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-email.svg" />
+            <a class="foot-link" href="mailto:haoqingqin@gmail.com">haoqingqin@gmail.com</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="http://example.com">Felt's blog</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  
+
+  </body>
+</html>

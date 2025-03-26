@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        c++学习笔记——智能指针—shared_ptr | Felt's blog
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/note">学习笔记</a>
+              
+                <a class="nav-menu-item" href="/project">项目</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner--toc">
+      <div class="post-content__head">
+        <div class="post-title">c++学习笔记——智能指针—shared_ptr</div>
+        <div class="post-info">
+          
+  <a href="/tags/c/" class="post-tag">#c++</a>
+
+
+          <span class="post-date">2025-03-12</span>
+        </div>
+      </div>
+      
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#shared-ptr"><span class="post-toc-text">shared_ptr</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E6%80%A7"><span class="post-toc-text">线程安全性</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#API"><span class="post-toc-text">API</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%89%8B%E6%92%95shared-ptr"><span class="post-toc-text">手撕shared_ptr</span></a></li></ol></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <h2 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h2><p>shared_ptr 旨在解决需要多个智能指针共同拥有资源的情况，因此有多个 std：：shared_ptr 指向同一个资源是可以的<br>	- 在内部，std：：shared_ptr 会跟踪有多少 std：：shared_ptr 共享资源<br>	- 当只要至少有一个 std：：shared_ptr 指向资源时，，即使单个 std：：shared_ptr 被销毁，也不会释放该资源。即当最后一个 std：：shared_ptr 超出范围（或被重新分配以指向其他内容），资源将被解除分配</p>
+<ul>
+<li>注意创建共享指针的方式，后续的指针要复制现有的指针来创建</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="comment">// allocate a Resource object and have it owned by std::shared_ptr</span></span><br><span class="line">	Resource* res &#123; <span class="keyword">new</span> Resource &#125;;</span><br><span class="line">	std::shared_ptr&lt;Resource&gt; ptr1&#123; res &#125;;</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">//请注意，我们从第一个共享指针创建了第二个共享指针</span></span><br><span class="line">		std::shared_ptr&lt;Resource&gt; ptr2 &#123; ptr1 &#125;; <span class="comment">// make another std::shared_ptr pointing to the same thing</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//错误做法：</span></span><br><span class="line">		<span class="comment">//相当于创建了两个彼此独立的 std：：shared_ptr。因此，即使它们都指向同一个 Resource，它们也不知道彼此。</span></span><br><span class="line">		<span class="comment">//shared_ptr&lt;Resource&gt; ptr2 &#123; res &#125;;</span></span><br><span class="line"></span><br><span class="line">		std::cout &lt;&lt; <span class="string">&quot;Killing one shared pointer\n&quot;</span>;</span><br><span class="line">	&#125; <span class="comment">// 当 ptr2 超出范围时，不会解除分配 Resource，因为 ptr1 仍指向 Resource。ptr2 goes out of scope here, but nothing happens</span></span><br><span class="line"></span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;Killing another shared pointer\n&quot;</span>;</span><br><span class="line">&#125;<span class="comment">//当 ptr1 超出范围时，ptr1 会注意到没有更多的 std：：shared_ptr 来管理 Resource，因此它会解除分配 Resource。</span></span><br></pre></td></tr></table></figure>
+
+<p>也可以使用make_shared（）创建，更简单、更安全（使用此方法无法创建两个指向同一资源但彼此不知道的独立 std：：shared_ptr）。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// allocate a Resource object and have it owned by std::shared_ptr</span></span><br><span class="line"><span class="keyword">auto</span> ptr1 &#123; <span class="built_in">make_shared</span>&lt;Resource&gt;() &#125;;</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">auto</span> ptr2 &#123; ptr1 &#125;; <span class="comment">// create ptr2 using copy of ptr1</span></span><br><span class="line"></span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;Killing one shared pointer\n&quot;</span>;</span><br><span class="line">&#125; <span class="comment">// ptr2 goes out of scope here, but nothing happens</span></span><br><span class="line"></span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;Killing another shared pointer\n&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>shared_ptr的原理</strong>：<br>	shared_ptr 在内部使用<strong>两个指针</strong>。<br>	- 一个指针指向正在管理的资源。<br>	- 另一个指向 “控制块”，这是一个动态分配的对象，用于跟踪一堆东西，包括有多少 std：：shared_ptr 指向资源（<strong>引用计数</strong>）。<strong>拷贝或赋值构造的shared_ptr会共享同一个控制块</strong></p>
+<ul>
+<li>当shared_ptr超出范围时，它的析构函数会检查引用计数是否为0，为0就释放资源</li>
+<li>通过 std：：shared_ptr 构造函数创建 std：：shared_ptr 时，托管对象（通常传入）和控制块（构造函数创建）的内存将单独分配。</li>
+<li>但是，当使用 std：：make_shared（） 时，可以将为资源和控制块优化为单个连续的内存分配，从而获得更好的性能。</li>
+<li>当使用复制分配克隆 std：：shared_ptr 时，可以适当地更新控制块中的数据，以指示现在有其他 std：：shared_ptr 共同管理资源</li>
+</ul>
+<p><strong>存在的问题</strong>：<br>	shared_ptr 有一些与unique_ptr 相同的挑战 – 如果 std：：shared_ptr 没有被正确释放（要么是因为它是动态分配的并且从未被删除，要么是动态分配的对象的一部分，从未被删除），那么它所管理的资源也不会被释放。<br>	使用 std：：unique_ptr，你只需要担心一个智能指针被正确处理。使用 std：：shared_ptr，你得操心。<strong>如果管理资源的任何 std：：shared_ptr 未正确销毁，则不会正确释放该资源</strong><br>	<br><strong>循环引用</strong>：每个对象引用下一个对象，最后一个对象引用回第一个对象，从而产生引用循环。对于三个指针，当 A 指向 B，B 指向 C，C 指向 A 时，你会得到同样的结果<br>	例如下面的shared_ptr的循环引用，当 ptr1 超出范围时，不会释放 Resource，因为 Resource 的 m_ptr 正在共享 Resource。<br>	释放 Resource 的唯一方法是将 m_ptr 设置为其他内容（因此不再共享 Resource）。但是我们无法访问 m_ptr因为 ptr1 超出了范围，因此我们不再有办法执行此操作。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Resource</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	std::shared_ptr&lt;Resource&gt; m_ptr &#123;&#125;; <span class="comment">// initially created empty</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">Resource</span>() &#123; std::cout &lt;&lt; <span class="string">&quot;Resource acquired\n&quot;</span>; &#125;</span><br><span class="line">	~<span class="built_in">Resource</span>() &#123; std::cout &lt;&lt; <span class="string">&quot;Resource destroyed\n&quot;</span>; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">auto</span> ptr1 &#123; std::<span class="built_in">make_shared</span>&lt;Resource&gt;() &#125;;</span><br><span class="line"></span><br><span class="line">	ptr1-&gt;m_ptr = ptr1; <span class="comment">// m_ptr is now sharing the Resource that contains it</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于循环引用的问题需要weak_ptr解决</p>
+<h3 id="线程安全性"><a href="#线程安全性" class="headerlink" title="线程安全性"></a>线程安全性</h3><ol>
+<li><strong>引用计数</strong>是线程安全的：</li>
+</ol>
+<ul>
+<li><code>shared_ptr</code>内部通过原子操作管理<strong>引用计数</strong>（<code>use_count</code>）和<strong>弱引用计数</strong>（<code>weak_count</code>）</li>
+<li>因此对不同线程创建和释放各自的<code>shared_ptr</code>实例（即使它们指向同一对象），是线程安全的</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 线程1操作 ptr1，线程2操作 ptr2（两者指向同一对象）</span></span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;<span class="type">int</span>&gt; ptr1 = <span class="built_in">std</span>::make_shared&lt;<span class="type">int</span>&gt;(<span class="number">42</span>);</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;<span class="type">int</span>&gt; ptr2 = ptr1;  <span class="comment">// 拷贝构造，引用计数原子增加</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程1操作 ptr1.reset()，线程2操作 ptr2.reset()：安全</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li><strong>指向对象的操作不是线程安全的</strong>：</li>
+</ol>
+<ul>
+<li><code>shared_ptr</code>仅管理对象的生命周期，<strong>不保证对象内部数据的线程安全</strong>。</li>
+<li>若多个线程通过不同的<code>shared_ptr</code>实例访问同一对象，仍需通过锁或其他机制保护对象的数据</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;Data&gt; data_ptr = <span class="built_in">std</span>::make_shared&lt;Data&gt;();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程1：</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">std</span>::lock_guard&lt;<span class="built_in">std</span>::mutex&gt; <span class="title function_">lock</span><span class="params">(data_mutex)</span>;</span><br><span class="line">    data_ptr-&gt;modify();  <span class="comment">// 需加锁保护对象</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程2：</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">std</span>::lock_guard&lt;<span class="built_in">std</span>::mutex&gt; <span class="title function_">lock</span><span class="params">(data_mutex)</span>;</span><br><span class="line">    data_ptr-&gt;read();  <span class="comment">// 需加锁保护对象</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>C++20 引入了<code>std::atomic&lt;std::shared_ptr&gt;</code>，允许原子地修改<code>shared_ptr</code>实例</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;atomic&gt;</span></span></span><br><span class="line"><span class="built_in">std</span>::atomic&lt;<span class="built_in">std</span>::<span class="built_in">shared_ptr</span>&lt;<span class="type">int</span>&gt;&gt; <span class="type">atomic_ptr</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程1：</span></span><br><span class="line"><span class="type">atomic_ptr</span>.store(<span class="built_in">std</span>::make_shared&lt;<span class="type">int</span>&gt;(<span class="number">42</span>), <span class="built_in">std</span>::memory_order_release);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 线程2：</span></span><br><span class="line"><span class="keyword">auto</span> ptr = <span class="type">atomic_ptr</span>.load(<span class="built_in">std</span>::memory_order_acquire);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>顺便一提weak_ptr的线程安全性：在多线程环境中，<code>weak_ptr</code>可用于跨线程观察资源状态，而无需担心引用计数的线程安全问题</p>
+<h3 id="API"><a href="#API" class="headerlink" title="API"></a>API</h3><table>
+<thead>
+<tr>
+<th>API</th>
+<th>作用</th>
+<th>示例</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>shared_ptr<T></td>
+<td>创建 shared_ptr</td>
+<td>shared_ptr<int> sp(new int(10));</td>
+<td>直接使用 new 可能导致异常时内存泄漏，推荐 make_shared</td>
+</tr>
+<tr>
+<td>make_shared<T>(args…)</td>
+<td>创建 shared_ptr</td>
+<td>auto sp &#x3D; make_shared<int>(10);</td>
+<td>推荐使用，比 new 性能更好（减少一次内存分配）</td>
+</tr>
+<tr>
+<td>operator*</td>
+<td>解引用获取对象</td>
+<td>int val &#x3D; *sp;</td>
+<td>访问指针管理的对象</td>
+</tr>
+<tr>
+<td>operator-&gt;</td>
+<td>访问对象成员</td>
+<td>sp-&gt;method();</td>
+<td>适用于指向类对象的 shared_ptr</td>
+</tr>
+<tr>
+<td>use_count()</td>
+<td>获取引用计数</td>
+<td>size_t count &#x3D; sp.use_count();</td>
+<td>仅供调试，不建议用于逻辑控制</td>
+</tr>
+<tr>
+<td>unique()</td>
+<td>判断是否是唯一所有者</td>
+<td>if (sp.unique()) { … }</td>
+<td>true 表示当前 shared_ptr 是唯一拥有者</td>
+</tr>
+<tr>
+<td>get()</td>
+<td>获取原始指针</td>
+<td>int* rawPtr &#x3D; sp.get();</td>
+<td>不会增加引用计数</td>
+</tr>
+<tr>
+<td>reset(ptr &#x3D; nullptr)</td>
+<td>释放当前对象并管理新对象</td>
+<td>sp.reset(new int(20));</td>
+<td>释放旧对象，避免内存泄漏</td>
+</tr>
+<tr>
+<td>swap(other)</td>
+<td>交换两个 shared_ptr</td>
+<td>sp1.swap(sp2);</td>
+<td>交换管理的对象</td>
+</tr>
+<tr>
+<td>operator bool</td>
+<td>检查是否为空</td>
+<td>if (sp) { … }</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="手撕shared-ptr"><a href="#手撕shared-ptr" class="headerlink" title="手撕shared_ptr"></a>手撕shared_ptr</h3><p>参考：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/384894475">https://zhuanlan.zhihu.com/p/384894475</a></p>
+<h5 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h5><ul>
+<li>基础构造函数</li>
+<li>复制语义</li>
+<li>移动语义</li>
+<li>一些<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=169441123&content_type=Article&match_order=1&q=%E5%B7%A5%E5%85%B7%E5%87%BD%E6%95%B0&zhida_source=entity">工具函数</a></li>
+<li>析构函数</li>
+</ul>
+<h5 id="基础构造函数"><a href="#基础构造函数" class="headerlink" title="基础构造函数"></a>基础构造函数</h5><p>假设我们现在在技术面现场, 面试官让手写一个<code>shared_ptr</code>, <code>shared_ptr</code>里面有多少东西呀一团乱麻怎么开始写? 别慌, 我们先把最简单的结构写上:</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">template&lt;class T&gt;</span><br><span class="line">class my_shared_ptr</span><br><span class="line">&#123;</span><br><span class="line">    private:</span><br><span class="line">    T * m_ptr = nullptr;</span><br><span class="line">    unsigned int * m_ref_count = nullptr;</span><br><span class="line">    public:</span><br><span class="line">    //默认构造函数</span><br><span class="line">    my_shared_ptr(): m_ptr(nullptr), m_ref_count(nullptr)&#123;&#125;</span><br><span class="line">    my_shared_ptr(T * ptr): m_ptr(ptr), m_ref_count(new unsigned int(1))&#123;&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h5 id="复制语义-Copy-Semantics"><a href="#复制语义-Copy-Semantics" class="headerlink" title="复制语义 (Copy Semantics)"></a>复制语义 (Copy Semantics)</h5><p>接下来我们加上复制构造函数(copy constructor)和复制赋值运算符(copy assignment operator):</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">/* 复制语义 */</span><br><span class="line">//复制构造函数</span><br><span class="line">my_shared_ptr(const my_shared_ptr &amp; obj)</span><br><span class="line">&#123;</span><br><span class="line">    m_ptr = obj.m_ptr;</span><br><span class="line">    m_ref_count = obj.m_ref_count;</span><br><span class="line">    if(m_ref_count!=nullptr)</span><br><span class="line">    &#123;</span><br><span class="line">        (*m_ref_count)++;</span><br><span class="line">    &#125;    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//赋值运算符</span><br><span class="line">my_shared_ptr&amp; operator=(const my_shared_ptr &amp; obj)</span><br><span class="line">&#123;</span><br><span class="line">    if(obj.m_ptr == m_ptr)</span><br><span class="line">    &#123;</span><br><span class="line">        return *this;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //先处理原有的指针和引用计数</span><br><span class="line">    if(m_ref_count!=nullptr)</span><br><span class="line">    &#123;</span><br><span class="line">        (*m_ref_count)--;</span><br><span class="line">        if(*m_ref_count==0)</span><br><span class="line">        &#123;</span><br><span class="line">            delete m_ptr;</span><br><span class="line">            delete m_ref_count;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //再处理赋值</span><br><span class="line">    m_ptr = obj.m_ptr;</span><br><span class="line">    m_ref_count = obj.m_ref_count;</span><br><span class="line"></span><br><span class="line">    if(m_ref_count!=nullptr)</span><br><span class="line">    &#123;</span><br><span class="line">        (*m_ref_count)++;</span><br><span class="line">    &#125;</span><br><span class="line">    return *this;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="移动语义-Move-Semantics"><a href="#移动语义-Move-Semantics" class="headerlink" title="移动语义 (Move Semantics)"></a>移动语义 (Move Semantics)</h5><p>接着我们写移动构造函数(move constructor)和移动赋值运算符(move assignment operator):</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">/*移动语义*/</span><br><span class="line">    //移动构造函数</span><br><span class="line">    my_shared_ptr(my_shared_ptr &amp;&amp; dying_obj): </span><br><span class="line">    m_ptr(nullptr),</span><br><span class="line">    m_ref_count(nullptr)</span><br><span class="line">    &#123;</span><br><span class="line">        //初始化后交换指针和引用计数, 等于清除了原shared_ptr的内容</span><br><span class="line">        dying_obj.swap(*this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //移动赋值运算符</span><br><span class="line">    my_shared_ptr &amp; operator=(my_shared_ptr &amp;&amp; dying_obj)</span><br><span class="line">    &#123;</span><br><span class="line">        //my_shared_ptr(std::move(dying_obj))用移动构造函数创建出一个新的shared_ptr(此时dying_obj的内容被清除了)</span><br><span class="line">        //再和this交换指针和引用计数</span><br><span class="line">        //因为this的内容被交换到了当前的临时创建的my_shared_ptr里，原this指向的引用计数-1</span><br><span class="line">        my_shared_ptr(std::move(dying_obj)).swap(*this);</span><br><span class="line">        return *this;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void swap(my_shared_ptr &amp; other)</span><br><span class="line">    &#123;</span><br><span class="line">        std::swap(m_ptr, other.m_ptr);</span><br><span class="line">        std::swap(m_ref_count, other.m_ref_count);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="一些工具函数"><a href="#一些工具函数" class="headerlink" title="一些工具函数"></a>一些工具函数</h5><p>指针相关的运算符重载以及获取引用计数</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">T* operator-&gt;() const</span><br><span class="line">    &#123;</span><br><span class="line">        return m_ptr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    T&amp; operator*() const</span><br><span class="line">    &#123;</span><br><span class="line">        return *m_ptr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    T* get() const</span><br><span class="line">    &#123;</span><br><span class="line">        return m_ptr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //以及获取引用计数</span><br><span class="line">    unsigned int use_count() const</span><br><span class="line">    &#123;</span><br><span class="line">        return *m_ref_count;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h5><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">//析构函数</span><br><span class="line">    ~my_shared_ptr()</span><br><span class="line">    &#123;</span><br><span class="line">        if(m_ref_count==nullptr)</span><br><span class="line">        &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        (*m_ref_count)--;</span><br><span class="line">        if (*m_ref_count &gt; 0)</span><br><span class="line">        &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (m_ptr != nullptr)</span><br><span class="line">        &#123;</span><br><span class="line">            delete m_ptr;</span><br><span class="line">        &#125;</span><br><span class="line">        delete m_ref_count;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="整合以及测试"><a href="#整合以及测试" class="headerlink" title="整合以及测试"></a>整合以及测试</h5><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;memory&gt;</span><br><span class="line"></span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">template&lt;class T&gt;</span><br><span class="line">class my_shared_ptr</span><br><span class="line">&#123;</span><br><span class="line">    private:</span><br><span class="line">    T * m_ptr = nullptr;</span><br><span class="line">    unsigned int * m_ref_count = nullptr;</span><br><span class="line">    public:</span><br><span class="line">    //默认构造函数</span><br><span class="line">    my_shared_ptr(): m_ptr(nullptr), m_ref_count(nullptr)&#123;&#125;</span><br><span class="line">    my_shared_ptr(T * ptr): m_ptr(ptr), m_ref_count(new unsigned int(1))&#123;&#125;</span><br><span class="line"></span><br><span class="line">    /* 复制语义 */</span><br><span class="line">    //复制构造函数</span><br><span class="line">    my_shared_ptr(const my_shared_ptr &amp; obj)</span><br><span class="line">    &#123;</span><br><span class="line">        m_ptr = obj.m_ptr;</span><br><span class="line">        m_ref_count = obj.m_ref_count;</span><br><span class="line">        if(m_ref_count!=nullptr)</span><br><span class="line">        &#123;</span><br><span class="line">            (*m_ref_count)++;</span><br><span class="line">        &#125;    </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //赋值运算符</span><br><span class="line">    my_shared_ptr&amp; operator=(const my_shared_ptr &amp; obj)</span><br><span class="line">    &#123;</span><br><span class="line">        if(obj.m_ptr == m_ptr)</span><br><span class="line">        &#123;</span><br><span class="line">            return *this;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        //先处理原有的指针和引用计数</span><br><span class="line">        if(m_ref_count!=nullptr)</span><br><span class="line">        &#123;</span><br><span class="line">            (*m_ref_count)--;</span><br><span class="line">            if(*m_ref_count==0)</span><br><span class="line">            &#123;</span><br><span class="line">                delete m_ptr;</span><br><span class="line">                delete m_ref_count;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        //再处理赋值</span><br><span class="line">        m_ptr = obj.m_ptr;</span><br><span class="line">        m_ref_count = obj.m_ref_count;</span><br><span class="line"></span><br><span class="line">        if(m_ref_count!=nullptr)</span><br><span class="line">        &#123;</span><br><span class="line">            (*m_ref_count)++;</span><br><span class="line">        &#125;</span><br><span class="line">        return *this;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /*移动语义*/</span><br><span class="line">    //移动构造函数</span><br><span class="line">    my_shared_ptr(my_shared_ptr &amp;&amp; dying_obj): </span><br><span class="line">    m_ptr(nullptr),</span><br><span class="line">    m_ref_count(nullptr)</span><br><span class="line">    &#123;</span><br><span class="line">        //初始化后交换指针和引用计数, 等于清除了原shared_ptr的内容</span><br><span class="line">        dying_obj.swap(*this);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //移动赋值运算符</span><br><span class="line">    my_shared_ptr &amp; operator=(my_shared_ptr &amp;&amp; dying_obj)</span><br><span class="line">    &#123;</span><br><span class="line">        //my_shared_ptr(std::move(dying_obj))用移动构造函数创建出一个新的shared_ptr(此时dying_obj的内容被清除了)</span><br><span class="line">        //再和this交换指针和引用计数</span><br><span class="line">        //因为this被交换到了当前的临时创建的my_shared_ptr里，this的引用计数-1</span><br><span class="line">        my_shared_ptr(std::move(dying_obj)).swap(*this);</span><br><span class="line">        return *this;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void swap(my_shared_ptr &amp; other)</span><br><span class="line">    &#123;</span><br><span class="line">        std::swap(m_ptr, other.m_ptr);</span><br><span class="line">        std::swap(m_ref_count, other.m_ref_count);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    T* operator-&gt;() const</span><br><span class="line">    &#123;</span><br><span class="line">        return m_ptr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    T&amp; operator*() const</span><br><span class="line">    &#123;</span><br><span class="line">        return m_ptr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    T* get() const</span><br><span class="line">    &#123;</span><br><span class="line">        return m_ptr;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //以及获取引用计数</span><br><span class="line">    unsigned int use_count() const</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        return m_ref_count!=nullptr? *m_ref_count : 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    //析构函数</span><br><span class="line">    ~my_shared_ptr()</span><br><span class="line">    &#123;</span><br><span class="line">        if(m_ref_count==nullptr)</span><br><span class="line">        &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line">        (*m_ref_count)--;</span><br><span class="line">        if (*m_ref_count &gt; 0)</span><br><span class="line">        &#123;</span><br><span class="line">            return;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        if (m_ptr != nullptr)</span><br><span class="line">        &#123;</span><br><span class="line">            delete m_ptr;</span><br><span class="line">        &#125;</span><br><span class="line">        delete m_ref_count;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct A&#123;</span><br><span class="line">    std::string m_str;</span><br><span class="line">    A(std::string s): m_str(s)</span><br><span class="line">    &#123;</span><br><span class="line">        cout&lt;&lt;&quot;ctor:&quot;&lt;&lt;m_str&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ~A()</span><br><span class="line">    &#123;</span><br><span class="line">        cout&lt;&lt;&quot;dtor:&quot;&lt;&lt;m_str&lt;&lt;endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    cout&lt;&lt; &quot;default constructor&quot; &lt;&lt;endl;</span><br><span class="line">    my_shared_ptr&lt;A&gt; empty_ptr;</span><br><span class="line">    cout &lt;&lt; (empty_ptr.use_count()==0) &lt;&lt; endl;</span><br><span class="line">    my_shared_ptr&lt;A&gt; a_ptr(new A(&quot;a&quot;));</span><br><span class="line">    cout &lt;&lt; (a_ptr.use_count()==1) &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    cout&lt;&lt; &quot;copy constructor&quot; &lt;&lt;endl;</span><br><span class="line">    my_shared_ptr&lt;A&gt; copied_ptr(a_ptr);</span><br><span class="line">    cout &lt;&lt; (a_ptr.use_count()==2) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; (copied_ptr.use_count()==2) &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    cout&lt;&lt; &quot;copy assignment&quot; &lt;&lt;endl;</span><br><span class="line">    my_shared_ptr&lt;A&gt; b_ptr(new A(&quot;b&quot;));</span><br><span class="line">    b_ptr = b_ptr;</span><br><span class="line">    cout &lt;&lt; (b_ptr.use_count()==1) &lt;&lt; endl;</span><br><span class="line">    my_shared_ptr&lt;A&gt; b_copy(b_ptr);</span><br><span class="line">    b_ptr = a_ptr;</span><br><span class="line">    cout &lt;&lt; (a_ptr.use_count()==3) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; (b_ptr.use_count()==3) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; (b_copy.use_count()==1) &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    cout&lt;&lt;&quot;move constructor&quot;&lt;&lt;endl;</span><br><span class="line">    my_shared_ptr&lt;A&gt; move_ctor_ptr(std::move(a_ptr));</span><br><span class="line">    cout &lt;&lt; (move_ctor_ptr.use_count()==3) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; (a_ptr.use_count()==0) &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    cout&lt;&lt;&quot;move assignment&quot;&lt;&lt;endl;</span><br><span class="line">    my_shared_ptr&lt;A&gt; b_ptr_observer = b_ptr;</span><br><span class="line">    cout &lt;&lt; (b_ptr.use_count()==4) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; (b_ptr_observer.use_count()==4) &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    my_shared_ptr&lt;A&gt; move_assign_ptr(new A(&quot;c&quot;));</span><br><span class="line">    my_shared_ptr&lt;A&gt; move_assign_ptr_observer=move_assign_ptr;</span><br><span class="line">    cout &lt;&lt; (move_assign_ptr.use_count()==2) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; (move_assign_ptr_observer.use_count()==2) &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    move_assign_ptr = std::move(b_ptr);</span><br><span class="line">    cout &lt;&lt; (b_ptr.use_count()==0) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; (move_assign_ptr.use_count()==b_ptr_observer.use_count()) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; (b_ptr_observer.use_count()==4) &lt;&lt; endl;</span><br><span class="line">    cout &lt;&lt; (move_assign_ptr_observer.use_count()==1) &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/pay-code.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <a class="post-nav-item-left" href="/2025/03/12/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E2%80%94weak_ptr/">
+      <div class="text-align">
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+        <span class="text-small">上一篇</span>
+      </div>
+      <div>c++学习笔记——智能指针—weak_ptr</div>
+    </a>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2025/03/12/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E2%80%94unique_ptr/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      c++学习笔记——智能指针—unique_ptr
+    </a>
+  
+</div>
+
+    
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/Felt98">Felt's Github</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-zh.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/yi-ming-81-1">Felt</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-email.svg" />
+            <a class="foot-link" href="mailto:haoqingqin@gmail.com">haoqingqin@gmail.com</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="http://example.com">Felt's blog</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  
+
+  </body>
+</html>
