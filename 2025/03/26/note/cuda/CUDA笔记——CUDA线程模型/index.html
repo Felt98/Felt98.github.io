@@ -185,6 +185,7 @@
 </ul>
 <h3 id="线程组织结构"><a href="#线程组织结构" class="headerlink" title="线程组织结构"></a>线程组织结构</h3><h3 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a>Thread</h3><p>GPU处理数据的基本单位<br>	- <strong>一个sp执行一个thread</strong><br>	- thread ID 是三维的，即通过（x,y,z)在block中定位<br>	- thread总数&#x3D;block总数×每个block的thread数<br>	- 每个线程都有自己的本地内存，有自己的数据空间(寄存器)；<br>		- 线程的本地内存通常是使用的全局内存，因此速度非常慢<br>		- 当线程发生<strong>寄存器溢出</strong>时才会使用本地内存<br>	- 同一个block中的线程都可以读写其blcok的共享内存shared memory</p>
 
+
 <h3 id="Block"><a href="#Block" class="headerlink" title="Block"></a><strong>Block</strong></h3><p>多个thread组成一个block，一个block最多拥有1024个线程<br>	- 同一个block中的threads可以同步，也可以共享数据<br>	- 不同block中的threads是不可以同步的，除非使用Thread Block Clusters（Hopper 架构）<br>	- <strong>同一个block中的所有线程一定在同一個SM中执行</strong>（即block不能切换到其他SM执行）<br>		- 这也是block中的线程数量受限制的原因，不能超过单个SM的负载<br>	- <strong>每个SM可以同时执行多个block</strong>，通常上限是16<br>		- 在同一个 SM 上，多个 block 的 warps 可能会交替执行。因此不同block之间是不同步的，它们之间执行也是无序的（对应到算法设计block之间也应该是无序的）<br>		- 当一个block执行完成后才会被释放<br>	- block ID和维度也是三维的<br>		- block三维的乘积&#x3D;该block的thread数<br>		- block的dim3范围：<strong>(1024,1024,64)</strong><br>	- <strong>每个block最多分配1024个thread</strong> （CUDA 2.0）<br>		- 即<strong>block的dim中x × y × z 三者的乘积不能超过1024</strong><br>		- block的线程数最好是32的倍数（不满32的也会被塞入无效线程强行凑够32个）</p>
 <h3 id="Grid"><a href="#Grid" class="headerlink" title="Grid"></a>Grid</h3><p>grid由多个block组成，可以拥有<strong>数万到百万</strong>的block数量<br>	- <strong>一个grid执行一个kernel函数</strong>（可以视作kernel&#x3D;grid）<br>		- 一个grid里面的所有thread均执行同一个kernel函数<br>		- GPU可以同时执行多个grid（即多个kernel）<br>	- grid的dim也是三维的，表示grid里面block的范围，grid三维的乘积&#x3D;block总数<br>		- grid的dim3范围：<strong>(2^31-1, 65535,65535)</strong><br>		- grid里面的所有block维度都一样，即线程数是一样的<br>	- 每个grid最多分配 65535（CUDA3前） 或 2^31-1 （CUDA3后）个block<br>		- 因此grid的dim中xyz乘积不能超过最大block数</p>
 <p>Grid、Block、Thread示意图：</p>
@@ -201,7 +202,11 @@
 <p>硬件与软件层的映射图：</p>
 <img src="/2025/03/26/note/cuda/CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94CUDA%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/img-CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94CUDA%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B-3.png" class="">
 
-<h4 id="自动可拓展性"><a href="#自动可拓展性" class="headerlink" title="自动可拓展性"></a><strong>自动可拓展性</strong></h4><p>block之间执行的无序性确保了自动可拓展性Automatic Scalability，如下图，同一个CUDA程序，不同的GPU执行时会根据具体的SM数分配不同的Block组数<br><img src="https://img-blog.csdnimg.cn/6ef554b3718e4a91ab8199c9aecc3486.png" alt="【笔记】CUDA （一） - 介绍、架构、编程模型基础_cuda库架构图-CSDN博客"></p>
+<h4 id="自动可拓展性"><a href="#自动可拓展性" class="headerlink" title="自动可拓展性"></a><strong>自动可拓展性</strong></h4><p>block之间执行的无序性确保了自动可拓展性Automatic Scalability，如下图，同一个CUDA程序，不同的GPU执行时会根据具体的SM数分配不同的Block组数</p>
+<img src="/2025/03/26/note/cuda/CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94CUDA%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/img-CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94CUDA%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B-9.png" class="" title="|550">
+
+
+
 <h3 id="GPU的Occupancy限制"><a href="#GPU的Occupancy限制" class="headerlink" title="GPU的Occupancy限制"></a>GPU的Occupancy限制</h3><p>GPU 的 <strong>Occupancy（占用率）</strong> 指的是 <strong>一个 SM上正在执行的 warp 数量与SM可支持的最大 warp 数量的比值</strong>。它衡量的是 GPU 计算资源的利用率。<br><em>例如在Ampere架构上，支持的最大 Warp 数量为 64</em></p>
 <ul>
 <li><p><strong>Occupancy计算公式</strong>：</p>
