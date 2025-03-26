@@ -159,7 +159,7 @@
       
         <aside class="toc-outer">
           <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#GPU%E7%BB%93%E6%9E%84"><span class="post-toc-text">GPU结构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#GPU%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="post-toc-text">GPU工作流</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#GPU%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84"><span class="post-toc-text">GPU组成结构</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#GPU%E5%92%8CCPU%E5%9C%A8%E7%BB%93%E6%9E%84%E4%B8%8A%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="post-toc-text">GPU和CPU在结构上的区别</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SIMD%E4%B8%8ESIMT"><span class="post-toc-text">SIMD与SIMT</span></a></li></ol></li></ol></li></ol>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#GPU%E7%BB%93%E6%9E%84"><span class="post-toc-text">GPU结构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#GPU%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="post-toc-text">GPU工作流</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#GPU%E7%BB%84%E6%88%90%E7%BB%93%E6%9E%84"><span class="post-toc-text">GPU组成结构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SM"><span class="post-toc-text">SM</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#SM%E5%86%85%E9%83%A8%E7%BB%93%E6%9E%84"><span class="post-toc-text">SM内部结构</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#GPU%E5%92%8CCPU%E5%9C%A8%E7%BB%93%E6%9E%84%E4%B8%8A%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="post-toc-text">GPU和CPU在结构上的区别</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#SIMD%E4%B8%8ESIMT"><span class="post-toc-text">SIMD与SIMT</span></a></li></ol></li></ol>
           <a href="#" class="toc-top">回到顶部</a>
         </aside>
       
@@ -170,9 +170,9 @@
           </div>
         
         <h2 id="GPU结构"><a href="#GPU结构" class="headerlink" title="GPU结构"></a>GPU结构</h2><p>GPU全名为Graphics Processing Unit，又称视觉处理器、图形显示卡，是一种专门用来执行图形处理和并行计算任务的<strong>芯片</strong>。<br>GPU负责渲染出2D、3D、VR效果，主要专注于计算机图形图像领域。后来人们发现，GPU非常适合并行计算，可以加速现代科学计算，GPU也因此不再局限于游戏和视频领域。</p>
-<h4 id="GPU工作流"><a href="#GPU工作流" class="headerlink" title="GPU工作流"></a>GPU工作流</h4><p>CPU 主要负责从主存（Main Memory）中读取和写入数据，并通过总线（Bus）与 GPU 进行通信。相比之下，GPU 不仅拥有大量专门用于并行计算的核心，还配备了一块独立的存储区域，称为显存（VRAM）。</p>
+<h3 id="GPU工作流"><a href="#GPU工作流" class="headerlink" title="GPU工作流"></a>GPU工作流</h3><p>CPU 主要负责从主存（Main Memory）中读取和写入数据，并通过总线（Bus）与 GPU 进行通信。相比之下，GPU 不仅拥有大量专门用于并行计算的核心，还配备了一块独立的存储区域，称为显存（VRAM）。</p>
 <p>在 GPU 执行计算任务时，它的计算核心无法直接访问主存中的数据，而是必须通过显存进行数据读写。因此，在编写 GPU 相关的代码时，程序员需要显式地管理数据传输，指定哪些数据需要在主存与显存之间进行拷贝，以确保计算任务能够顺利执行。<br><img src="https://www.lulaoshi.info/assets/cpu-and-gpu-392408bf.png" alt="CPU与GPU"></p>
-<h4 id="GPU组成结构"><a href="#GPU组成结构" class="headerlink" title="GPU组成结构"></a>GPU组成结构</h4><h5 id="SM"><a href="#SM" class="headerlink" title="SM"></a>SM</h5><p>在英伟达的设计里，多个核心组成一个Streaming Multiprocessor（<strong>SM</strong>）</p>
+<h3 id="GPU组成结构"><a href="#GPU组成结构" class="headerlink" title="GPU组成结构"></a>GPU组成结构</h3><h4 id="SM"><a href="#SM" class="headerlink" title="SM"></a>SM</h4><p>在英伟达的设计里，多个核心组成一个Streaming Multiprocessor（<strong>SM</strong>）</p>
 <ul>
 <li>每一个SM有左右两个SM Processing Block（SMP），<strong>每个SM有多个SP组成</strong><ul>
 <li>每个SM可以执行多个block，block一旦分配给SM就会常驻在SM中直到执行结束</li>
@@ -182,7 +182,7 @@
 </ul>
 <img src="/2024/05/06/note/cuda/CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94GPU%E7%BB%93%E6%9E%84/img-GPU%E5%92%8CCUDA%E7%AE%80%E4%BB%8B-2.png" class="">
 <p>以NVIDIA Tesla P100为例，包含60个SM<br><img src="https://cdn.arstechnica.net/wp-content/uploads/sites/3/2016/04/gp100_block_diagram-1.png" alt="Nvidia unveils first Pascal graphics card, the monstrous Tesla P100 ..."></p>
-<h5 id="SM内部结构"><a href="#SM内部结构" class="headerlink" title="SM内部结构"></a>SM内部结构</h5><p>SM包括SP、各种内存、线程束调度器（wrap scheduler）、指令分发器（dispatch unit）等，有些架构的SM还有tensor core</p>
+<h4 id="SM内部结构"><a href="#SM内部结构" class="headerlink" title="SM内部结构"></a>SM内部结构</h4><p>SM包括SP、各种内存、线程束调度器（wrap scheduler）、指令分发器（dispatch unit）等，有些架构的SM还有tensor core</p>
 <ol>
 <li>SP（Streaming Processor）<ul>
 <li><strong>GPU最基本处理单元，又称CUDA core，相当於一个简易的CPU</strong>，一个sp执行一个thread，可以类比办公桌 </li>
@@ -196,7 +196,7 @@
 </li>
 <li>线程本地内存：片外，每个线程都有自己的本地私有内存，通常用来存储寄存器溢出的数据。GPU通常会使用L1 L2来对本地内存进行优化</li>
 </ol>
-<h4 id="GPU和CPU在结构上的区别"><a href="#GPU和CPU在结构上的区别" class="headerlink" title="GPU和CPU在结构上的区别"></a>GPU和CPU在结构上的区别</h4><p>与CPU的结构对比图：<br><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/_images/gpu-devotes-more-transistors-to-data-processing.png"><img src="https://docs.nvidia.com/cuda/cuda-c-programming-guide/_images/gpu-devotes-more-transistors-to-data-processing.png" alt="The GPU Devotes More Transistors to Data Processing|600"></a></p>
+<h3 id="GPU和CPU在结构上的区别"><a href="#GPU和CPU在结构上的区别" class="headerlink" title="GPU和CPU在结构上的区别"></a>GPU和CPU在结构上的区别</h3><p>与CPU的结构对比图：<br><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/_images/gpu-devotes-more-transistors-to-data-processing.png"><img src="https://docs.nvidia.com/cuda/cuda-c-programming-guide/_images/gpu-devotes-more-transistors-to-data-processing.png" alt="The GPU Devotes More Transistors to Data Processing|600"></a></p>
 <ol>
 <li><strong>核心数量</strong>：</li>
 </ol>
@@ -244,7 +244,7 @@
 <td>依赖显存（VRAM），但延迟相对较高</td>
 </tr>
 </tbody></table>
-<h4 id="SIMD与SIMT"><a href="#SIMD与SIMT" class="headerlink" title="SIMD与SIMT"></a>SIMD与SIMT</h4><p>SIMD（<strong>Single Instruction, Multiple Data</strong>）和 SIMT（<strong>Single Instruction, Multiple Threads</strong>）是 CPU 和 GPU 在并行计算设计上的一个重要区别。</p>
+<h3 id="SIMD与SIMT"><a href="#SIMD与SIMT" class="headerlink" title="SIMD与SIMT"></a>SIMD与SIMT</h3><p>SIMD（<strong>Single Instruction, Multiple Data</strong>）和 SIMT（<strong>Single Instruction, Multiple Threads</strong>）是 CPU 和 GPU 在并行计算设计上的一个重要区别。</p>
 <ul>
 <li>SIMD：单指令多数据，由一个指令并行执行多个数据。例如CPU核心中的多个处理器单元执行相同的指令，但是每个单元处理不同的数据。是数据级的并行。典型的 SIMD 指令集有 Intel SSE、AVX、AVX-512</li>
 <li>SIMT：单指令多线程，多个线程执行相同的指令，每个线程处理不同的数据。例如GPU中每个SM有多个线程来执行相同的指令，这些线程可以独立控制自己的数据流和状态，是线程级的并行</li>

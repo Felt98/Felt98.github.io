@@ -159,7 +159,7 @@
       
         <aside class="toc-outer">
           <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98"><span class="post-toc-text">全局内存</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="post-toc-text">共享内存</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8"><span class="post-toc-text">寄存器</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%BC%93%E5%AD%98"><span class="post-toc-text">缓存</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%B8%B8%E9%87%8F%E5%86%85%E5%AD%98"><span class="post-toc-text">常量内存</span></a></li></ol>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98"><span class="post-toc-text">全局内存</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="post-toc-text">共享内存</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%AF%84%E5%AD%98%E5%99%A8"><span class="post-toc-text">寄存器</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%BC%93%E5%AD%98"><span class="post-toc-text">缓存</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%B8%B8%E9%87%8F%E5%86%85%E5%AD%98"><span class="post-toc-text">常量内存</span></a></li></ol>
           <a href="#" class="toc-top">回到顶部</a>
         </aside>
       
@@ -170,7 +170,7 @@
           </div>
         
         <p>CUDA内存模型总览：<br><img src="https://img-blog.csdnimg.cn/direct/2c04332abb6a48e7b6805c420d64a2a1.png" alt="CUDA内存模型|400"></p>
-<h4 id="全局内存"><a href="#全局内存" class="headerlink" title="全局内存"></a>全局内存</h4><p>容量大，延迟高，所有线程共享<br>分配的device端内存默认都是使用的全局内存</p>
+<h3 id="全局内存"><a href="#全局内存" class="headerlink" title="全局内存"></a>全局内存</h3><p>容量大，延迟高，所有线程共享<br>分配的device端内存默认都是使用的全局内存</p>
 <ul>
 <li>静态分配：_ _device_ _声明，cudaMemcpyToSymbol分配</li>
 </ul>
@@ -189,18 +189,18 @@
 <blockquote>
 <p>访问全局内存的次序： L1-&gt; L2-&gt; 全局内存<br><strong>L1 cache</strong>：cache miss时最小访问单元是 4 sector（原则上）。<br><strong>L2 cache</strong>：cache miss时最小访问单元是1 sector。</p>
 </blockquote>
-<h4 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h4><p>位于<strong>片内</strong>，靠近每个sm处理器内核的轻量级低延迟内存（类似于L1缓存）<br>每个SM都有一个共享内存，被执行的block划分，GPU通常会限制单个block使用的共享内存大小<br>	- 使用方法：使用__shared__声明，详情请看共享内存一章</p>
-<h4 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h4><p>位于片内。寄存器直接集成在GPU核心中，数据读写几乎没有延迟，访问速度是所有GPU内存中最快的。</p>
+<h3 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h3><p>位于<strong>片内</strong>，靠近每个sm处理器内核的轻量级低延迟内存（类似于L1缓存）<br>每个SM都有一个共享内存，被执行的block划分，GPU通常会限制单个block使用的共享内存大小<br>	- 使用方法：使用__shared__声明，详情请看共享内存一章</p>
+<h3 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h3><p>位于片内。寄存器直接集成在GPU核心中，数据读写几乎没有延迟，访问速度是所有GPU内存中最快的。</p>
 <ul>
 <li>每个线程拥有自己的寄存器空间，不同线程之间的寄存器是私有的，互不共享。</li>
 <li>如果线程使用的寄存器过多，可能会导致寄存器溢出，从而导致性能下降。GPU通常会将超出寄存器的变量存储到本地内存（片外）中，但本地内存访问速度较慢。</li>
 </ul>
-<h4 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h4><p>GPU有两级<strong>L1缓存</strong>和<strong>L2缓存</strong></p>
+<h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>GPU有两级<strong>L1缓存</strong>和<strong>L2缓存</strong></p>
 <p><strong>1. L1缓存</strong><br>• <strong>位置</strong>：L1缓存位于片内，每个<strong>SM</strong>的本地，接近于SP。<br>• <strong>功能</strong>：L1缓存存储的是频繁访问的局部数据、寄存器内容以及常用的全局内存数据。<br>• <strong>容量</strong>：通常每个SM的L1缓存容量较小，在16KB到64KB之间。<br>• <strong>专用性</strong>：L1缓存主要服务于本地线程和线程块，减少跨线程块或跨SM的共享负载。</p>
 <p><strong>2. L2缓存</strong></p>
 <p>• <strong>位置</strong>：L2缓存位于GPU的全局层次，跨越整个GPU的多个SM。<br>• <strong>功能</strong>：L2缓存用于存储较大范围的共享数据，帮助多个SM之间的数据交换。它通常缓存从全局内存加载的数据，以减少全局内存访问延迟。<br>• <strong>较大容量</strong>：L2缓存的容量通常比L1缓存大，可能达到数百KB到几MB。<br>• <strong>共享性</strong>：L2缓存用于多个SM之间的数据共享，帮助减少全局内存访问的瓶颈。<br>• <strong>较高的访问延迟</strong>：虽然L2缓存比全局内存快，但相对于L1缓存来说，访问延迟更高。</p>
 <p><strong>合并访存</strong>：缓存会尽可能合并warp的访存请求，减少对内存的访问次数</p>
-<h4 id="常量内存"><a href="#常量内存" class="headerlink" title="常量内存"></a>常量内存</h4><p>位于<strong>片外</strong>，设备端只读，生命周期为整个应用。<br>一般为 64KB，因此适合存储小型、频繁访问的<strong>常量数据</strong>。<br>	- 当所有线程访问同一地址时，常量内存的访问效率最高（广播机制）。<br>	- 因为是只读，不存在缓存一致性的问题<br>	- 使用方法,_ _constant_ _声明，cudaMemcpyToSymbol从主机拷贝数据，在kernel中直接使用，无需手动释放</p>
+<h3 id="常量内存"><a href="#常量内存" class="headerlink" title="常量内存"></a>常量内存</h3><p>位于<strong>片外</strong>，设备端只读，生命周期为整个应用。<br>一般为 64KB，因此适合存储小型、频繁访问的<strong>常量数据</strong>。<br>	- 当所有线程访问同一地址时，常量内存的访问效率最高（广播机制）。<br>	- 因为是只读，不存在缓存一致性的问题<br>	- 使用方法,_ _constant_ _声明，cudaMemcpyToSymbol从主机拷贝数据，在kernel中直接使用，无需手动释放</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">__constant__ <span class="type">float</span> constData[<span class="number">256</span>];</span><br><span class="line"><span class="type">int</span> main（）&#123;</span><br><span class="line">    cudaMemcpyToSymbol(constData, hostData, <span class="keyword">sizeof</span>(<span class="type">float</span>) * <span class="number">256</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>延迟：全局内存&gt;常量内存&gt;共享内存&gt;寄存器</p>

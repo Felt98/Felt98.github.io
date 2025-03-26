@@ -159,7 +159,7 @@
       
         <aside class="toc-outer">
           <div class="toc-title">目录</div>
-          <ol class="post-toc"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%8F%98%E9%87%8F"><span class="post-toc-text">变量</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="post-toc-text">常用数据类型</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%BA%A2%E5%87%BA"><span class="post-toc-text">溢出</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="post-toc-text">浮点数</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="post-toc-text">类型转换</span></a></li></ol>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%8F%98%E9%87%8F"><span class="post-toc-text">变量</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E5%B8%B8%E7%94%A8%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="post-toc-text">常用数据类型</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%BA%A2%E5%87%BA"><span class="post-toc-text">溢出</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%B5%AE%E7%82%B9%E6%95%B0"><span class="post-toc-text">浮点数</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="post-toc-text">类型转换</span></a></li></ol>
           <a href="#" class="toc-top">回到顶部</a>
         </aside>
       
@@ -169,7 +169,7 @@
             
           </div>
         
-        <h4 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h4><p>变量：是可用于存储信息的内存段的名称<br>	变量定义在操作系统中的细节：<br>	- 定义变量时，系统将为该变量留出一段内存。内存被组织成称为<strong>内存地址</strong>的顺序单元。与使用街道地址在街道上查找给定房屋的方式类似，唯一的内存地址允许我们在特定位置查找和访问内存内容。<br>	- 当您为变量对象指定值时，编译器和 CPU 会负责将值编码为该数据类型的适当位序列，然后将其存储在内存中（请记住：<strong>内存只能存储位</strong>）。例如，如果为整数对象分配值 <code>65</code>，则该值将转换为位序列 <code>0100 0001</code> 并存储在分配给该对象的内存中。相反，当对对象进行计算以生成值时，该位序列将重构回原始值。这意味着 <code>0100 0001</code> 将转换回值 <code>65</code>。<br>	- 只要对象存在就会一直占有内存</p>
+        <h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><p>变量：是可用于存储信息的内存段的名称<br>	变量定义在操作系统中的细节：<br>	- 定义变量时，系统将为该变量留出一段内存。内存被组织成称为<strong>内存地址</strong>的顺序单元。与使用街道地址在街道上查找给定房屋的方式类似，唯一的内存地址允许我们在特定位置查找和访问内存内容。<br>	- 当您为变量对象指定值时，编译器和 CPU 会负责将值编码为该数据类型的适当位序列，然后将其存储在内存中（请记住：<strong>内存只能存储位</strong>）。例如，如果为整数对象分配值 <code>65</code>，则该值将转换为位序列 <code>0100 0001</code> 并存储在分配给该对象的内存中。相反，当对对象进行计算以生成值时，该位序列将重构回原始值。这意味着 <code>0100 0001</code> 将转换回值 <code>65</code>。<br>	- 只要对象存在就会一直占有内存</p>
 <blockquote>
 <p>因为内存地址的数量有限，在现代计算机体系结构中，每个位都没有自己唯一的内存地址。而是选择将<strong>每个内存地址保存 1 字节的数据</strong>（<strong>内存是字节可寻址的</strong>），也就是说，<strong>一个数据变量的大小至少是1字节</strong><br>- <strong>字节Byte</strong>是作为内存单元进行操作的一组位。现代标准是<strong>字节由 8 个顺序位bit</strong>组成。</p>
 </blockquote>
@@ -177,7 +177,7 @@
 <img src="/2025/01/22/note/c++%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%8F%98%E9%87%8F%E4%B8%8E%E5%B8%B8%E7%94%A8%E7%B1%BB%E5%9E%8B/img-%E5%8F%98%E9%87%8F%E4%B8%8E%E5%B8%B8%E7%94%A8%E7%B1%BB%E5%9E%8B-4.png" class="" title="|300">
 
 
-<h4 id="常用数据类型"><a href="#常用数据类型" class="headerlink" title="常用数据类型"></a>常用数据类型</h4><p>C++的<strong>基本数据类型</strong>如下表，务必将下面的表背熟并会推范围：</p>
+<h3 id="常用数据类型"><a href="#常用数据类型" class="headerlink" title="常用数据类型"></a>常用数据类型</h3><p>C++的<strong>基本数据类型</strong>如下表，务必将下面的表背熟并会推范围：</p>
 <table>
 <thead>
 <tr>
@@ -278,7 +278,7 @@
 <p><strong>整数除法</strong>:<br> 当一个整数不能整除另一个整数时，将会<strong>舍弃掉小数部分</strong>，这称为向下取整<br> 例如：8 &#x2F; 5 产生值 1.6。小数部分 （0.6） 被删除，1 的结果保持不变。</p>
 </blockquote>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">    std::cout &lt;&lt; <span class="number">8</span> / <span class="number">5</span> &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">输出：<span class="number">1</span></span><br></pre></td></tr></table></figure>
-<h4 id="溢出"><a href="#溢出" class="headerlink" title="溢出"></a>溢出</h4><p>假如我们将超出范围的数分配给了一个基本类型对象，就会发生<strong>溢出</strong>。溢出会导致信息丢失<br>	例如下面的程序，x将会溢出</p>
+<h3 id="溢出"><a href="#溢出" class="headerlink" title="溢出"></a>溢出</h3><p>假如我们将超出范围的数分配给了一个基本类型对象，就会发生<strong>溢出</strong>。溢出会导致信息丢失<br>	例如下面的程序，x将会溢出</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">    <span class="type">int</span> x &#123; <span class="number">2&#x27;147&#x27;483&#x27;647</span> &#125;; <span class="comment">// the maximum value of a 4-byte signed integer</span></span><br><span class="line">    std::cout &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    x = x + <span class="number">1</span>; <span class="comment">// integer overflow, undefined behavior</span></span><br><span class="line">    std::cout &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">	<span class="number">2147483647</span></span><br><span class="line">	<span class="number">-2147483648</span></span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>冷知识：在c++标准中，有符号整数溢出是未定义的行为，而无符号整数溢出是明确定义的行为（也就是说C++ 标准明确表示无符号整数溢出不是溢出）</p>
@@ -302,7 +302,7 @@
 <blockquote>
 <p>在 C++ 中，仍有一些情况下可以使用无符号数字。<br>例如在处理位操作时，无符号数字是首选。<br>当需要明确定义的环绕行为时，它们也很有用（在某些算法中很有用，如加密和随机数生成）。<br>在某些情况下，使用无符号数字仍然是不可避免的，例如vector等容器类的下标索引类型size_t是无符号整型</p>
 </blockquote>
-<h4 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h4><p>在现代体系结构中，浮点类型通常使用 IEEE 754 标准中定义的浮点格式之一实现。<br>浮点数可用于存储非常大或非常小的数字，包括那些带有小数分量的数字。</p>
+<h3 id="浮点数"><a href="#浮点数" class="headerlink" title="浮点数"></a>浮点数</h3><p>在现代体系结构中，浮点类型通常使用 IEEE 754 标准中定义的浮点格式之一实现。<br>浮点数可用于存储非常大或非常小的数字，包括那些带有小数分量的数字。</p>
 <blockquote>
 <p>浮点数的二进制实现参考：<a target="_blank" rel="noopener" href="https://float.exposed/0x3dcccccd">https://float.exposed/0x3dcccccd</a></p>
 </blockquote>
@@ -329,7 +329,7 @@
 <li>对于小于 1 的数字，指数可以为负数。数字 <code>5e-2</code> 相当于 <code>5 * 10⁻²</code>，即 <code>5 / 10²</code>，即 <code>0.05</code>。</li>
 </ul>
 </blockquote>
-<h4 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h4><p>在大多数情况下，C++ 将允许我们将一种基本类型的值转换为另一种基本类型的值。将值从一种类型转换为另一种类型的过程称为<strong>类型转换</strong><br><strong>隐式类型转换</strong>：编译器不经过询问进行的类型转换<br>	例如，下面print（y) 中 int 变量 <code>y</code> 持有的值5将隐式转换为 double 值 <code>5.0</code>，然后复制到参数 <code>x</code> 中</p>
+<h3 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h3><p>在大多数情况下，C++ 将允许我们将一种基本类型的值转换为另一种基本类型的值。将值从一种类型转换为另一种类型的过程称为<strong>类型转换</strong><br><strong>隐式类型转换</strong>：编译器不经过询问进行的类型转换<br>	例如，下面print（y) 中 int 变量 <code>y</code> 持有的值5将隐式转换为 double 值 <code>5.0</code>，然后复制到参数 <code>x</code> 中</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(<span class="type">double</span> x)</span> <span class="comment">// print takes a double parameter</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	std::cout &lt;&lt; x &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="type">int</span> y &#123; <span class="number">5</span> &#125;;</span><br><span class="line">	<span class="built_in">print</span>(y); <span class="comment">// y is of type int</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>将浮点值转换为整数值会导致删除任何小数分量。<br>某些类型转换始终可以安全进行（例如 <code>int</code> 到 <code>double</code>），而其他类型可能会导致在转换过程中更改值（例如 <code>double</code> 到 <code>int</code>）。不安全的隐式转换通常会生成编译器警告，或者（在大括号初始化的情况下）生成错误。</p>
