@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <title>
+      
+        基于CUDA实现彩色圆形渲染器 | Felt's blog
+      
+    </title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    
+      <link rel="apple-touch-icon"
+            sizes="180x180"
+            href="/images/apple-touch-icon.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/images/favicon-32x32.png" />
+    
+    
+      <link rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/images/favicon-16x16.png" />
+    
+    
+      <link rel="mask-icon"
+            href="/images/logo.svg"
+            color="" />
+    
+    
+    
+      
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/normal.ttf);
+        font-weight: normal;
+    }
+  </style>
+
+  <style>
+    @font-face {
+        font-family:sourceHanSerif;
+        src: url(/font/bold.ttf);
+        font-weight: bold;
+    }
+  </style>
+
+
+    
+    <link rel="stylesheet"
+          type="text/css"
+          href='/css/layout.css' />
+    
+    
+  <link rel="stylesheet" type="text/css" href="/css/post.css"/>
+  
+
+  <meta name="generator" content="Hexo 7.3.0"></head>
+  <body>
+    
+      <div id="search-mask" style="display:none">
+  <div class="search-main" id="search-main">
+    <div class="search__head">
+      <div class="search-form">
+        <svg t="1706347533072"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="7828"
+             width="20"
+             height="20">
+          <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+          </path>
+        </svg>
+        <input id="search-input" placeholder="搜索文章">
+        <svg t="1706361500528"
+             id="search-clear"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             version="1.1"
+             xmlns="http://www.w3.org/2000/svg"
+             p-id="4351"
+             width="20"
+             height="20">
+          <path d="M512 562.688l-264.2944 264.2944-50.688-50.688L461.312 512 197.0176 247.7056l50.688-50.688L512 461.312l264.2944-264.2944 50.688 50.688L562.688 512l264.2944 264.2944-50.688 50.688L512 562.688z" fill="#00" p-id="4352">
+          </path>
+        </svg>
+      </div>
+    </div>
+    <div class="search__body" id="search-result"></div>
+    <div class="search__foot"></div>
+  </div>
+</div>
+
+    
+    
+    <div class=head>
+      <div class="nav">
+        <a href='/' class="nav-logo">
+          <img alt="logo" height="60px" width="60px" src="/images/logo.svg" />
+        </a>
+        <input id="navBtn" type="checkbox" />
+        <div class="nav-right">
+          
+            <div class="search-outer">
+  <div class="search" id="search-btn">
+    <svg t="1706347533072"
+         class="icon"
+         viewBox="0 0 1024 1024"
+         version="1.1"
+         xmlns="http://www.w3.org/2000/svg"
+         p-id="7828"
+         width="20"
+         height="20">
+      <path d="M685.6 660.336l155.152 155.168a16 16 0 0 1 0 22.624l-11.312 11.328a16 16 0 0 1-22.624 0l-158.528-158.544a289.792 289.792 0 0 1-165.152 51.36C322.336 742.256 192 611.904 192 451.12 192 290.336 322.336 160 483.136 160c160.784 0 291.12 130.336 291.12 291.136 0 82.112-33.984 156.272-88.672 209.2z m-202.464 33.92c134.272 0 243.12-108.848 243.12-243.12C726.256 316.848 617.408 208 483.136 208 348.848 208 240 316.848 240 451.136c0 134.272 108.848 243.12 243.136 243.12z" fill="#000000" p-id="7829">
+      </path>
+    </svg>
+    <span>搜索</span>
+    <span class="search-shortcut-key">Ctrl K</span>
+  </div>
+</div>
+
+          
+          <div class="nav-menu">
+            
+              
+                <a class="nav-menu-item" href="/note">学习笔记</a>
+              
+                <a class="nav-menu-item" href="/project">小仓库</a>
+              
+            
+            
+          </div>
+        </div>
+        <label class="nav-btn" for="navBtn"></label>
+      </div>
+    </div>
+    <div class="body">
+      
+  <article class="post-content">
+    <div class="post-inner--toc">
+      <div class="post-content__head">
+        <div class="post-title">基于CUDA实现彩色圆形渲染器</div>
+        <div class="post-info">
+          
+  <a href="/tags/cuda/" class="post-tag">#cuda</a>
+
+
+          <span class="post-date">2025-03-27</span>
+        </div>
+      </div>
+      
+        <aside class="toc-outer">
+          <div class="toc-title">目录</div>
+          <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="post-toc-text">概述</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%B8%B2%E6%9F%93%E5%99%A8%E7%B1%BB"><span class="post-toc-text">渲染器类</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%B8%B2%E6%9F%93%E5%99%A8%E7%B1%BB%E8%AE%BE%E8%AE%A1"><span class="post-toc-text">渲染器类设计</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%B8%B2%E6%9F%93%E5%99%A8%E7%B1%BB%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="post-toc-text">渲染器类的使用</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#%E6%B8%B2%E6%9F%93%E6%B5%81%E7%A8%8B%E5%AE%9E%E7%8E%B0"><span class="post-toc-text">渲染流程实现</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%95%B0%E6%8D%AE%E5%87%86%E5%A4%87setup"><span class="post-toc-text">数据准备setup</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%B8%85%E7%A9%BA%E5%9B%BE%E5%83%8F-clearImage"><span class="post-toc-text">清空图像 clearImage</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E6%9B%B4%E6%96%B0%E5%99%A8-advanceAnimation"><span class="post-toc-text">更新器 advanceAnimation</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E4%B8%B2%E8%A1%8C%E6%B8%B2%E6%9F%93%E7%9A%84render%E5%AE%9E%E7%8E%B0"><span class="post-toc-text">串行渲染的render实现</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#%E5%B9%B6%E8%A1%8C%E6%B8%B2%E6%9F%93%E7%9A%84render%E5%AE%9E%E7%8E%B0"><span class="post-toc-text">并行渲染的render实现</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#%E6%80%BB%E7%BB%93"><span class="post-toc-text">总结</span></a></li></ol>
+          <a href="#" class="toc-top">回到顶部</a>
+        </aside>
+      
+      <div class="post-content__body">
+        
+          <div class="post-gallery">
+            
+          </div>
+        
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本文根据 CMU15418-Assignment2，基于CUDA实现了一个简单的彩色圆形渲染器，能够加速彩色圆在空白图像上的渲染。<br>目前可以渲染 bouncingballs, fireworks, hypnosis, snow等四幅动画图像。</p>
+<p>项目地址：<a target="_blank" rel="noopener" href="https://github.com/Felt98/Simple-Parallel-Color-Circular-Renderer">https://github.com/Felt98/Simple-Parallel-Color-Circular-Renderer</a></p>
+<p><strong>运行环境</strong>：</p>
+<ul>
+<li>操作系统：Ubuntu 22.04.3 LTS</li>
+<li>显卡：NVIDIA A100-SXM4-80GB</li>
+<li>CUDA 版本：11.8</li>
+</ul>
+<h2 id="渲染器类"><a href="#渲染器类" class="headerlink" title="渲染器类"></a>渲染器类</h2><h3 id="渲染器类设计"><a href="#渲染器类设计" class="headerlink" title="渲染器类设计"></a>渲染器类设计</h3><p>cuda圆形渲染器类设计如下：</p>
+<ul>
+<li>成员变量包括一组圆的参数输入，如数量、相对位置、速度、半径、rgba颜色等；</li>
+<li>成员函数主要是对图像进行设置、圆位置更新、像素点颜色渲染等。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CudaRenderer</span> :</span> public CircleRenderer</span><br><span class="line">&#123;</span><br><span class="line">  private:</span><br><span class="line">    Image *image;</span><br><span class="line">    SceneName sceneName;</span><br><span class="line">    <span class="comment">// 输入圆的host参数，包括数量、相对位置、速度、半径、颜色等</span></span><br><span class="line">    <span class="type">int</span> numCircles;</span><br><span class="line">    <span class="type">float</span> *position;</span><br><span class="line">    <span class="type">float</span> *velocity;</span><br><span class="line">    <span class="type">float</span> *color;</span><br><span class="line">    <span class="type">float</span> *radius;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 输入圆的device参数</span></span><br><span class="line">    <span class="type">float</span> *cudaDevicePosition;</span><br><span class="line">    <span class="type">float</span> *cudaDeviceVelocity;</span><br><span class="line">    <span class="type">float</span> *cudaDeviceColor;</span><br><span class="line">    <span class="type">float</span> *cudaDeviceRadius;</span><br><span class="line">    <span class="type">float</span> *cudaDeviceImageData;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">  public:</span><br><span class="line">    CudaRenderer();</span><br><span class="line">    </span><br><span class="line">    virtual ~CudaRenderer();</span><br><span class="line">    </span><br><span class="line">    <span class="type">const</span> Image *<span class="title function_">getImage</span><span class="params">()</span>;             <span class="comment">//获取图像指针</span></span><br><span class="line">    </span><br><span class="line">    <span class="type">void</span> <span class="title function_">setup</span><span class="params">()</span>;                        <span class="comment">//复制host数据到device</span></span><br><span class="line"></span><br><span class="line">    <span class="type">void</span> <span class="title function_">loadScene</span><span class="params">(SceneName name)</span>;      <span class="comment">//加载Scene的初始状态</span></span><br><span class="line"></span><br><span class="line">    <span class="type">void</span> <span class="title function_">allocOutputImage</span><span class="params">(<span class="type">int</span> width, <span class="type">int</span> height)</span>;  <span class="comment">//为图像分配动态内存</span></span><br><span class="line"></span><br><span class="line">    <span class="type">void</span> <span class="title function_">clearImage</span><span class="params">()</span>;                   <span class="comment">//清空图像内容</span></span><br><span class="line"></span><br><span class="line">    <span class="type">void</span> <span class="title function_">advanceAnimation</span><span class="params">()</span>;             <span class="comment">//更新每一帧中圆的速度和位置</span></span><br><span class="line"></span><br><span class="line">    <span class="type">void</span> <span class="title function_">render</span><span class="params">()</span>;                       <span class="comment">//对空白图像上的圆进行渲染</span></span><br><span class="line"></span><br><span class="line">    <span class="type">void</span> <span class="title function_">shadePixel</span><span class="params">(<span class="type">int</span> circleIndex, <span class="type">float</span> pixelCenterX, <span class="type">float</span> pixelCenterY, <span class="type">float</span> px, <span class="type">float</span> py, <span class="type">float</span> *pixelData)</span>; <span class="comment">// 计算输入圆(px,py) 对输入像素(pixelCenterX, pixelCenterY) 的rgba贡献</span></span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="渲染器类的使用"><a href="#渲染器类的使用" class="headerlink" title="渲染器类的使用"></a>渲染器类的使用</h3><p>渲染器类的使用方式大致如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">renderer = new CudaRenderer();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 分配图像内存空间</span></span><br><span class="line">renderer-&gt;allocOutputImage(imageSize, imageSize);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 场景初始化，指定要渲染的图像sceneName，加载圆的host参数</span></span><br><span class="line">renderer-&gt;loadScene(sceneName);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 复制host数据到device</span></span><br><span class="line">renderer-&gt;setup();</span><br><span class="line">    <span class="type">bool</span> dumpFrames = frameFilename.length() &gt; <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 渲染动画的每一帧</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> frame = <span class="number">0</span>; frame &lt; totalFrames; frame++)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="comment">// 清空图像内容</span></span><br><span class="line">        renderer-&gt;clearImage();</span><br><span class="line">        cudaDeviceSynchronize();</span><br><span class="line">        </span><br><span class="line">	<span class="comment">// 更新圆的位置</span></span><br><span class="line">        renderer-&gt;advanceAnimation();</span><br><span class="line">        cudaDeviceSynchronize();</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 渲染图像</span></span><br><span class="line">        renderer-&gt;render();</span><br><span class="line">        cudaDeviceSynchronize();</span><br><span class="line"> </span><br><span class="line">        <span class="comment">// 每一帧生成一个ppm文件</span></span><br><span class="line">        <span class="keyword">if</span> (dumpFrames)</span><br><span class="line">           &#123;</span><br><span class="line">              <span class="type">char</span> filename[<span class="number">1024</span>];</span><br><span class="line">              writePPMImage(renderer-&gt;getImage(), filename);</span><br><span class="line">           &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="渲染流程实现"><a href="#渲染流程实现" class="headerlink" title="渲染流程实现"></a>渲染流程实现</h3><h4 id="数据准备setup"><a href="#数据准备setup" class="headerlink" title="数据准备setup"></a>数据准备setup</h4><ul>
+<li>在 <code>loadScene</code> 获取了圆的host输入参数后，需要将圆的host参数通过<code>cudaMemcpy</code>搬运到device</li>
+<li>device参数可以声明为常量内存，进一步优化读取速度</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将图像数据放置到常量内存cuConstRendererParams中</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GlobalConstants</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    SceneName sceneName;</span><br><span class="line">    <span class="type">int</span> numCircles;</span><br><span class="line">    <span class="type">float</span> *position;</span><br><span class="line">    <span class="type">float</span> *velocity;</span><br><span class="line">    <span class="type">float</span> *color;</span><br><span class="line">    <span class="type">float</span> *radius;</span><br><span class="line">    <span class="type">int</span> imageWidth;</span><br><span class="line">    <span class="type">int</span> imageHeight;</span><br><span class="line">    <span class="type">float</span> *imageData;</span><br><span class="line">&#125;;</span><br><span class="line">__constant__ GlobalConstants cuConstRendererParams;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">CudaRenderer::setup</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> deviceCount = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> name;</span><br><span class="line">    cudaError_t err = cudaGetDeviceCount(&amp;deviceCount);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Initializing CUDA for CudaRenderer\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    cudaMalloc(&amp;cudaDevicePosition, <span class="keyword">sizeof</span>(<span class="type">float</span>) * <span class="number">3</span> * numCircles);</span><br><span class="line">    cudaMalloc(&amp;cudaDeviceVelocity, <span class="keyword">sizeof</span>(<span class="type">float</span>) * <span class="number">3</span> * numCircles);</span><br><span class="line">    cudaMalloc(&amp;cudaDeviceColor, <span class="keyword">sizeof</span>(<span class="type">float</span>) * <span class="number">3</span> * numCircles);</span><br><span class="line">    cudaMalloc(&amp;cudaDeviceRadius, <span class="keyword">sizeof</span>(<span class="type">float</span>) * numCircles);</span><br><span class="line">    cudaMalloc(&amp;cudaDeviceImageData, <span class="keyword">sizeof</span>(<span class="type">float</span>) * <span class="number">4</span> * image-&gt;width * image-&gt;height);</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">    cudaMemcpy(cudaDevicePosition, position, <span class="keyword">sizeof</span>(<span class="type">float</span>) * <span class="number">3</span> * numCircles, cudaMemcpyHostToDevice);</span><br><span class="line">    cudaMemcpy(cudaDeviceVelocity, velocity, <span class="keyword">sizeof</span>(<span class="type">float</span>) * <span class="number">3</span> * numCircles, cudaMemcpyHostToDevice);</span><br><span class="line">    cudaMemcpy(cudaDeviceColor, color, <span class="keyword">sizeof</span>(<span class="type">float</span>) * <span class="number">3</span> * numCircles, cudaMemcpyHostToDevice);</span><br><span class="line">    cudaMemcpy(cudaDeviceRadius, radius, <span class="keyword">sizeof</span>(<span class="type">float</span>) * numCircles, cudaMemcpyHostToDevice);</span><br><span class="line"></span><br><span class="line">    GlobalConstants params;</span><br><span class="line">    params.sceneName = sceneName;</span><br><span class="line">    params.numCircles = numCircles;</span><br><span class="line">    params.imageWidth = image-&gt;width;</span><br><span class="line">    params.imageHeight = image-&gt;height;</span><br><span class="line">    params.position = cudaDevicePosition;</span><br><span class="line">    params.velocity = cudaDeviceVelocity;</span><br><span class="line">    params.color = cudaDeviceColor;</span><br><span class="line">    params.radius = cudaDeviceRadius;</span><br><span class="line">    params.imageData = cudaDeviceImageData;</span><br><span class="line"></span><br><span class="line">    cudaMemcpyToSymbol(cuConstRendererParams, &amp;params, <span class="keyword">sizeof</span>(GlobalConstants));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="清空图像-clearImage"><a href="#清空图像-clearImage" class="headerlink" title="清空图像 clearImage"></a>清空图像 clearImage</h4><ul>
+<li>清空图像内容，即将图像所有像素设置为白色 (1,1,1,1)</li>
+<li>清空图像可以使用cuda进行加速，每一个线程负责一个像素的设置，可以使用float4向量化写入</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">__global__ <span class="type">void</span> <span class="title function_">kernelClearImage</span><span class="params">()</span></span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> imageX = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">int</span> imageY = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line">    </span><br><span class="line">    <span class="type">int</span> width = cuConstRendererParams.imageWidth;</span><br><span class="line">    <span class="type">int</span> height = cuConstRendererParams.imageHeight;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (imageX &gt;= width || imageY &gt;= height)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> offset = <span class="number">4</span> * (imageY * width + imageX);</span><br><span class="line">    float4 value = make_float4(<span class="number">1.f</span>, <span class="number">1.f</span>, <span class="number">1.f</span>, <span class="number">1.f</span>);</span><br><span class="line"></span><br><span class="line">    *(float4 *)(&amp;cuConstRendererParams.imageData[offset]) = value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">CudaRenderer::clearImage</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    dim3 <span class="title function_">blockDim</span><span class="params">(<span class="number">16</span>, <span class="number">16</span>, <span class="number">1</span>)</span>;</span><br><span class="line"></span><br><span class="line">    dim3 <span class="title function_">gridDim</span><span class="params">((image-&gt;width + blockDim.x - <span class="number">1</span>) / blockDim.x, (image-&gt;height + blockDim.y - <span class="number">1</span>) / blockDim.y)</span>;</span><br><span class="line"></span><br><span class="line">    kernelClearImage&lt;&lt;&lt;gridDim, blockDim&gt;&gt;&gt;();</span><br><span class="line">    cudaDeviceSynchronize();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="更新器-advanceAnimation"><a href="#更新器-advanceAnimation" class="headerlink" title="更新器 advanceAnimation"></a>更新器 advanceAnimation</h4><ul>
+<li>更新器更新圆当前帧所在的位置。不同动画图像的更新逻辑不同，但都可以使用cuda进行加速，让一个线程负责一个圆位置的更新即可</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">CudaRenderer::advanceAnimation</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 256 threads per block is a healthy number</span></span><br><span class="line">    dim3 <span class="title function_">blockDim</span><span class="params">(<span class="number">256</span>, <span class="number">1</span>)</span>;</span><br><span class="line">    dim3 <span class="title function_">gridDim</span><span class="params">((numCircles + blockDim.x - <span class="number">1</span>) / blockDim.x)</span>;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// only the snowflake scene has animation</span></span><br><span class="line">    <span class="keyword">if</span> (sceneName == SNOWFLAKES)</span><br><span class="line">    &#123;</span><br><span class="line">        kernelAdvanceSnowflake&lt;&lt;&lt;gridDim, blockDim&gt;&gt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (sceneName == BOUNCING_BALLS)</span><br><span class="line">    &#123;</span><br><span class="line">        kernelAdvanceBouncingBalls&lt;&lt;&lt;gridDim, blockDim&gt;&gt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (sceneName == HYPNOSIS)</span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        kernelAdvanceHypnosis&lt;&lt;&lt;gridDim, blockDim&gt;&gt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (sceneName == FIREWORKS)</span><br><span class="line">    &#123;</span><br><span class="line">        kernelAdvanceFireWorks&lt;&lt;&lt;gridDim, blockDim&gt;&gt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="串行渲染的render实现"><a href="#串行渲染的render实现" class="headerlink" title="串行渲染的render实现"></a>串行渲染的render实现</h4><p>渲染空白图像每个像素的伪代码如下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">for 每个圆</span><br><span class="line">    计算圆在图像的边界框  </span><br><span class="line">    for 边界框内的所有像素  </span><br><span class="line">        计算像素中心点  </span><br><span class="line"></span><br><span class="line">        if 中心点在圆内  </span><br><span class="line">            计算圆在该点的颜色  </span><br><span class="line">            将圆对该像素的颜色贡献混合到图像中</span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>：</p>
+<ul>
+<li>仅当像素中心位于圆圈内时，圆圈才会为输出像素提供颜色。</li>
+<li>某个像素点的颜色是混合了所有与该像素重叠的半透明圆的颜色。也就是说如果一个像素点有多个圆重叠，那么这个像素点的颜色是这多个圆按输入顺序进行颜色渲染叠加的结果</li>
+</ul>
+<img src="/2025/03/27/project/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8/img-%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8-8.png" class="" title="|400">
+
+<p><strong>串行实现</strong>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> CLAMP(x, minimum, maximum) std::max(minimum, std::min(x, maximum))</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">render</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 遍历所有圆</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> circleIndex = <span class="number">0</span>; circleIndex &lt; numCircles; circleIndex++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> index3 = <span class="number">3</span> * circleIndex; </span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 该圆中心点位置</span></span><br><span class="line">        <span class="type">float</span> px = position[index3];</span><br><span class="line">        <span class="type">float</span> py = position[index3 + <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">        <span class="type">float</span> rad = radius[circleIndex]; <span class="comment">// 半径</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 计算每个圆的二维的bounding box范围，输入数据均是归一化后的数据</span></span><br><span class="line">        <span class="type">float</span> minX = px - rad;</span><br><span class="line">        <span class="type">float</span> maxX = px + rad;</span><br><span class="line">        <span class="type">float</span> minY = py - rad;</span><br><span class="line">        <span class="type">float</span> maxY = py + rad;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 将归一化的圆的bounding box边界（minX, maxX, minY, maxY）转换为实际的图像坐标</span></span><br><span class="line">        <span class="type">int</span> screenMinX = CLAMP(static_cast&lt;<span class="type">int</span>&gt;(minX * image-&gt;width), <span class="number">0</span>, image-&gt;width);</span><br><span class="line">        <span class="type">int</span> screenMaxX = CLAMP(static_cast&lt;<span class="type">int</span>&gt;(maxX * image-&gt;width) + <span class="number">1</span>, <span class="number">0</span>, image-&gt;width);</span><br><span class="line">        <span class="type">int</span> screenMinY = CLAMP(static_cast&lt;<span class="type">int</span>&gt;(minY * image-&gt;height), <span class="number">0</span>, image-&gt;height);</span><br><span class="line">        <span class="type">int</span> screenMaxY = CLAMP(static_cast&lt;<span class="type">int</span>&gt;(maxY * image-&gt;height) + <span class="number">1</span>, <span class="number">0</span>, image-&gt;height);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 图像width和height的倒数，用于对像素点坐标进行归一化</span></span><br><span class="line">        <span class="type">float</span> invWidth = <span class="number">1.f</span> / image-&gt;width;</span><br><span class="line">        <span class="type">float</span> invHeight = <span class="number">1.f</span> / image-&gt;height;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 遍历 bounding box中的每一个像素。注意只有像素点在圆的范围内才会被渲染到</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> pixelY = screenMinY; pixelY &lt; screenMaxY; pixelY++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 像素点[pixelY,screenMinX]的rgba值的指针</span></span><br><span class="line">			<span class="type">float</span> *imgPtr =&amp;image-&gt;data[<span class="number">4</span> *(pixelY * image-&gt;width +screenMinX)];</span><br><span class="line">			</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> pixelX = screenMinX; pixelX &lt; screenMaxX; pixelX++)</span><br><span class="line">            &#123;</span><br><span class="line">				<span class="comment">// 归一化像素点的中心位置</span></span><br><span class="line">                <span class="type">float</span> pixelCenterNormX = invWidth * (static_cast&lt;<span class="type">float</span>&gt;(pixelX) + <span class="number">0.5f</span>);</span><br><span class="line">                <span class="type">float</span> pixelCenterNormY = invHeight * (static_cast&lt;<span class="type">float</span>&gt;(pixelY) + <span class="number">0.5f</span>);</span><br><span class="line">                </span><br><span class="line">                <span class="comment">// 渲染当前像素</span></span><br><span class="line">                shadePixel(circleIndex, pixelCenterNormX, pixelCenterNormY, px, py, imgPtr);</span><br><span class="line">                <span class="comment">// 指针移到下一列的像素点</span></span><br><span class="line">                imgPtr += <span class="number">4</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>渲染像素点的实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">shadePixel</span><span class="params">(<span class="type">int</span> circleIndex, <span class="type">float</span> pixelCenterX, <span class="type">float</span> pixelCenterY, <span class="type">float</span> px, <span class="type">float</span> py, <span class="type">float</span> *pixelData)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">float</span> diffX = px - pixelCenterX;</span><br><span class="line">    <span class="type">float</span> diffY = py - pixelCenterY;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 圆心到像素点归一化坐标的欧式距离</span></span><br><span class="line">    <span class="type">float</span> pixelDist = diffX * diffX + diffY * diffY;</span><br><span class="line">    </span><br><span class="line">    <span class="type">float</span> rad = radius[circleIndex];</span><br><span class="line">    <span class="type">float</span> maxDist = rad * rad;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 当前像素不在圆形范围内，直接返回</span></span><br><span class="line">    <span class="keyword">if</span> (pixelDist &gt; maxDist)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">float</span> colR, colG, colB;</span><br><span class="line">    <span class="type">float</span> alpha;</span><br><span class="line"></span><br><span class="line">     <span class="comment">// 加载当前圆的rgba值</span></span><br><span class="line">    <span class="type">int</span> index3 = <span class="number">3</span> * circleIndex;</span><br><span class="line">    colR = color[index3];</span><br><span class="line">    colG = color[index3 + <span class="number">1</span>];</span><br><span class="line">    colB = color[index3 + <span class="number">2</span>];</span><br><span class="line">    alpha = .<span class="number">5f</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 圆的颜色按透明度比例叠加在原像素颜色上</span></span><br><span class="line">    pixelData[<span class="number">0</span>] = alpha * colR + (<span class="number">1.f</span> - alpha) * pixelData[<span class="number">0</span>];</span><br><span class="line">    pixelData[<span class="number">1</span>] = alpha * colG + (<span class="number">1.f</span> - alpha) * pixelData[<span class="number">1</span>];</span><br><span class="line">    pixelData[<span class="number">2</span>] = alpha * colB + (<span class="number">1.f</span> - alpha) * pixelData[<span class="number">2</span>];</span><br><span class="line">    pixelData[<span class="number">3</span>] += alpha;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>渲染一万个圆的图片，执行时间如下: </p>
+<ul>
+<li>渲染使用时间为395ms</li>
+</ul>
+<img src="/2025/03/27/project/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8-3.png" class="">
+
+<h4 id="并行渲染的render实现"><a href="#并行渲染的render实现" class="headerlink" title="并行渲染的render实现"></a>并行渲染的render实现</h4><p>使用cuda并行实现图像渲染需要注意两个问题：</p>
+<ul>
+<li><strong>原子性</strong>：因为像素点的颜色渲染是对像素点rgba数据进行 <strong>“读-改-写”</strong> 的操作，不能让多个线程同时对同一个像素进行渲染，所以要保证像素点的颜色渲染是原子操作；</li>
+<li><strong>顺序性</strong>：渲染器必须按圆形输入顺序对图像像素执行更新。因为同一个像素点可能被不同的圆覆盖，不同的渲染顺序得到的颜色结果是不同（如下图所示），所以这里规定渲染的顺序需要是按照圆形输入的序号从小到大对像素进行渲染。</li>
+</ul>
+<img src="/2025/03/27/project/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8/img-%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8-7.png" class="">
+
+<hr>
+<p><strong>Native 实现</strong><br>因为要保证像素点颜色渲染的原子性，所以不能按圆并行，要按像素并行。</p>
+<ul>
+<li>我们可以为每个像素分配一个线程，让线程去遍历所有的圆，判断哪些圆覆盖到了线程负责的像素点，再用这些圆去渲染像素点。</li>
+<li>一个线程负责一个像素点的渲染，并且按顺序遍历圆，同时满足了渲染的<strong>原子性和顺序性</strong></li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">__global__ <span class="type">void</span> <span class="title function_">kernelRenderPixels_v1</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> pixelX = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">int</span> pixelY = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> imageWidth = cuConstRendererParams.imageWidth;</span><br><span class="line">    <span class="type">int</span> imageHeight = cuConstRendererParams.imageHeight;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (pixelX &gt;= imageWidth || pixelY &gt;= imageHeight)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    <span class="type">float</span> invWidth = <span class="number">1.f</span> / imageWidth;</span><br><span class="line">    <span class="type">float</span> invHeight = <span class="number">1.f</span> / imageHeight;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 线程负责的像素中心的标准化坐标</span></span><br><span class="line">    float2 pixelCenterNorm =</span><br><span class="line">        make_float2(invWidth * (static_cast&lt;<span class="type">float</span>&gt;(pixelX) + <span class="number">0.5f</span>), invHeight * (static_cast&lt;<span class="type">float</span>&gt;(pixelY) + <span class="number">0.5f</span>));</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 线程负责的像素点的rgba值</span></span><br><span class="line">    float4 *imgPtr = (float4 *)(&amp;cuConstRendererParams.imageData[<span class="number">4</span> * (pixelY * imageWidth + pixelX)]);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 遍历每个圆</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> circleIndex = <span class="number">0</span>; circleIndex &lt; cuConstRendererParams.numCircles; circleIndex++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="type">int</span> index3 = <span class="number">3</span> * circleIndex;</span><br><span class="line">        float3 p = *(float3 *)(&amp;cuConstRendererParams.position[index3]); <span class="comment">// 圆中心点坐标</span></span><br><span class="line">  </span><br><span class="line">		<span class="comment">// 计算圆心到像素点到欧式距离</span></span><br><span class="line">	    <span class="type">float</span> diffX = p.x - pixelCenter.x;</span><br><span class="line">	    <span class="type">float</span> diffY = p.y - pixelCenter.y;</span><br><span class="line">	    <span class="type">float</span> pixelDist = diffX * diffX + diffY * diffY;</span><br><span class="line">	    <span class="type">float</span> rad = cuConstRendererParams.radius[circleIndex];</span><br><span class="line">	    <span class="type">float</span> maxDist = rad * rad;</span><br><span class="line"></span><br><span class="line">	    <span class="comment">// 如果像素点不在该圆中</span></span><br><span class="line">	    <span class="keyword">if</span> (pixelDist &gt; maxDist)</span><br><span class="line">		    <span class="keyword">continue</span>;</span><br><span class="line">        <span class="comment">// 使用该圆渲染像素点</span></span><br><span class="line">	    shadePixel(circleIndex, pixelCenterNorm, p, imgPtr);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>渲染一万个圆的图片，执行时间如下：</p>
+<ul>
+<li>相比cpu实现，渲染的加速比为 3.87</li>
+</ul>
+<img src="/2025/03/27/project/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8-4.png" class="">
+
+<p>使用Nsight Compute进行分析，发现带宽很低，且访问全局内存的次数非常多：</p>
+<img src="/2025/03/27/project/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8-2.png" class="" title="|500">
+
+<p>Native实现可以优化的点：</p>
+<ul>
+<li><strong>全局访存</strong>： 线程读写全局内存的次数过多，多次读写像素点全局数据；</li>
+<li><strong>遍历圆的次数</strong>： 整个图像上可能只有少数圆对线程负责的像素点有颜色贡献，但是每个线程都需要重复遍历所有的圆。</li>
+</ul>
+<hr>
+<p><strong>共享内存优化</strong>：</p>
+<p>为了减少对全局内存的访问次数，以及减少对圆的遍历次数，我们可以通过共享内存的通信，让block中所有的线程共同遍历圆，具体的算法步骤如下：</p>
+<ul>
+<li>以一个block中的像素所围成的矩形区域为单位，筛选出与矩形区域有重叠的圆（与矩形无重叠的圆一定对矩形区域的像素无颜色贡献）；<ul>
+<li>如下图所示，与block所围成的矩形区域的红色圆是可能对内部像素有贡献的，而不相交的蓝色圆一定对内部像素无贡献。</li>
+</ul>
+</li>
+</ul>
+<img src="/2025/03/27/project/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8-6.png" class="">
+<ul>
+<li>这样就可以让每个线程负责一部分的圆，计算出与矩形区域有重叠的圆的位置，再用计算前缀和的方式收集圆的下标，最后让线程遍历这些重叠的圆对其负责的像素点进行渲染；</li>
+<li>另外，线程读写的像素点值可以使用寄存器保存，进一步减少对全局内存的访问。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line">  __global__ <span class="type">void</span> <span class="title function_">kernelRenderPixels_v2</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> threadIndex = blockDim.x * threadIdx.y + threadIdx.x;</span><br><span class="line">    <span class="type">int</span> pixelX = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">int</span> pixelY = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line">    <span class="type">int</span> imageWidth = cuConstRendererParams.imageWidth;</span><br><span class="line">    <span class="type">int</span> imageHeight = cuConstRendererParams.imageHeight;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// if (pixelX &gt;= imageWidth || pixelY &gt;= imageHeight)</span></span><br><span class="line">    <span class="comment">//     return;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 像素中心的标准化坐标</span></span><br><span class="line">    <span class="type">float</span> invWidth = <span class="number">1.f</span> / imageWidth;</span><br><span class="line">    <span class="type">float</span> invHeight = <span class="number">1.f</span> / imageHeight;</span><br><span class="line">    float2 pixelCenterNorm =</span><br><span class="line">        make_float2(invWidth * (static_cast&lt;<span class="type">float</span>&gt;(pixelX) + <span class="number">0.5f</span>), invHeight * (static_cast&lt;<span class="type">float</span>&gt;(pixelY) + <span class="number">0.5f</span>));</span><br><span class="line"></span><br><span class="line">    float4 *imgPtr = (float4 *)(&amp;cuConstRendererParams.imageData[<span class="number">4</span> * (pixelY * imageWidth + pixelX)]);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 像素数据加载到寄存器</span></span><br><span class="line">    float4 img_reg = *imgPtr;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 线程块负责的矩形区域</span></span><br><span class="line">    uint boxL = blockDim.x * blockIdx.x;</span><br><span class="line">    uint boxR = boxL + blockDim.x &lt; imageWidth ? boxL + blockDim.x : imageWidth;</span><br><span class="line">    uint boxB = blockDim.y * blockIdx.y;</span><br><span class="line">    uint boxT = boxB + blockDim.y &lt; imageHeight ? boxB + blockDim.y : imageHeight;</span><br><span class="line">    <span class="type">float</span> boxLNorm = (<span class="type">float</span>)boxL * invWidth;</span><br><span class="line">    <span class="type">float</span> boxRNorm = (<span class="type">float</span>)boxR * invWidth;</span><br><span class="line">    <span class="type">float</span> boxBNorm = (<span class="type">float</span>)boxB * invHeight;</span><br><span class="line">    <span class="type">float</span> boxTNorm = (<span class="type">float</span>)boxT * invHeight;</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line">    <span class="comment">// 计算前缀和、相交圆需要用到的共享内存数组</span></span><br><span class="line">    __shared__ uint flag[THREADS_PER_BLOCK];</span><br><span class="line">    __shared__ uint prefixSumOutput[THREADS_PER_BLOCK];</span><br><span class="line">    __shared__ uint prefixSumScratch[<span class="number">2</span> * THREADS_PER_BLOCK]; <span class="comment">// 计算前缀和需要用到的临时数组</span></span><br><span class="line">    __shared__ uint circlesConservative[THREADS_PER_BLOCK];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> numCircles = cuConstRendererParams.numCircles;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 遍历每个圆，步长为THREADS_PER_BLOCK</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> index = <span class="number">0</span>; index &lt; numCircles; index += THREADS_PER_BLOCK) </span><br><span class="line">    &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> circleIndex = index + threadIndex; <span class="comment">// 每个线程对应计算的圆序号</span></span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (circleIndex &lt; numCircles)</span><br><span class="line">        &#123;</span><br><span class="line">            float3 p = *(float3 *)(&amp;cuConstRendererParams.position[<span class="number">3</span> * circleIndex]); <span class="comment">// 圆中心点坐标</span></span><br><span class="line">            <span class="type">float</span> circleRadius = cuConstRendererParams.radius[circleIndex]; </span><br><span class="line">            </span><br><span class="line">			<span class="comment">// 判断该圆是否与block相交</span></span><br><span class="line">            flag[threadIndex] = circleInBox(p.x, p.y, circleRadius, boxLNorm, boxRNorm, boxTNorm, boxBNorm);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            flag[threadIndex] = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        __syncthreads();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 计算flag前缀和</span></span><br><span class="line">        sharedMemExclusiveScan(threadIndex, flag, prefixSumOutput, prefixSumScratch, THREADS_PER_BLOCK);</span><br><span class="line">        __syncthreads();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 统计与block相交的圆下标</span></span><br><span class="line">        <span class="keyword">if</span> (flag[threadIndex])</span><br><span class="line">            circlesConservative[prefixSumOutput[threadIndex]] = circleIndex;</span><br><span class="line">        __syncthreads();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">		<span class="comment">// 无效像素点不需要计算</span></span><br><span class="line">        <span class="keyword">if</span> (pixelX &gt;= imageWidth || pixelY &gt;= imageHeight)</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 和block区域相交的圆的数量</span></span><br><span class="line">        <span class="type">int</span> numConservative = prefixSumOutput[THREADS_PER_BLOCK - <span class="number">1</span>] + flag[BLOCKSIZE - <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 用和block区域相交的圆渲染该像素点</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; numConservative; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">int</span> circle = circlesConservative[i];</span><br><span class="line">            float3 p = *(float3 *)(&amp;cuConstRendererParams.position[<span class="number">3</span> * circle]);</span><br><span class="line">            shadePixel(circle, pixelCenterNorm, p, &amp;img_reg);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 像素点数据写入全局内存</span></span><br><span class="line">    *imgPtr = img_reg;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>判断重叠的方法：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 判断圆是否和矩形有交叠</span></span><br><span class="line">__device__ __inline__ <span class="type">int</span></span><br><span class="line"><span class="title function_">circleInBox</span><span class="params">(</span></span><br><span class="line"><span class="params">    <span class="type">float</span> circleX, <span class="type">float</span> circleY, <span class="type">float</span> circleRadius,</span></span><br><span class="line"><span class="params">    <span class="type">float</span> boxL, <span class="type">float</span> boxR, <span class="type">float</span> boxT, <span class="type">float</span> boxB)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 找到矩形中最接近圆心的点</span></span><br><span class="line">    <span class="type">float</span> closestX = (circleX &gt; boxL) ? ((circleX &lt; boxR) ? circleX : boxR) : boxL;</span><br><span class="line">    <span class="type">float</span> closestY = (circleY &gt; boxB) ? ((circleY &lt; boxT) ? circleY : boxT) : boxB;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 计算圆心到最近点的欧式距离</span></span><br><span class="line">    <span class="type">float</span> distX = closestX - circleX;</span><br><span class="line">    <span class="type">float</span> distY = closestY - circleY;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 是否在圆内</span></span><br><span class="line">    <span class="keyword">if</span> ( ((distX*distX) + (distY*distY)) &lt;= (circleRadius*circleRadius) ) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<p>修改后的渲染算法将每个线程从遍历N次圆，减少到了遍历 N &#x2F; THREADS_PER_BLOCK 次圆，大幅减少了计算次数，同时也减少了全局内存的访存次数。</p>
+<p>渲染一万个圆的图片，渲染执行时间如下：</p>
+<ul>
+<li>相比Native实现，加速比为12.75倍； 相比CPU实现，加速比为49倍</li>
+</ul>
+<img src="/2025/03/27/project/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8-7.png" class="">
+
+<p>使用Nsight Compute进行分析，内存带宽得到大幅度的提升，同时访存指令和全局内存的读写也大大减少。</p>
+<img src="/2025/03/27/project/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8-9.png" class="" title="|600">
+
+<p>因为是按行读写全局内存，期间也没有发生bank conflict</p>
+<img src="/2025/03/27/project/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8-10.png" class="">
+
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>最后实现的渲染器相比普通CPU实现，加速比为49倍，整体运行速度得到了巨大的提升，不过这一算法比较适合圆数量非常大的情况，对圆数量较少时的渲染效果欠佳。<br>后续可以尝试采用批量处理的方式，当收集到的圆达到一定数量后，再集中进行渲染，对于与block相交圆数量比较少的情况效果可能会好一些。</p>
+<p>图像结果展示：</p>
+<ul>
+<li>一万个彩色圆</li>
+</ul>
+<img src="/2025/03/27/project/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8/img-%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8-1.png" class="" title="|400">
+
+<ul>
+<li>跳动小球</li>
+</ul>
+<img src="/2025/03/27/project/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8/bouncingballs.gif" class="" title="|300">
+
+<ul>
+<li>雪花</li>
+</ul>
+<img src="/2025/03/27/project/%E5%9F%BA%E4%BA%8ECUDA%E5%AE%9E%E7%8E%B0%E5%BD%A9%E8%89%B2%E5%9C%86%E5%BD%A2%E6%B8%B2%E6%9F%93%E5%99%A8/snow.gif" class="" title="|400">
+      </div>
+    </div>
+    
+      <script src='https://unpkg.com/mermaid@latest/dist/mermaid.min.js'></script>
+      <script>
+        if (window.mermaid) {
+          mermaid.initialize({"startOnload":true});
+        }
+      </script>
+    
+  </article>
+  <div class="post__foot">
+    
+      <div class="like-author">
+  <input type="checkbox" id="likeCode" />
+  <div class="author-face">
+    <img height="100px"
+         width="100px"
+         id="front-face"
+         alt="author face"
+         src="/assets/author-face.jpg" />
+    <img height="100px"
+         width="100px"
+         id="back-face"
+         alt="like code"
+         src="/assets/pay-code.jpg" />
+  </div>
+  <div class="like-text">“给作者倒杯卡布奇诺”</div>
+  <label for="likeCode" class="like-btn">
+    <svg viewBox="0 0 1024 1024"
+         width="20px"
+         style="margin-right: 10px"
+         height="20px">
+      <path d="M466.88 908.96L113.824 563.296a270.08 270.08 0 0 1 0-387.392c108.8-106.56 284.896-106.56 393.696 0 1.504 1.472 2.976 2.944 4.448 4.48 1.472-1.536 2.944-3.008 4.448-4.48 108.8-106.56 284.896-106.56 393.696 0a269.952 269.952 0 0 1 34.016 347.072l-387.392 385.6a64 64 0 0 1-89.92 0.384z" p-id="13650" fill="#ee4242" />
+    </svg>
+    喜欢作者
+  </label>
+</div>
+
+    
+    <div class="post-nav">
+  
+    <div class="post-nav-item-left"></div>
+  
+  <div class="vhr"></div>
+  
+    <a class="post-nav-item-right" href="/2025/03/26/note/cuda/CUDA%E7%AC%94%E8%AE%B0%E2%80%94%E2%80%94CUDA%E7%BA%BF%E7%A8%8B%E6%A8%A1%E5%9E%8B/">
+      <div class="text-align">
+        <span class="text-small">下一篇</span>
+        <svg t="1670570876164"
+             class="icon"
+             viewBox="0 0 1024 1024"
+             transform="scale(-1,-1)"
+             width="16"
+             height="16">
+          <path d="M384 512L731.733333 202.666667c17.066667-14.933333 19.2-42.666667 4.266667-59.733334-14.933333-17.066667-42.666667-19.2-59.733333-4.266666l-384 341.333333c-10.666667 8.533333-14.933333 19.2-14.933334 32s4.266667 23.466667 14.933334 32l384 341.333333c8.533333 6.4 19.2 10.666667 27.733333 10.666667 12.8 0 23.466667-4.266667 32-14.933333 14.933333-17.066667 14.933333-44.8-4.266667-59.733334L384 512z" p-id="14596" />
+        </svg>
+      </div>
+      CUDA笔记——CUDA线程模型
+    </a>
+  
+</div>
+
+    
+    
+  </div>
+
+    </div>
+    <div class="foot">
+  <div class="foot-inner">
+    <div class="foot__head">
+      
+        <div class="foot-line">
+          <div class="matts">海</div><div class="matts">内</div><div class="matts">存</div><div class="matts">知</div><div class="matts">己</div>
+        </div>
+      
+        <div class="foot-line">
+          <div class="matts">天</div><div class="matts">涯</div><div class="matts">若</div><div class="matts">比</div><div class="matts">邻</div>
+        </div>
+      
+    </div>
+    <div class="foot__body">
+      
+      
+        <div class="foot-item">
+          <div class="foot-item__head">账号</div>
+          <div class="foot-item__body">
+            
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-github.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://github.com/Felt98">Felt's Github</a>
+          </div>
+        
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/logo-zh.svg" />
+            <a class="foot-link" target="_blank" rel="noopener" href="https://www.zhihu.com/people/yi-ming-81-1">Felt</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+          </div>
+        </div>
+      
+      <div class="foot-item">
+        <div class="foot-item__head">联系</div>
+        <div class="foot-item__body">
+          
+
+
+  
+  
+    <div class="foot-link-group">
+      
+        
+        
+          <div class="text">
+            <img alt="link"
+                 height="20px"
+                 width="20px"
+                 src="/images/icon/icon-email.svg" />
+            <a class="foot-link" href="mailto:haoqingqin@gmail.com">haoqingqin@gmail.com</a>
+          </div>
+        
+      
+        
+        
+      
+        
+        
+      
+        
+        
+      
+    </div>
+  
+
+
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <a href="http://example.com">Felt's blog</a> &nbsp;|&nbsp;由&nbsp;<a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>&nbsp;及&nbsp;
+      <svg width="20" height="20" viewBox="0 0 725 725">
+        <path fill-rule="evenodd" fill="rgb(221, 221, 221)" d="M145.870,236.632 L396.955,103.578 L431.292,419.44 L156.600,522.53 L145.870,236.632 Z" />
+        <path fill-rule="evenodd" fill="rgb(159, 159, 159)" d="M396.955,103.578 L564.345,234.486 L611.558,513.469 L431.292,419.44 L396.955,103.578 Z" />
+        <path fill-rule="evenodd" fill="rgb(0, 0, 0)" d="M431.292,419.44 L611.558,513.469 L358.327,595.18 L156.600,522.53 L431.292,419.44 Z" />
+      </svg>
+      <a target="_blank" rel="noopener" href="https://github.com/hooozen/hexo-theme-tranquility">致远</a>&nbsp;驱动
+    </div>
+  </div>
+</div>
+
+    
+    
+      <script src="/js/search.js"></script>
+      <script>searchInitialize("/search.json")</script>
+    
+    <script src="/js/copy-code.js"></script>
+    
+  
+
+  </body>
+</html>
